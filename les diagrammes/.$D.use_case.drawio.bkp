@@ -1,0 +1,80 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.1 Chrome/142.0.7444.265 Electron/39.8.0 Safari/537.36" version="29.6.1">
+  <diagram name="Page-1" id="SdWLdMCdYFiGFQz9ihA6">
+    <mxGraphModel dx="2284" dy="2367" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="uRloCLSMDtVyEOetcvlN-17" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="visiteur" vertex="1">
+          <mxGeometry height="60" width="30" x="130" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-21" edge="1" parent="1" source="uRloCLSMDtVyEOetcvlN-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="145" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-19" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="pépiniériste" vertex="1">
+          <mxGeometry height="60" width="30" x="130" y="950" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-20" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="admin" vertex="1">
+          <mxGeometry height="60" width="30" x="130" y="1450" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-24" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="1900" width="1080" x="240" y="-120" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-25" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="lister les pepinières" vertex="1">
+          <mxGeometry height="50" width="230" x="490" y="-20" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-26" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="recherche et filtrer les plantes" vertex="1">
+          <mxGeometry height="50" width="230" x="490" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-27" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="consulter les details d&#39;un plants" vertex="1">
+          <mxGeometry height="50" width="230" x="490" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-28" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="consulter les information d&#39;un pepinière" vertex="1">
+          <mxGeometry height="50" width="230" x="490" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-29" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="consulter le catalogue des plantes d&#39;un pepinière" vertex="1">
+          <mxGeometry height="50" width="230" x="490" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-30" edge="1" parent="1" source="uRloCLSMDtVyEOetcvlN-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="uRloCLSMDtVyEOetcvlN-18" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="145" y="660" as="sourcePoint" />
+            <mxPoint x="145" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-18" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="utilisateur" vertex="1">
+          <mxGeometry height="60" width="30" x="130" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-31" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="gerer son profile personnel" vertex="1">
+          <mxGeometry height="50" width="230" x="480" y="389" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-32" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="ajouter une pepinière au favorite" vertex="1">
+          <mxGeometry height="50" width="230" x="480" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-33" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="ajouter une plante au favorite" vertex="1">
+          <mxGeometry height="50" width="230" x="480" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-34" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="laisser un avie" vertex="1">
+          <mxGeometry height="50" width="230" x="480" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-35" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="modifier les informations de sa pepinière" vertex="1">
+          <mxGeometry height="50" width="230" x="470" y="893.5" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-36" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="gérer son catalogue" vertex="1">
+          <mxGeometry height="50" width="230" x="470" y="956.5" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-37" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="filter les plantes de son catalogue" vertex="1">
+          <mxGeometry height="50" width="230" x="470" y="1016.5" as="geometry" />
+        </mxCell>
+        <mxCell id="uRloCLSMDtVyEOetcvlN-38" edge="1" parent="1" source="uRloCLSMDtVyEOetcvlN-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.3333333333333333;entryDx=0;entryDy=0;entryPerimeter=0;" target="uRloCLSMDtVyEOetcvlN-18">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="50" y="1480.0000000000005" />
+              <mxPoint x="50" y="510" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
