@@ -58,8 +58,7 @@ class AuthController extends Controller
             'first_name' => ['required', 'string', 'max:255'],
             'last_name'  => ['required', 'string', 'max:255'],
             'email'      => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password'   => ['required', 'string', 'min:8', 'confirmed'],
-            'terms'      => ['accepted'],
+            'password'   => ['required', 'string', 'min:8', 'confirmed']
         ], [
             'terms.accepted' => 'You must accept the Terms of Service and Privacy Policy.',
         ], [], 'register');
