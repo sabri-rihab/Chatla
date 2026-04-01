@@ -27,7 +27,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Avoid direct hot afternoon sun as it can burn the leaves. Filtered morning light is ideal.',
                 'leaf_care'            => 'Wipe leaves with a damp cloth every few weeks to keep them dust-free and shiny.',
                 'support_instructions' => 'As a climber, it loves a moss pole to attach its aerial roots to for stability.',
-                'is_primary'           => true,
             ],
             [
                 'name'                 => 'Philodendron Imperial Green',
@@ -40,7 +39,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Keep away from direct sunlight. Thrives in shade or dappled light.',
                 'leaf_care'            => 'Clean leaves monthly with a damp cloth to remove dust and improve photosynthesis.',
                 'support_instructions' => 'No support needed. Self-standing rosette shape.',
-                'is_primary'           => false,
             ],
             [
                 'name'                 => 'Pothos Aureus',
@@ -53,7 +51,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Tolerates low light but grows faster in bright indirect light.',
                 'leaf_care'            => 'Occasional dusting with a soft cloth.',
                 'support_instructions' => 'Can be trained to climb a pole or left to trail from a shelf.',
-                'is_primary'           => false,
             ],
             [
                 'name'                 => 'Spathiphyllum (Peace Lily)',
@@ -66,7 +63,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Avoid direct sun. Perfect for north-facing rooms.',
                 'leaf_care'            => 'Remove yellow leaves promptly. Wipe with a damp cloth.',
                 'support_instructions' => 'No support required.',
-                'is_primary'           => false,
             ],
 
             // --- Cactaceae ---
@@ -81,7 +77,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Needs maximum direct sun exposure.',
                 'leaf_care'            => 'Remove dead pads with tongs. Handle spines with care.',
                 'support_instructions' => 'Freestanding. Plant in sandy, well-draining soil.',
-                'is_primary'           => true,
             ],
             [
                 'name'                 => 'Cereus Peruvianus',
@@ -94,7 +89,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Place near a south-facing window or outdoors in full sun.',
                 'leaf_care'            => 'No leaves. Remove debris from around the base.',
                 'support_instructions' => 'May need staking when very tall.',
-                'is_primary'           => false,
             ],
 
             // --- Rosaceae ---
@@ -109,7 +103,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Requires full sun for optimal blooming.',
                 'leaf_care'            => 'Watch for black spot fungus. Remove infected leaves immediately.',
                 'support_instructions' => 'Train on a trellis or arch for climbing varieties.',
-                'is_primary'           => true,
             ],
             [
                 'name'                 => 'Prunus Persica (Pêcher)',
@@ -122,7 +115,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Plant in an open, sunny spot with good air circulation.',
                 'leaf_care'            => 'Monitor for peach leaf curl fungus. Apply copper fungicide in autumn.',
                 'support_instructions' => 'Stake young trees for their first two years.',
-                'is_primary'           => false,
             ],
 
             // --- Lamiaceae ---
@@ -137,7 +129,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Thrives in full sun. Avoid shaded or humid spots.',
                 'leaf_care'            => 'Prune after flowering to keep compact shape.',
                 'support_instructions' => 'No support needed. Plant in raised beds for drainage.',
-                'is_primary'           => true,
             ],
             [
                 'name'                 => 'Mentha (Menthe Nana)',
@@ -150,7 +141,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Tolerates some afternoon shade in very hot areas.',
                 'leaf_care'            => 'Harvest regularly to encourage bushy growth and prevent flowering.',
                 'support_instructions' => 'Plant in pots to control spreading. No staking needed.',
-                'is_primary'           => false,
             ],
 
             // --- Asteraceae ---
@@ -165,7 +155,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Plant in the most open, sunny position in the garden.',
                 'leaf_care'            => 'Remove lower leaves if mildew develops for air circulation.',
                 'support_instructions' => 'Stake tall varieties when they exceed 1.5 metres.',
-                'is_primary'           => true,
             ],
             [
                 'name'                 => 'Calendula Officinalis (Souci)',
@@ -178,7 +167,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Prefers a cool, sunny position. Ideal for winter/spring gardens.',
                 'leaf_care'            => 'Deadhead spent flowers regularly to prolong blooming.',
                 'support_instructions' => 'No support needed.',
-                'is_primary'           => false,
             ],
 
             // --- Fabaceae ---
@@ -193,7 +181,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Thrives in full Mediterranean sun.',
                 'leaf_care'            => 'Minimal maintenance. Remove dead branches in winter.',
                 'support_instructions' => 'Stake young trees. No support needed once mature.',
-                'is_primary'           => true,
             ],
             [
                 'name'                 => 'Acacia Melanoxylon (Acacia)',
@@ -206,7 +193,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Needs maximum sun exposure.',
                 'leaf_care'            => 'Prune lower branches to raise canopy for shade.',
                 'support_instructions' => 'Stake young trees for the first 2 years.',
-                'is_primary'           => false,
             ],
 
             // --- Orchidaceae ---
@@ -221,7 +207,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'East-facing window is ideal. Avoid direct afternoon sun.',
                 'leaf_care'            => 'Wipe leaves with a slightly damp cloth. No spraying on flowers.',
                 'support_instructions' => 'Use a bamboo stake to support flower spikes as they grow.',
-                'is_primary'           => true,
             ],
 
             // --- Euphorbiaceae ---
@@ -236,7 +221,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Needs bright light but avoid harsh direct sun which fades bracts.',
                 'leaf_care'            => 'Avoid cold drafts. Keep away from air conditioning vents.',
                 'support_instructions' => 'No support needed. Prune after flowering season.',
-                'is_primary'           => false,
             ],
 
             // --- Moraceae ---
@@ -251,7 +235,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Sensitive to position changes - avoid moving once settled.',
                 'leaf_care'            => 'Leaf drop occurs with draughts or temperature changes. Wipe leaves monthly.',
                 'support_instructions' => 'Needs a stable position. No staking required.',
-                'is_primary'           => true,
             ],
             [
                 'name'                 => 'Ficus Carica (Figuier)',
@@ -264,7 +247,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Loves heat and direct sun. Perfect for south-facing walls.',
                 'leaf_care'            => 'Prune in late winter to shape and encourage fruiting.',
                 'support_instructions' => 'Train against a wall for espalier effect. Stake when young.',
-                'is_primary'           => false,
             ],
 
             // --- Rutaceae ---
@@ -279,7 +261,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Requires full sun for fruit production.',
                 'leaf_care'            => 'Monitor for scale insects and citrus leaf miner.',
                 'support_instructions' => 'Stake young trees. Prune crossing branches annually.',
-                'is_primary'           => true,
             ],
             [
                 'name'                 => 'Citrus Limon (Citronnier)',
@@ -292,7 +273,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'South-facing wall or open sunny position.',
                 'leaf_care'            => 'Yellow leaves indicate overwatering or iron deficiency. Treat accordingly.',
                 'support_instructions' => 'Stake young trees. No support needed once established.',
-                'is_primary'           => false,
             ],
 
             // --- Apocynaceae ---
@@ -307,7 +287,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Thrives in full, intense Moroccan sun.',
                 'leaf_care'            => 'Prune after flowering. Wear gloves as sap is toxic.',
                 'support_instructions' => 'Can be trained as a tree or left as a multi-stemmed shrub.',
-                'is_primary'           => true,
             ],
             [
                 'name'                 => 'Plumeria Rubra (Frangipanier)',
@@ -320,7 +299,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Maximum sun exposure is essential for flowering.',
                 'leaf_care'            => 'Leaves drop in winter - this is normal dormancy.',
                 'support_instructions' => 'Plant in well-draining sandy soil. Stake young plants.',
-                'is_primary'           => false,
             ],
 
             // --- Arecaceae ---
@@ -335,7 +313,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Maximum desert sun. Intolerant of shade.',
                 'leaf_care'            => 'Remove dead fronds annually. Harvest dates in autumn.',
                 'support_instructions' => 'No support needed for mature palms. Stake for the first year.',
-                'is_primary'           => true,
             ],
             [
                 'name'                 => 'Chamaerops Humilis (Palmier Nain)',
@@ -348,7 +325,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Very adaptable; tolerates coastal winds and drought.',
                 'leaf_care'            => 'Remove old dead fronds at the base annually.',
                 'support_instructions' => 'No support needed. Natural clumping habit.',
-                'is_primary'           => false,
             ],
 
             // --- Bromeliaceae ---
@@ -363,7 +339,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Bright light encourages fruiting. Avoid deep shade.',
                 'leaf_care'            => 'Keep the central cup filled with fresh water. Clean leaves monthly.',
                 'support_instructions' => 'No support needed. Freestanding rosette.',
-                'is_primary'           => false,
             ],
 
             // --- Myrtaceae ---
@@ -378,7 +353,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Needs full sun. Very fast-growing in open positions.',
                 'leaf_care'            => 'Harvest young branches for medicinal use. Prune to shape.',
                 'support_instructions' => 'Stake firmly when young as they grow very quickly and can be top-heavy.',
-                'is_primary'           => true,
             ],
             [
                 'name'                 => 'Myrtus Communis (Myrte)',
@@ -391,7 +365,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => 'Loves full Mediterranean sun. Tolerates coastal conditions.',
                 'leaf_care'            => 'Prune after flowering to maintain a neat, compact shape.',
                 'support_instructions' => 'Can be clipped as topiary. No support needed.',
-                'is_primary'           => false,
             ],
         ];
 
@@ -408,7 +381,6 @@ class PlantSeeder extends Seeder
                 'sun_exposure'         => $plant['sun_exposure'],
                 'leaf_care'            => $plant['leaf_care'],
                 'support_instructions' => $plant['support_instructions'],
-                'is_primary'           => $plant['is_primary'],
                 'created_at'           => now(),
                 'updated_at'           => now(),
             ]);

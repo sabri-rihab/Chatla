@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('sun_exposure')->nullable();
             $table->text('leaf_care')->nullable();
             $table->text('support_instructions')->nullable();
-            $table->boolean('is_primary')->default(false);
+
             $table->timestamps();
         });
     }
