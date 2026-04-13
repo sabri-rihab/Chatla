@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('nursery_id')->constrained()->onDelete('cascade');
             $table->foreignId('plant_id')->constrained()->onDelete('cascade');
-            $table->enum('stock_status', ['in_stock', 'low_stock', 'pre_ordered'])->default('in_stock');
+            $table->enum('stock_quantity', ['in_stock', 'low_stock', 'pre_ordered'])->default('in_stock');
             $table->enum('growth_status', ['seed', 'seedling', 'vegetative', 'mature']);
             $table->timestamps();
         });

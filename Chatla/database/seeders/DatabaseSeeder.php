@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,            // 1 admin + 10 nursery_owners + 20 simple users
+            CitySeeder::class,            // All Moroccan cities
             PlantFamilySeeder::class,     // 15 plant families
             PlantSeeder::class,           // 27 plants with full care details
             DefaultPlantImageSeeder::class, // Unsplash images for each plant

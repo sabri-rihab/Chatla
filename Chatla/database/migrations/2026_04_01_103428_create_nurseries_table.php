@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('owner_id')->constrained('users')->onDelete('cascade');
             $table->string('name');
             $table->string('phone'); // Changed from bigint to string for formatting
-            $table->string('city');
+            $table->foreignId('city_id')->constrained()->onDelete('cascade');
             $table->string('address'); // Corrected spelling and type
             $table->enum('status', ['active', 'inactive', 'pending'])->default('pending');
             $table->string('website')->nullable();
