@@ -215,3 +215,29 @@ Immediately detected via explicit formatting checks and re-patched `routes/web.p
 
 **Result:**
 Nursery owners now possess a fully operational "Nursery Info" profile editor layout where they can upload their `profile_img`, set their physical location metadata, change business naming schemas, and log operating hours.
+
+## Step 9
+**Request:**
+In the nursery profile, make sure to add all the days of the week to the operating hours section, not only Monday and Tuesday.
+
+**Actions Performed:**
+- Modified file: `resources/views/nursery/profile.blade.php`
+  - Replicated the provided `day-row` structure to cover `Wed`, `Thu`, `Fri`, `Sat`, and `Sun`.
+  - Configured `Wed`, `Thu`, and `Fri` to be active by default from 08:00 AM to 06:00 PM.
+  - Configured `Sat` and `Sun` to be logically `"Closed"` (unchecked) by default, requiring the user to explicitly toggle them if they open on weekends.
+
+**Commands Executed:**
+```bash
+git add Chatla/resources/views/nursery/profile.blade.php Chatla/STEPS.md
+git commit -m "feat(profile): expand operating hours to full week"
+git push
+```
+
+**Issues Encountered:**
+None.
+
+**Resolution:**
+N/A
+
+**Result:**
+The nursery operating hour configurations span all 7 days of the week correctly, saving neatly into the structured string database format (`Mon-Fri: 08:00 AM – 06:00 PM · Closed...` etc.) natively handled by the existing script logic.
