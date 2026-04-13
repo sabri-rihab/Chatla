@@ -248,9 +248,11 @@
 
                     <!-- Pagination -->
                     @if(isset($inventories) && $inventories instanceof \Illuminate\Pagination\LengthAwarePaginator && $inventories->hasPages())
-                        <div class="px-6 py-4 border-t border-slate-100 flex items-center justify-between">
-                            <div class="w-full">
-                                {{ $inventories->links() }}
+                        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/30">
+                            <div class="flex items-center justify-center">
+                                <div class="pagination-wrapper">
+                                    {{ $inventories->links() }}
+                                </div>
                             </div>
                         </div>
                     @endif

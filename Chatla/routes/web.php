@@ -19,7 +19,7 @@ Route::middleware(['auth', 'verified', 'nursery_owner'])->group(function () {
         $totalPlants = $nursery->inventory()->count();
         $outOfStock = $nursery->inventory()->where('stock_quantity', '<=', 0)->count();
         
-        $inventories = $nursery->inventory()->with(['plant', 'plant.family'])->paginate(10);
+        $inventories = $nursery->inventory()->with(['plant', 'plant.family'])->paginate(8);
             
         return view('nursery.dashboard', compact('totalPlants', 'outOfStock', 'inventories'));
     })->name('dashboard');

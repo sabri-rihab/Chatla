@@ -630,3 +630,51 @@ Starting with a "Blank Slate" (All Closed) in the HTML ensures the UI is a perfe
 
 **Result:**
 The profile form now accurately reflects the user's current settings from the moment it finishes loading, with no "phantom" defaults.
+
+## Step 18
+**Request:**
+Implement pagination in the nursery owner's dashboard plant list with 8 plants per page.
+
+**Actions Performed:**
+- Modified file: `routes/web.php`
+  - Updated the `/dashboard` route closure to use `paginate(8)` instead of `paginate(10)` for the inventory query.
+- Modified file: `app/Providers/AppServiceProvider.php`
+  - Added `Paginator::useTailwind()` in the `boot()` method to ensure Laravel renders pagination links using Tailwind CSS utility classes, matching the dashboard's design system.
+- Modified file: `resources/views/nursery/dashboard.blade.php`
+  - Wrapped `{{ $inventories->links() }}` in a styled container (`bg-slate-50/30` and centered flex container) to integrate the pagination controls smoothly into the existing table footer.
+
+**Commands Executed:**
+```bash
+git add Chatla/routes/web.php Chatla/app/Providers/AppServiceProvider.php Chatla/resources/views/nursery/dashboard.blade.php Chatla/STEPS.md
+git commit -m "feat(dashboard): implement plant list pagination with 8 items per page"
+git push
+```
+
+**Code Diffs (Added/Deleted):**
+*routes/web.php*
+```diff
+-$inventories = $nursery->inventory()->with(['plant', 'plant.family'])->paginate(10);
++$inventories = $nursery->inventory()->with(['plant', 'plant.family'])->paginate(8);
+```
+
+*app/Providers/AppServiceProvider.php*
+```diff
+ public function boot(): void
+ {
++    \Illuminate\Pagination\Paginator::useTailwind();
+ }
+```
+
+*resources/views/nursery/dashboard.blade.php*
+```diff
++<div class="px-6 py-4 border-t border-slate-100 bg-slate-50/30">
++    <div class="flex items-center justify-center">
++        <div class="pagination-wrapper">
++            {{ $inventories->links() }}
++        </div>
++    </div>
++</div>
+```
+
+**Result:**
+The plant inventory list on the dashboard now correctly paginates with 8 items per page, maintaining a clean and premium layout.
