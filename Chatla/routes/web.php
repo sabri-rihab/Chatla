@@ -13,6 +13,18 @@ Route::get('/test-api', function () {
 });
 
 Route::get('/dashboard', function () {
+    $user = auth()->user();
+    if ($user->role === 'nursery_owner') {
+        $nursery = $user->nursery;
+        $totalPlants = $nursery ? $nursery->inventory()->count() : 0;
+        
+        $inventories = $nursery 
+            ? $nursery->inventory()->with('plant')->paginate(10)
+            : new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+            
+        return view('nursery.dashboard', compact('totalPlants', 'inventories'));
+    }
+    
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
