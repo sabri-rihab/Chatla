@@ -22,7 +22,7 @@ class NurseryProfileController extends Controller
             'address'         => ['required', 'string', 'max:500'],
             'website'         => ['nullable', 'url', 'max:255'],
             'phone'           => ['required', 'string', 'max:30'],
-            'email'           => ['required', 'email', 'max:255'],
+            'email'           => ['required', 'email', 'max:255', \Illuminate\Validation\Rule::unique('users')->ignore($request->user()->id)],
             'owner_name'      => ['required', 'string', 'max:255'],
             'operating_hours' => ['nullable', 'string', 'max:1000'],
             'profile_img'     => ['nullable', 'image', 'max:2048'],

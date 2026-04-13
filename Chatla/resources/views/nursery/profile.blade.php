@@ -114,14 +114,14 @@
             <div class="bg-white rounded-xl border border-slate-100 p-6">
               <div class="flex items-center gap-6 mb-6 pb-6 border-b border-slate-100">
                 <div class="relative shrink-0">
-                  <div class="w-20 h-20 rounded-xl border-2 border-slate-100 overflow-hidden bg-background-light">
-                    <img class="w-full h-full object-cover"
+                  <div class="w-20 h-20 rounded-xl border-2 border-slate-100 overflow-hidden bg-background-light" id="nursery-logo-wrapper">
+                    <img id="nursery-logo-preview" class="w-full h-full object-cover"
                       src="{{ auth()->user()->nursery->profile_img ? asset('storage/' . auth()->user()->nursery->profile_img) : 'https://lh3.googleusercontent.com/aida-public/AB6AXuBsywabFjZ3elNUFFgdRgwJOJrq9hz1adle7vsO2UBxT6EIFZI2Hv2hzjdS_u4WfH_z3yJVssMzrT_a_yzTYJBV7efG9hUpCjuXjYzgnWv4N_zuvKSVZX105SOdIGUnPaIjXv3UYYZ-gKzAyHAKzbhHKai6zBsAoj35bRxaivbmchjRTO3UmNO5v8sAAlf79LNnMHI4LchgLHGtz4V04aA3n4un6P_bvWjLmCoLCEcOqVcKTMet2C3HKy_JO-WUvepVUowzvZyHVmY' }}"
                       alt="Nursery logo"/>
                   </div>
                   <label class="absolute -bottom-2 -right-2 w-7 h-7 bg-primary text-white rounded-full flex items-center justify-center border-2 border-white cursor-pointer shadow">
                     <span class="material-symbols-outlined mat text-[14px]">photo_camera</span>
-                    <input type="file" name="profile_img" accept="image/*" class="hidden"/>
+                    <input type="file" name="profile_img" accept="image/*" class="hidden" id="nursery-logo-input" onchange="previewNurseryLogo(event)"/>
                   </label>
                 </div>
                 <div>
@@ -130,7 +130,7 @@
                   <div class="flex gap-2">
                     <label class="cursor-pointer px-3 py-1.5 bg-primary/10 text-primary text-xs font-semibold rounded-lg hover:bg-primary/20 transition-colors">
                       Change Logo
-                      <input type="file" name="profile_img" accept="image/*" class="hidden"/>
+                      <input type="file" name="profile_img" accept="image/*" class="hidden" onchange="previewNurseryLogo(event)"/>
                     </label>
                   </div>
                   @error('profile_img') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
@@ -502,6 +502,25 @@ function previewOwnerPhoto(event) {
     const dt = new DataTransfer();
     dt.items.add(file);
     mainInput.files = dt.files;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ── Nursery logo preview ── */
+function previewNurseryLogo(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const wrapper = document.getElementById('nursery-logo-wrapper');
+    wrapper.innerHTML = `<img id="nursery-logo-preview" src="${e.target.result}" alt="Nursery Logo" class="w-full h-full object-cover"/>`;
+    const mainInput = document.getElementById('nursery-logo-input');
+    // If event isn't from the main input, sync it
+    if(event.target.id !== 'nursery-logo-input') {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        mainInput.files = dt.files;
+    }
   };
   reader.readAsDataURL(file);
 }
