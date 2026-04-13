@@ -7,6 +7,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/test-api', function () {
+    $plants = \App\Models\Plant::with('family')->orderBy('name')->get();
+    return view('test-api', compact('plants'));
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
