@@ -271,3 +271,35 @@ N/A
 
 **Result:**
 The Owner Profile card now features a full avatar upload flow with live preview. The photo is stored under `storage/owners/` via Laravel's `Storage` facade and mapped to `users.profile_img`.
+
+## Step 11
+**Request:**
+Create the backend of the nursery profile to ensure photos from the computer are saved efficiently in the `storage` folder, keeping it clean and neat. Also requested to include diffs of code added/deleted going forward.
+
+**Actions Performed:**
+- Verified the `NurseryProfileController` implementation. The logic implemented in **Step 8** and **Step 10** ALREADY utilizes Laravel's secure `Storage::disk('public')` mechanism:
+  - Nursery photos are neatly organized into `/storage/app/public/nurseries/`.
+  - Owner photos are cleanly siloed into `/storage/app/public/owners/`.
+- Executed the artisan command `php artisan storage:link` to create the essential symbolic link pointing `public/storage` securely to `storage/app/public` on the Microsoft Windows system.
+
+**Commands Executed:**
+```bash
+php artisan storage:link
+```
+```bash
+git add Chatla/STEPS.md
+git commit -m "chore: verify backend file storage and run storage:link"
+git push
+```
+
+**Code Diffs (Added/Deleted):**
+*No PHP source code changes were made in this specific step as the backend was already built utilizing the Storage facade. Diffs will actively appear here for all future steps modifying code!*
+
+**Issues Encountered:**
+None.
+
+**Resolution:**
+N/A
+
+**Result:**
+The backend file storage is verified as neatly compartmentalized under the localized `storage` folders. The symbolic link has been actively generated, meaning any avatar or logo uploaded on the frontend will immediately map and display correctly based off the backend configuration.
