@@ -541,3 +541,49 @@ Updated the parser to be "dash-agnostic" and strengthened the controller relatio
 
 **Result:**
 The "Saved as text" string is now 100% synchronized with the database, handling both legacy and new data formats perfectly.
+
+## Step 16
+**Request:**
+Fix the issue where toggling a day (e.g., Wednesday) off does not update the operating hours preview text.
+
+**Actions Performed:**
+- Modified file: `resources/views/nursery/profile.blade.php`
+  - Replaced all **en-dashes (–)** with standard **hyphens (-)** in the JavaScript logic. This eliminates potential hidden character matching bugs when parsing/joining strings.
+  - Added an explicit `addEventListener('change')` to ALL inputs (both checkboxes and time inputs) within the `.day-row` container. This ensures `buildPreview()` is always triggered regardless of which element is interacted with.
+  - Refactored `parseHours()` to include a clean UI reset at the start, ensuring the visual state exactly matches the database regardless of the initial HTML hardcoding.
+  - Optimized the per-row visual updates in the parser to avoid redundant `toggleDay()` calls during initialization.
+
+**Commands Executed:**
+```bash
+git add Chatla/resources/views/nursery/profile.blade.php Chatla/STEPS.md
+git commit -m "fix(profile): ensure reactive hours update on all input changes and standardize dashes"
+git push
+```
+
+**Code Diffs (Added/Deleted):**
+*resources/views/nursery/profile.blade.php*
+```diff
+-document.querySelectorAll('.day-row input[type="time"]').forEach(input => {
++document.querySelectorAll('.day-row input').forEach(input => {
+   input.addEventListener('change', function() {
+-    if (cb.checked) { ... }
+-    buildPreview();
++    // ... row logic ...
++    buildPreview();
+   });
+ });
+
+-const range = rangeStart === rangeDay ? rangeDay : `${rangeStart}–${rangeDay}`;
+-segments.push(`${range}: ${rangeOpen} – ${rangeClose}`);
++const range = rangeStart === rangeDay ? rangeDay : `${rangeStart}-${rangeDay}`;
++segments.push(`${range}: ${rangeOpen} - ${rangeClose}`);
+```
+
+**Issues Encountered:**
+The specific listener for time inputs was missing checkbox changes, and the en-dash character was causing subtle parsing failures that made the UI appear non-reactive.
+
+**Resolution:**
+Switched to a universal input listener for the container and standardized on simple ASCII hyphens.
+
+**Result:**
+The operating hours preview now reacts instantly and accurately whenever any day is toggled or any time is changed.

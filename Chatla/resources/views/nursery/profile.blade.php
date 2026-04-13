@@ -431,7 +431,7 @@ function to12(val) {
 
 function formatTimeRange(row) {
   const inputs = row.querySelectorAll('input[type="time"]');
-  return `${to12(inputs[0].value)} – ${to12(inputs[1].value)}`;
+  return `${to12(inputs[0].value)} - ${to12(inputs[1].value)}`;
 }
 
 /* ── Convert 12h AM/PM → 24h ── */
@@ -447,15 +447,17 @@ function from12(val) {
   return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
 }
 
-/* ── Live preview on time change ── */
-document.querySelectorAll('.day-row input[type="time"]').forEach(input => {
+/* ── Live preview listeners ── */
+document.querySelectorAll('.day-row input').forEach(input => {
   input.addEventListener('change', function() {
     const row = this.closest('.day-row');
     const cb = row.querySelector('.toggle-input');
     if (cb.checked) {
       row.querySelector('.day-preview').textContent = formatTimeRange(row);
-      buildPreview();
+    } else {
+      row.querySelector('.day-preview').textContent = 'Closed';
     }
+    buildPreview();
   });
 });
 
@@ -467,8 +469,8 @@ function buildPreview() {
 
   function flush() {
     if (!rangeStart) return;
-    const range = rangeStart === rangeDay ? rangeDay : `${rangeStart}–${rangeDay}`;
-    segments.push(`${range}: ${rangeOpen} – ${rangeClose}`);
+    const range = rangeStart === rangeDay ? rangeDay : `${rangeStart}-${rangeDay}`;
+    segments.push(`${range}: ${rangeOpen} - ${rangeClose}`);
     rangeStart = null;
   }
 
@@ -503,22 +505,32 @@ function parseHours() {
   const rows = document.querySelectorAll('.day-row');
   const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
+  // Reset UI to all closed first
+  rows.forEach(row => {
+    const cb = row.querySelector('.toggle-input');
+    cb.checked = false;
+    const timeFields = row.querySelector('.time-fields');
+    timeFields.classList.add('opacity-30','pointer-events-none');
+    timeFields.querySelectorAll('input').forEach(i => i.disabled = true);
+    row.querySelector('span.w-8').className = 'w-8 text-sm font-semibold text-slate-400';
+    row.querySelector('.day-preview').textContent = 'Closed';
+  });
+
   const segments = savedVal.split(' · ');
   segments.forEach(segment => {
     const [daysPart, timesPart] = segment.split(': ');
     if (!timesPart) return;
 
-    // Handle both en-dash (–) and hyphen (-) for time range
-    const times = timesPart.includes(' – ') ? timesPart.split(' – ') : timesPart.split(' - ');
+    // Split times by hyphen
+    const times = timesPart.split(' - ');
     if (times.length < 2) return;
     
     const open = times[0], close = times[1];
     const days = [];
 
-    // Handle both en-dash (–) and hyphen (-) for day range
-    if (daysPart.includes('–') || daysPart.includes('-')) {
-        const separator = daysPart.includes('–') ? '–' : '-';
-        const range = daysPart.split(separator);
+    // Split range by hyphen
+    if (daysPart.includes('-')) {
+        const range = daysPart.split('-');
         const startIndex = dayNames.indexOf(range[0].trim());
         const endIndex = dayNames.indexOf(range[1].trim());
         if (startIndex !== -1 && endIndex !== -1) {
@@ -536,7 +548,13 @@ function parseHours() {
             const inputs = row.querySelectorAll('input[type="time"]');
             inputs[0].value = from12(open);
             inputs[1].value = from12(close);
-            toggleDay(cb);
+            
+            // Visual update for the row
+            const timeFields = row.querySelector('.time-fields');
+            timeFields.classList.remove('opacity-30','pointer-events-none');
+            timeFields.querySelectorAll('input').forEach(i => i.disabled = false);
+            row.querySelector('span.w-8').className = 'w-8 text-sm font-semibold text-slate-700';
+            row.querySelector('.day-preview').textContent = formatTimeRange(row);
         }
     });
   });
