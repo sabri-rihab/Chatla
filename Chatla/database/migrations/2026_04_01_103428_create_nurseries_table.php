@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('website')->nullable();
             $table->unsignedTinyInteger('rating')->default(0); 
             $table->string('operating_hours')->nullable(); // Corrected spelling and type
+            $table->string('profile_img')->nullable();
             $table->timestamps();
         });
     }

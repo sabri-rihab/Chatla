@@ -155,3 +155,29 @@ N/A
 
 **Result:**
 Confirmed that the database is already fully prepared to handle `profile_img`. User's manual modifications to `routes/web.php` were committed and pushed alongside this log.
+
+## Step 7
+**Request:**
+Add `profile_img` in the nursery migration. Commit and push after modification.
+
+**Actions Performed:**
+- Modified file: `database/migrations/2026_04_01_103428_create_nurseries_table.php`
+  - Added `$table->string('profile_img')->nullable();` to the `nurseries` schema.
+- Modified file: `app/Models/Nursery.php`
+  - Added `'profile_img'` to the `$fillable` array to ensure it is mass assignable.
+
+**Commands Executed:**
+```bash
+git add Chatla/database/migrations/2026_04_01_103428_create_nurseries_table.php Chatla/app/Models/Nursery.php Chatla/STEPS.md
+git commit -m "feat(database): add profile_img column to nurseries table"
+git push
+```
+
+**Issues Encountered:**
+None.
+
+**Resolution:**
+N/A
+
+**Result:**
+The `nurseries` table is now configured to store a distinct `profile_img` per nursery business branch. Note: The exact command `php artisan migrate:fresh --seed` (or simple `migrate`) will need to be executed on the target environment to reconstruct the tables.
