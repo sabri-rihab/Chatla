@@ -49,6 +49,7 @@ class NurseryProfileController extends Controller
         $user->update($userData);
 
         // Update Nursery info
+        $nursery = $user->nursery;
         $nurseryData = [
             'name'            => $request->name,
             'city_id'         => $request->city_id,
@@ -63,8 +64,7 @@ class NurseryProfileController extends Controller
             if ($nursery->profile_img) {
                 Storage::disk('public')->delete($nursery->profile_img);
             }
-            $path = $request->file('profile_img')->store('nurseries', 'public');
-            $nurseryData['profile_img'] = $path;
+            $nurseryData['profile_img'] = $request->file('profile_img')->store('nurseries', 'public');
         }
 
         $nursery->update($nurseryData);

@@ -508,19 +508,24 @@ function parseHours() {
     const [daysPart, timesPart] = segment.split(': ');
     if (!timesPart) return;
 
-    const times = timesPart.split(' – ');
+    // Handle both en-dash (–) and hyphen (-) for time range
+    const times = timesPart.includes(' – ') ? timesPart.split(' – ') : timesPart.split(' - ');
+    if (times.length < 2) return;
+    
     const open = times[0], close = times[1];
     const days = [];
 
-    if (daysPart.includes('–')) {
-        const range = daysPart.split('–');
-        const startIndex = dayNames.indexOf(range[0]);
-        const endIndex = dayNames.indexOf(range[1]);
+    // Handle both en-dash (–) and hyphen (-) for day range
+    if (daysPart.includes('–') || daysPart.includes('-')) {
+        const separator = daysPart.includes('–') ? '–' : '-';
+        const range = daysPart.split(separator);
+        const startIndex = dayNames.indexOf(range[0].trim());
+        const endIndex = dayNames.indexOf(range[1].trim());
         if (startIndex !== -1 && endIndex !== -1) {
             for (let i = startIndex; i <= endIndex; i++) days.push(dayNames[i]);
         }
     } else {
-        days.push(daysPart);
+        days.push(daysPart.trim());
     }
 
     days.forEach(day => {
