@@ -17,12 +17,13 @@ Route::get('/dashboard', function () {
     if ($user->role === 'nursery_owner') {
         $nursery = $user->nursery;
         $totalPlants = $nursery ? $nursery->inventory()->count() : 0;
+        $outOfStock = $nursery ? $nursery->inventory()->where('stock_quantity', '<=', 0)->count() : 0;
         
         $inventories = $nursery 
-            ? $nursery->inventory()->with('plant')->paginate(10)
+            ? $nursery->inventory()->with(['plant', 'plant.family'])->paginate(10)
             : new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
             
-        return view('nursery.dashboard', compact('totalPlants', 'inventories'));
+        return view('nursery.dashboard', compact('totalPlants', 'outOfStock', 'inventories'));
     }
     
     return view('dashboard');

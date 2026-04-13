@@ -72,3 +72,34 @@ N/A
 
 **Result:**
 Nursery owners now successfully see their custom dashboard, populated with their nursery catalog data, immediately after registering or logging in.
+
+## Step 4
+**Request:**
+Modify the provided nursery owner dashboard HTML to match the Laravel Blade structure. Ensure to commit and push after every code modification.
+
+**Actions Performed:**
+- Modified file: `routes/web.php`
+  - Added an `$outOfStock` variable calculation to the dashboard route.
+  - Passed `$outOfStock` via the `compact()` array to the view.
+- Modified file: `resources/views/nursery/dashboard.blade.php`
+  - Replaced static HTML values with dynamic Blade variables (`$totalPlants`, `$outOfStock`, `auth()->user()->name`, etc.).
+  - Implemented an `@forelse` loop spanning the newly provided HTML layout to list the user's inventory dynamically.
+  - Added dynamic fallback for the user's avatar based on `profile_img`.
+  - Replaced the static pagination UI with standard Laravel `$inventories->links()` logic, adapting it smoothly into the design.
+- Committed and pushed these changes to the upstream repository.
+
+**Commands Executed:**
+```bash
+git add Chatla/resources/views/nursery/dashboard.blade.php Chatla/routes/web.php Chatla/STEPS.md
+git commit -m "feat(dashboard): parse dynamic UI for nursery owner dashboard"
+git push
+```
+
+**Issues Encountered:**
+None.
+
+**Resolution:**
+N/A
+
+**Result:**
+The dashboard is now fully dynamic, visually matching the provided design exactly while pulling real metrics and table rows from the database. Changes successfully pushed.
