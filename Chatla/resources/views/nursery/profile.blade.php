@@ -260,82 +260,82 @@
 
                 <div class="day-row flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-slate-50 transition-colors" data-day="Mon">
                   <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" checked class="toggle-input sr-only" onchange="toggleDay(this)"/>
+                    <input type="checkbox" class="toggle-input sr-only" onchange="toggleDay(this)"/>
                     <div class="toggle-track w-10 h-5 bg-slate-200 rounded-full transition-colors duration-200 flex items-center px-0.5">
                       <div class="toggle-thumb w-4 h-4 bg-white rounded-full shadow transition-transform duration-200"></div>
                     </div>
                   </label>
-                  <span class="w-8 text-sm font-semibold text-slate-700">Mon</span>
-                  <div class="time-fields flex items-center gap-2 flex-1">
-                    <input type="time" value="08:00" class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
+                  <span class="w-8 text-sm font-semibold text-slate-400">Mon</span>
+                  <div class="time-fields flex items-center gap-2 flex-1 opacity-30 pointer-events-none">
+                    <input type="time" value="08:00" disabled class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
                     <span class="text-slate-300 text-sm">—</span>
-                    <input type="time" value="18:00" class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
+                    <input type="time" value="18:00" disabled class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
                   </div>
-                  <span class="text-xs text-slate-400 w-28 text-right day-preview">08:00 AM – 06:00 PM</span>
+                  <span class="text-xs text-slate-400 w-28 text-right day-preview">Closed</span>
                 </div>
 
                 <div class="day-row flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-slate-50 transition-colors" data-day="Tue">
                   <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" checked class="toggle-input sr-only" onchange="toggleDay(this)"/>
+                    <input type="checkbox" class="toggle-input sr-only" onchange="toggleDay(this)"/>
                     <div class="toggle-track w-10 h-5 bg-slate-200 rounded-full transition-colors duration-200 flex items-center px-0.5">
                       <div class="toggle-thumb w-4 h-4 bg-white rounded-full shadow transition-transform duration-200"></div>
                     </div>
                   </label>
-                  <span class="w-8 text-sm font-semibold text-slate-700">Tue</span>
-                  <div class="time-fields flex items-center gap-2 flex-1">
-                    <input type="time" value="08:00" class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
+                  <span class="w-8 text-sm font-semibold text-slate-400">Tue</span>
+                  <div class="time-fields flex items-center gap-2 flex-1 opacity-30 pointer-events-none">
+                    <input type="time" value="08:00" disabled class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
                     <span class="text-slate-300 text-sm">—</span>
-                    <input type="time" value="18:00" class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
+                    <input type="time" value="18:00" disabled class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
                   </div>
-                  <span class="text-xs text-slate-400 w-28 text-right day-preview">08:00 AM – 06:00 PM</span>
+                  <span class="text-xs text-slate-400 w-28 text-right day-preview">Closed</span>
                 </div>
 
                 <div class="day-row flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-slate-50 transition-colors" data-day="Wed">
                   <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" checked class="toggle-input sr-only" onchange="toggleDay(this)"/>
+                    <input type="checkbox" class="toggle-input sr-only" onchange="toggleDay(this)"/>
                     <div class="toggle-track w-10 h-5 bg-slate-200 rounded-full transition-colors duration-200 flex items-center px-0.5">
                       <div class="toggle-thumb w-4 h-4 bg-white rounded-full shadow transition-transform duration-200"></div>
                     </div>
                   </label>
-                  <span class="w-8 text-sm font-semibold text-slate-700">Wed</span>
-                  <div class="time-fields flex items-center gap-2 flex-1">
-                    <input type="time" value="08:00" class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
+                  <span class="w-8 text-sm font-semibold text-slate-400">Wed</span>
+                  <div class="time-fields flex items-center gap-2 flex-1 opacity-30 pointer-events-none">
+                    <input type="time" value="08:00" disabled class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
                     <span class="text-slate-300 text-sm">—</span>
-                    <input type="time" value="18:00" class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
+                    <input type="time" value="18:00" disabled class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
                   </div>
-                  <span class="text-xs text-slate-400 w-28 text-right day-preview">08:00 AM – 06:00 PM</span>
+                  <span class="text-xs text-slate-400 w-28 text-right day-preview">Closed</span>
                 </div>
 
                 <div class="day-row flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-slate-50 transition-colors" data-day="Thu">
                   <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" checked class="toggle-input sr-only" onchange="toggleDay(this)"/>
+                    <input type="checkbox" class="toggle-input sr-only" onchange="toggleDay(this)"/>
                     <div class="toggle-track w-10 h-5 bg-slate-200 rounded-full transition-colors duration-200 flex items-center px-0.5">
                       <div class="toggle-thumb w-4 h-4 bg-white rounded-full shadow transition-transform duration-200"></div>
                     </div>
                   </label>
-                  <span class="w-8 text-sm font-semibold text-slate-700">Thu</span>
-                  <div class="time-fields flex items-center gap-2 flex-1">
-                    <input type="time" value="08:00" class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
+                  <span class="w-8 text-sm font-semibold text-slate-400">Thu</span>
+                  <div class="time-fields flex items-center gap-2 flex-1 opacity-30 pointer-events-none">
+                    <input type="time" value="08:00" disabled class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
                     <span class="text-slate-300 text-sm">—</span>
-                    <input type="time" value="18:00" class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
+                    <input type="time" value="18:00" disabled class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
                   </div>
-                  <span class="text-xs text-slate-400 w-28 text-right day-preview">08:00 AM – 06:00 PM</span>
+                  <span class="text-xs text-slate-400 w-28 text-right day-preview">Closed</span>
                 </div>
 
                 <div class="day-row flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-slate-50 transition-colors" data-day="Fri">
                   <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" checked class="toggle-input sr-only" onchange="toggleDay(this)"/>
+                    <input type="checkbox" class="toggle-input sr-only" onchange="toggleDay(this)"/>
                     <div class="toggle-track w-10 h-5 bg-slate-200 rounded-full transition-colors duration-200 flex items-center px-0.5">
                       <div class="toggle-thumb w-4 h-4 bg-white rounded-full shadow transition-transform duration-200"></div>
                     </div>
                   </label>
-                  <span class="w-8 text-sm font-semibold text-slate-700">Fri</span>
-                  <div class="time-fields flex items-center gap-2 flex-1">
-                    <input type="time" value="08:00" class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
+                  <span class="w-8 text-sm font-semibold text-slate-400">Fri</span>
+                  <div class="time-fields flex items-center gap-2 flex-1 opacity-30 pointer-events-none">
+                    <input type="time" value="08:00" disabled class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
                     <span class="text-slate-300 text-sm">—</span>
-                    <input type="time" value="18:00" class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
+                    <input type="time" value="18:00" disabled class="bg-background-light border-none rounded-lg px-3 py-1.5 text-sm font-medium focus:ring-2 focus:ring-primary/30 outline-none"/>
                   </div>
-                  <span class="text-xs text-slate-400 w-28 text-right day-preview">08:00 AM – 06:00 PM</span>
+                  <span class="text-xs text-slate-400 w-28 text-right day-preview">Closed</span>
                 </div>
 
                 <div class="day-row flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-slate-50 transition-colors" data-day="Sat">
@@ -377,7 +377,7 @@
                   <span class="material-symbols-outlined mat-fill text-primary text-[18px] mt-0.5">info</span>
                   <div>
                     <p class="text-xs font-semibold text-slate-600 mb-1">Saved as text</p>
-                    <p class="text-xs font-mono text-slate-500 leading-relaxed" id="hours-preview">Loading...</p>
+                    <p class="text-xs font-mono text-slate-500 leading-relaxed" id="hours-preview">No hours set</p>
                     
                     <input type="hidden" name="operating_hours" id="hours-value" value="{{ old('operating_hours', auth()->user()->nursery->operating_hours ?? '') }}"/>
                   </div>

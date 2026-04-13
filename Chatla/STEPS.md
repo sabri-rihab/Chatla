@@ -587,3 +587,46 @@ Switched to a universal input listener for the container and standardized on sim
 
 **Result:**
 The operating hours preview now reacts instantly and accurately whenever any day is toggled or any time is changed.
+
+## Step 17
+**Request:**
+The default state should be the user's current operating hours from the database.
+
+**Actions Performed:**
+- Modified file: `resources/views/nursery/profile.blade.php`
+  - Changed the static HTML for **Monday through Friday** to be "Closed" and "Unchecked" by default. Previously, these were hardcoded as "Checked" and "8am-6pm".
+  - This prevents the UI from showing incorrect default hours for a split second before JavaScript loads, and more importantly, it prevents the system from accidentally overwriting a empty/custom database value with these hardcoded defaults.
+  - Updated the "Saved as text" placeholder in the HTML to "No hours set".
+  - Now, the `parseHours()` function is the unified logic that "opens" the days based exactly on what is stored in the database.
+
+**Commands Executed:**
+```bash
+git add Chatla/resources/views/nursery/profile.blade.php Chatla/STEPS.md
+git commit -m "fix(profile): set HTML defaults to closed to ensure UI exactly mirrors database"
+git push
+```
+
+**Code Diffs (Added/Deleted):**
+*resources/views/nursery/profile.blade.php*
+```diff
+-   <input type="checkbox" checked class="toggle-input sr-only" ... />
++   <input type="checkbox" class="toggle-input sr-only" ... />
+
+-   <span class="w-8 text-sm font-semibold text-slate-700">Mon</span>
++   <span class="w-8 text-sm font-semibold text-slate-400">Mon</span>
+
+-   <div class="time-fields flex items-center gap-2 flex-1">
++   <div class="time-fields flex items-center gap-2 flex-1 opacity-30 pointer-events-none">
+
+-   <span class="day-preview">08:00 AM – 06:00 PM</span>
++   <span class="day-preview">Closed</span>
+```
+
+**Issues Encountered:**
+The hardcoded "Checked" state in the HTML for Mon-Fri was overriding the user's actual intent if their database was empty or had different settings, as the system would "auto-fill" the defaults on every page load.
+
+**Resolution:**
+Starting with a "Blank Slate" (All Closed) in the HTML ensures the UI is a perfect mirror of the database once `parseHours()` runs.
+
+**Result:**
+The profile form now accurately reflects the user's current settings from the moment it finishes loading, with no "phantom" defaults.
