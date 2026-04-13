@@ -181,3 +181,37 @@ N/A
 
 **Result:**
 The `nurseries` table is now configured to store a distinct `profile_img` per nursery business branch. Note: The exact command `php artisan migrate:fresh --seed` (or simple `migrate`) will need to be executed on the target environment to reconstruct the tables.
+
+## Step 8
+**Request:**
+Add the "Nursery Info" page mapping to the provided HTML, using the Blade structure and linking it off the nursery_owner dashboard.
+
+**Actions Performed:**
+- Created file: `resources/views/nursery/profile.blade.php`
+  - Integrated the provided detailed HTML structure for editing nursery profiles.
+  - Dynamically linked the form to routes (`dashboard` and `nursery.profile.update`).
+  - Implemented dynamic prepopulation for `owner_name`, `email`, `address`, `phone`, `website`, and `city_id` (iterating through existing `City` records).
+  - Wired up the visual file upload component to point its `<input name="profile_img">` back to the server securely.
+- Created file: `app/Http/Controllers/NurseryProfileController.php`
+  - Created the `edit()` method to render the view with available cities.
+  - Created the `update()` method to securely validate the input, parse the `profile_img` standard Laravel Storage object, and commit the changes directly to `nursery` and `user` models.
+- Modified file: `routes/web.php`
+  - Safely grouped the new `/nursery/profile` GET and PUT routes alongside `/dashboard` under the shared `nursery_owner` middleware block.
+- Modified file: `resources/views/nursery/dashboard.blade.php`
+  - Linked the "Nursery Info" sidebar link dynamically via `href="{{ route('nursery.profile.edit') }}"`.
+
+**Commands Executed:**
+```bash
+git add Chatla/app/Http/Controllers/NurseryProfileController.php Chatla/resources/views/nursery/profile.blade.php Chatla/resources/views/nursery/dashboard.blade.php Chatla/routes/web.php Chatla/STEPS.md
+git commit -m "feat(profile): create nursery profile editor view and handling logic"
+git push
+```
+
+**Issues Encountered:**
+During routing updates, a transient syntax typo appeared where a middleware closure was missing its opening block.
+
+**Resolution:**
+Immediately detected via explicit formatting checks and re-patched `routes/web.php` to legally group using `Route::middleware([...])->group(function() { ... });`
+
+**Result:**
+Nursery owners now possess a fully operational "Nursery Info" profile editor layout where they can upload their `profile_img`, set their physical location metadata, change business naming schemas, and log operating hours.

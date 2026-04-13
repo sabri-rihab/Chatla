@@ -60,7 +60,7 @@
                 <span class="material-symbols-outlined text-[20px]">add_circle</span>
                 Add New Plant
             </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-primary/8 hover:text-primary rounded-lg text-sm font-medium transition-colors">
+            <a href="{{ route('nursery.profile.edit') }}" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-primary/8 hover:text-primary rounded-lg text-sm font-medium transition-colors">
                 <span class="material-symbols-outlined text-[20px]">storefront</span>
                 Nursery Info
             </a>
