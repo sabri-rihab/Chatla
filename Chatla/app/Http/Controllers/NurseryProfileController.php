@@ -26,16 +26,27 @@ class NurseryProfileController extends Controller
             'owner_name'      => ['required', 'string', 'max:255'],
             'operating_hours' => ['nullable', 'string', 'max:1000'],
             'profile_img'     => ['nullable', 'image', 'max:2048'],
+            'owner_profile_img' => ['nullable', 'image', 'max:2048'],
         ]);
 
         $user = $request->user();
         $nursery = $request->attributes->get('nursery');
 
-        // Update User info (assuming their login email and the "contact email" in the form are the same)
-        $user->update([
+        // Update User info
+        $userData = [
             'name'  => $request->owner_name,
             'email' => $request->email,
-        ]);
+        ];
+
+        // Handle owner profile image upload
+        if ($request->hasFile('owner_profile_img')) {
+            if ($user->profile_img) {
+                Storage::disk('public')->delete($user->profile_img);
+            }
+            $userData['profile_img'] = $request->file('owner_profile_img')->store('owners', 'public');
+        }
+
+        $user->update($userData);
 
         // Update Nursery info
         $nurseryData = [

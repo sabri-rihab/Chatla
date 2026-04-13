@@ -209,6 +209,34 @@
           <div class="mb-6">
             <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Owner Profile</h2>
             <div class="bg-white rounded-xl border border-slate-100 p-6">
+              <div class="flex items-center gap-6 mb-5">
+                <!-- Owner avatar -->
+                <div class="relative shrink-0">
+                  <div class="w-16 h-16 rounded-full border-2 border-slate-100 overflow-hidden bg-background-light" id="owner-avatar-wrapper">
+                    @if(auth()->user()->profile_img)
+                      <img id="owner-avatar-preview" src="{{ asset('storage/' . auth()->user()->profile_img) }}" alt="Owner Photo" class="w-full h-full object-cover"/>
+                    @else
+                      <div id="owner-avatar-preview" class="w-full h-full bg-primary/20 bg-cover bg-center flex items-center justify-center">
+                        <span class="material-symbols-outlined mat-fill text-primary/60 text-[32px]">person</span>
+                      </div>
+                    @endif
+                  </div>
+                  <label class="absolute -bottom-1 -right-1 w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center border-2 border-white cursor-pointer shadow">
+                    <span class="material-symbols-outlined mat text-[12px]">photo_camera</span>
+                    <input type="file" name="owner_profile_img" accept="image/*" class="hidden" id="owner-photo-input" onchange="previewOwnerPhoto(event)"/>
+                  </label>
+                </div>
+                <div>
+                  <p class="font-semibold text-sm">Owner Photo</p>
+                  <p class="text-xs text-slate-400 mt-0.5 mb-2">Visible on your public nursery profile</p>
+                  <label class="cursor-pointer px-3 py-1.5 bg-primary/10 text-primary text-xs font-semibold rounded-lg hover:bg-primary/20 transition-colors">
+                    Upload Photo
+                    <input type="file" name="owner_profile_img" accept="image/*" class="hidden" onchange="previewOwnerPhoto(event)"/>
+                  </label>
+                  @error('owner_profile_img') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                </div>
+              </div>
+
               <div class="grid grid-cols-2 gap-4">
                 <div class="flex flex-col gap-1.5 col-span-2">
                   <label class="text-xs font-semibold text-slate-600">Owner Name</label>
@@ -452,18 +480,30 @@ function buildPreview() {
   const str = segments.join(' · ');
   document.getElementById('hours-preview').textContent = str || 'No hours set';
   
-  // NOTE: We only want to auto-fill the field if there wasn't already a saved value, or if they change it.
-  // Actually, since Javascript runs to rebuild it initially from the hardcoded values "Mon" and "Tue", 
-  // it might overwrite old values! The user HTML is hardcoded for Mon and Tue right now.
-  // Assuming this is just a mockup that replaces the string. Let's write to it.
   document.getElementById('hours-value').value = str;
 }
 
-/* init */
-// Because the HTML only has two days directly, calling this on load will overwrite the DB value 
-// in hours-value input with "Mon–Tue: 08:00 AM – 06:00 PM". Let's conditionally set it.
+/* init — only build preview if no saved value exists yet */
 if (!document.getElementById('hours-value').value) {
     buildPreview();
+}
+
+/* ── Owner photo preview ── */
+function previewOwnerPhoto(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const wrapper = document.getElementById('owner-avatar-wrapper');
+    // Replace whatever is inside the wrapper with a live <img>
+    wrapper.innerHTML = `<img id="owner-avatar-preview" src="${e.target.result}" alt="Owner Photo" class="w-full h-full object-cover"/>`;
+    // Also sync the hidden file input so the form submits correctly
+    const mainInput = document.getElementById('owner-photo-input');
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    mainInput.files = dt.files;
+  };
+  reader.readAsDataURL(file);
 }
 </script>
 </body>

@@ -241,3 +241,33 @@ N/A
 
 **Result:**
 The nursery operating hour configurations span all 7 days of the week correctly, saving neatly into the structured string database format (`Mon-Fri: 08:00 AM – 06:00 PM · Closed...` etc.) natively handled by the existing script logic.
+
+## Step 10
+**Request:**
+Add the Owner Profile photo upload UI (avatar, live preview, upload button) and wire up the owner's `profile_img` field.
+
+**Actions Performed:**
+- Modified file: `resources/views/nursery/profile.blade.php`
+  - Replaced the bare owner name section with a full avatar UI, conditionally showing the stored `profile_img` or a placeholder icon.
+  - Added two file inputs (camera button and "Upload Photo" button) both pointing to `name="owner_profile_img"` and triggering `previewOwnerPhoto(event)`.
+  - Added `previewOwnerPhoto()` JS function using `FileReader` for a live preview without page reload. It also syncs all file inputs via `DataTransfer` so the form correctly sends the file.
+  - Cleaned up outdated comments in the hours `buildPreview` init block.
+- Modified file: `app/Http/Controllers/NurseryProfileController.php`
+  - Added `owner_profile_img` to the validation rules (nullable image, max 2 MB).
+  - Before `$user->update()`, checks for `owner_profile_img` upload, deletes old image from `storage/owners/` if present, stores the new file, and adds `profile_img` path to the user data array.
+
+**Commands Executed:**
+```bash
+git add Chatla/resources/views/nursery/profile.blade.php Chatla/app/Http/Controllers/NurseryProfileController.php Chatla/STEPS.md
+git commit -m "feat(profile): add owner photo upload with live preview to nursery profile"
+git push
+```
+
+**Issues Encountered:**
+None.
+
+**Resolution:**
+N/A
+
+**Result:**
+The Owner Profile card now features a full avatar upload flow with live preview. The photo is stored under `storage/owners/` via Laravel's `Storage` facade and mapped to `users.profile_img`.
