@@ -12,22 +12,18 @@ Route::get('/test-api', function () {
     return view('test-api', compact('plants'));
 });
 
-Route::get('/dashboard', function () {
-    $user = auth()->user();
-    if ($user->role === 'nursery_owner') {
-        $nursery = $user->nursery;
-        $totalPlants = $nursery ? $nursery->inventory()->count() : 0;
-        $outOfStock = $nursery ? $nursery->inventory()->where('stock_quantity', '<=', 0)->count() : 0;
-        
-        $inventories = $nursery 
-            ? $nursery->inventory()->with(['plant', 'plant.family'])->paginate(10)
-            : new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
-            
-        return view('nursery.dashboard', compact('totalPlants', 'outOfStock', 'inventories'));
-    }
+Route::get('/dashboard', function (\Illuminate\Http\Request $request) {
+    // The NurseryOwnerMiddleware guarantees the role is nursery_owner
+    // and attaches the user's nursery to the request attributes.
+    $nursery = $request->attributes->get('nursery');
+
+    $totalPlants = $nursery->inventory()->count();
+    $outOfStock = $nursery->inventory()->where('stock_quantity', '<=', 0)->count();
     
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    $inventories = $nursery->inventory()->with(['plant', 'plant.family'])->paginate(10);
+        
+    return view('nursery.dashboard', compact('totalPlants', 'outOfStock', 'inventories'));
+})->middleware(['auth', 'verified', 'nursery_owner'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

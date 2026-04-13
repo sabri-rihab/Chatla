@@ -103,3 +103,29 @@ N/A
 
 **Result:**
 The dashboard is now fully dynamic, visually matching the provided design exactly while pulling real metrics and table rows from the database. Changes successfully pushed.
+
+## Step 5
+**Request:**
+Use the `nursery_owner` middleware instead of manually checking `role === 'nursery_owner'`. Commit and push after the modification.
+
+**Actions Performed:**
+- Modified file: `routes/web.php`
+  - Removed the explicit `if ($user->role === 'nursery_owner')` check from the `/dashboard` route.
+  - Appended `nursery_owner` to the middleware array: `->middleware(['auth', 'verified', 'nursery_owner'])`.
+  - Updated the closure to fetch the nursery via `$request->attributes->get('nursery')` because the `NurseryOwnerMiddleware` attaches it there after performing the rigorous role and database checks natively.
+
+**Commands Executed:**
+```bash
+git add Chatla/routes/web.php Chatla/STEPS.md
+git commit -m "refactor(routes): use nursery_owner middleware on dashboard route"
+git push
+```
+
+**Issues Encountered:**
+None.
+
+**Resolution:**
+N/A
+
+**Result:**
+The dashboard route is now cleanly secured by the structured `NurseryOwnerMiddleware` class, eliminating boilerplate authorization logic from `routes/web.php`.
