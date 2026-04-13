@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\City; // <-- Added this so we can fetch the City IDs
 
 class NurserySeeder extends Seeder
 {
@@ -124,11 +125,16 @@ class NurserySeeder extends Seeder
         ];
 
         foreach ($nurseries as $nursery) {
+            
+            // 1. Find the city ID dynamically (or create it if it doesn't exist yet)
+            $city = City::firstOrCreate(['name' => $nursery['city']]);
+
+            // 2. Insert into the database using 'city_id' instead of 'city'
             DB::table('nurseries')->insert([
                 'owner_id'        => $nursery['owner_id'],
+                'city_id'         => $city->id,  // <-- This is the crucial fix!
                 'name'            => $nursery['name'],
                 'phone'           => $nursery['phone'],
-                'city'            => $nursery['city'],
                 'address'         => $nursery['address'],
                 'status'          => $nursery['status'],
                 'website'         => $nursery['website'],
