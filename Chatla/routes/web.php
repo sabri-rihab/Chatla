@@ -12,9 +12,7 @@ Route::get('/test-api', function () {
     return view('test-api', compact('plants'));
 });
 
-Route::get('/dashboard', function (\Illuminate\Http\Request $request) {
-    // The NurseryOwnerMiddleware guarantees the role is nursery_owner
-    // and attaches the user's nursery to the request attributes.
+Route::get('/dashboard', function (Request $request) {
     $nursery = $request->attributes->get('nursery');
 
     $totalPlants = $nursery->inventory()->count();

@@ -129,3 +129,29 @@ N/A
 
 **Result:**
 The dashboard route is now cleanly secured by the structured `NurseryOwnerMiddleware` class, eliminating boilerplate authorization logic from `routes/web.php`.
+
+## Step 6
+**Request:**
+Add `profile_img` for the users migration. Make sure to commit and push modifications.
+
+**Actions Performed:**
+- Verified the contents of `database/migrations/0001_01_01_000000_create_users_table.php`.
+- Verified the `App\Models\User` model.
+- Discovered that `$table->string('profile_img')->nullable();` was *already present* in the migration (Line 23), and `profile_img` is already properly declared inside the User model's `$fillable` array.
+
+**Commands Executed:**
+None required for code changes, but committing user's recent file modifications as requested.
+```bash
+git add Chatla/routes/web.php Chatla/STEPS.md
+git commit -m "chore: verify profile_img migration and commit user route changes"
+git push
+```
+
+**Issues Encountered:**
+None.
+
+**Resolution:**
+N/A
+
+**Result:**
+Confirmed that the database is already fully prepared to handle `profile_img`. User's manual modifications to `routes/web.php` were committed and pushed alongside this log.
