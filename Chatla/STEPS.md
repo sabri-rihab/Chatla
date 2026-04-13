@@ -418,3 +418,67 @@ Created and executed a dedicated migration to add the column.
 
 **Result:**
 The `profile_img` column now exists in the `nurseries` table, allowing nursery logos to be saved and displayed correctly.
+
+## Step 14
+**Request:**
+Ensure operating hours change and save correctly.
+
+**Actions Performed:**
+- Modified file: `resources/views/nursery/profile.blade.php`
+  - Implemented `parseHours()` JavaScript function to read the saved operating hours string from the database on page load.
+  - Automatically toggles checkboxes and sets time inputs (24h format converted from 12h) based on the saved string.
+  - Ensures `buildPreview()` is called on initialization to provide immediate visual feedback.
+  - This fix prevents the "default" UI values (Mon-Fri 8am-6pm) from overwriting custom saved data when a user makes a single change.
+
+**Commands Executed:**
+```bash
+git add Chatla/resources/views/nursery/profile.blade.php Chatla/STEPS.md
+git commit -m "fix(profile): sync operating hours UI with database value on load"
+git push
+```
+
+**Code Diffs (Added/Deleted):**
+*resources/views/nursery/profile.blade.php*
+```diff
++/* ── Convert 12h AM/PM → 24h ── */
++function from12(val) {
++  if (!val) return '08:00';
++  const parts = val.split(' ');
++  ...
++  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
++}
+
++/* ── Parse saved string → UI ── */
++function parseHours() {
++  const savedVal = document.getElementById('hours-value').value;
++  ...
++  days.forEach(day => {
++    const row = Array.from(rows).find(r => r.dataset.day === day);
++    if (row) {
++        const cb = row.querySelector('.toggle-input');
++        cb.checked = true;
++        const inputs = row.querySelectorAll('input[type="time"]');
++        inputs[0].value = from12(open);
++        inputs[1].value = from12(close);
++        toggleDay(cb);
++    }
++  });
++}
+
+-/* init — only build preview if no saved value exists yet */
+-if (!document.getElementById('hours-value').value) {
+-    buildPreview();
+-}
++/* init */
++parseHours();
++buildPreview();
+```
+
+**Issues Encountered:**
+The UI state (checkboxes and times) didn't match the saved string on load. Making any change caused the whole string to be rebuilt, effectively "losing" previously saved custom hours for other days.
+
+**Resolution:**
+Synchronized the UI state with the database value on initialization.
+
+**Result:**
+Operating hours now accurately reflect saved data and update reliably upon modification.

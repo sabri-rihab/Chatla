@@ -434,6 +434,19 @@ function formatTimeRange(row) {
   return `${to12(inputs[0].value)} – ${to12(inputs[1].value)}`;
 }
 
+/* ── Convert 12h AM/PM → 24h ── */
+function from12(val) {
+  if (!val) return '08:00';
+  const parts = val.split(' ');
+  if (parts.length < 2) return '08:00';
+  const time = parts[0];
+  const ampm = parts[1];
+  let [h, m] = time.split(':').map(Number);
+  if (ampm === 'PM' && h < 12) h += 12;
+  if (ampm === 'AM' && h === 12) h = 0;
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+}
+
 /* ── Live preview on time change ── */
 document.querySelectorAll('.day-row input[type="time"]').forEach(input => {
   input.addEventListener('change', function() {
@@ -479,14 +492,54 @@ function buildPreview() {
 
   const str = segments.join(' · ');
   document.getElementById('hours-preview').textContent = str || 'No hours set';
-  
   document.getElementById('hours-value').value = str;
 }
 
-/* init — only build preview if no saved value exists yet */
-if (!document.getElementById('hours-value').value) {
-    buildPreview();
+/* ── Parse saved string → UI ── */
+function parseHours() {
+  const savedVal = document.getElementById('hours-value').value;
+  if (!savedVal || savedVal === 'Loading...' || savedVal === 'No hours set') return;
+
+  const rows = document.querySelectorAll('.day-row');
+  const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+  const segments = savedVal.split(' · ');
+  segments.forEach(segment => {
+    const [daysPart, timesPart] = segment.split(': ');
+    if (!timesPart) return;
+
+    const times = timesPart.split(' – ');
+    const open = times[0], close = times[1];
+    const days = [];
+
+    if (daysPart.includes('–')) {
+        const range = daysPart.split('–');
+        const startIndex = dayNames.indexOf(range[0]);
+        const endIndex = dayNames.indexOf(range[1]);
+        if (startIndex !== -1 && endIndex !== -1) {
+            for (let i = startIndex; i <= endIndex; i++) days.push(dayNames[i]);
+        }
+    } else {
+        days.push(daysPart);
+    }
+
+    days.forEach(day => {
+        const row = Array.from(rows).find(r => r.dataset.day === day);
+        if (row) {
+            const cb = row.querySelector('.toggle-input');
+            cb.checked = true;
+            const inputs = row.querySelectorAll('input[type="time"]');
+            inputs[0].value = from12(open);
+            inputs[1].value = from12(close);
+            toggleDay(cb);
+        }
+    });
+  });
 }
+
+/* init */
+parseHours();
+buildPreview();
 
 /* ── Owner photo preview ── */
 function previewOwnerPhoto(event) {
