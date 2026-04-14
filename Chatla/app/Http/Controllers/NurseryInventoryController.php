@@ -45,6 +45,7 @@ class NurseryInventoryController extends Controller
                     'price' => (float)($item->price ?? 0),
                     'stock' => $item->quantity,
                     'status' => $statusMap[$item->stock_quantity] ?? 'out',
+                    'growth' => ucfirst($item->growth_status),
                     'desc' => $item->custom_description ?? $item->plant->about_description ?? '',
                     'img' => $item->images->first()->image_path ?? $item->plant->defaultImages->first()->image_url ?? 'https://via.placeholder.com/400x300?text=Plant'
                 ];

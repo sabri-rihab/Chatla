@@ -258,8 +258,8 @@
         </div>
       </div>
 
-      <!-- Name + Family row -->
-      <div class="grid grid-cols-2 gap-4">
+      <!-- Name + Family + Growth row -->
+      <div class="grid grid-cols-3 gap-4">
         <div class="flex flex-col gap-1.5">
           <label class="text-xs font-semibold text-slate-600">Plant Name</label>
           <input id="f-name" type="text" placeholder="Plant name"
@@ -268,6 +268,11 @@
         <div class="flex flex-col gap-1.5">
           <label class="text-xs font-semibold text-slate-600">Family</label>
           <input id="f-family" type="text" placeholder="Plant family"
+            class="bg-slate-50 text-slate-500 border border-slate-200 rounded-lg px-3 py-2.5 text-sm cursor-not-allowed outline-none" readonly/>
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label class="text-xs font-semibold text-slate-600">Growth Stage</label>
+          <input id="f-growth" type="text" placeholder="Growth"
             class="bg-slate-50 text-slate-500 border border-slate-200 rounded-lg px-3 py-2.5 text-sm cursor-not-allowed outline-none" readonly/>
         </div>
       </div>
@@ -380,7 +385,10 @@ function renderGrid(list) {
       </div>
       <!-- Card body -->
       <div class="p-4">
-        <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">${p.family}</p>
+        <div class="flex justify-between items-center mb-1">
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">${p.family}</p>
+          <span class="px-2 py-0.5 rounded text-[10px] font-semibold text-sky-700 bg-sky-50">${p.growth}</span>
+        </div>
         <h3 class="font-bold text-sm text-slate-900 mb-0.5 leading-snug">${p.name}</h3>
         <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-3">${p.desc}</p>
         <div class="flex items-center justify-between">
@@ -530,6 +538,7 @@ function openEdit(id) {
     title.textContent = 'Edit Plant';
     document.getElementById('f-name').value   = p.name;
     document.getElementById('f-family').value = p.family;
+    document.getElementById('f-growth').value = p.growth;
     document.getElementById('f-price').value  = p.price;
     document.getElementById('f-stock').value  = p.stock;
     document.getElementById('f-status').value = p.status;
@@ -538,7 +547,7 @@ function openEdit(id) {
   } else {
     // For now Add New Plant button handles some default UI, but the backend integration will come later.
     title.textContent = 'Add New Plant';
-    ['f-name','f-family','f-price','f-stock'].forEach(id => document.getElementById(id).value = '');
+    ['f-name','f-family','f-growth','f-price','f-stock'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('f-status').value = 'available';
   }
   modal.classList.add('open');

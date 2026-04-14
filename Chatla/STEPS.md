@@ -862,3 +862,21 @@ git push
 
 **Result:**
 The plant inventory interface now inherently synchronizes edit updates and delete routines continuously with database storage. The image manipulation and basic text revisions strictly obey backend constraints and validation rules while remaining localized on the SPA grid interface.
+
+## Step 24
+**Request:**
+Add `growth_status` to both the grid's card and into the "Edit" modal as a strictly read-only property to ensure tracking accuracy.
+
+**Actions Performed:**
+- Modified file: `app/Http/Controllers/NurseryInventoryController.php`
+  - Added new `growth` property via capitalizing the `$item->growth_status` database enum mapping value.
+- Modified file: `resources/views/nursery/inventory/index.blade.php`
+  - Redesigned the card HTML loop in `renderGrid` injecting a stylish `text-sky-700 bg-sky-50` rounded pill holding the `growth` value beside the family label.
+  - Re-mapped the "Edit Form" UI to dynamically stretch across `grid-cols-3` appending a read-only input locking the growth stage text down visually (`cursor-not-allowed`) mimicking the `plant_name` attributes constraints.
+
+**Commands Executed:**
+```bash
+git add app/Http/Controllers/NurseryInventoryController.php resources/views/nursery/inventory/index.blade.php STEPS.md
+git commit -m "feat(inventory): display dynamic growth status pill in cards and edit modal"
+git push
+```
