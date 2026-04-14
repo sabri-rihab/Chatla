@@ -761,3 +761,30 @@ git push
 
 **Result:**
 The plant inventory list now features a clean, professional navigation bar that is easier to use and fits better into the overall dashboard aesthetics.
+
+## Step 21
+**Request:**
+The logout should take the user directly to the login page.
+
+**Actions Performed:**
+- Modified file: `app/Http/Controllers/Auth/AuthenticatedSessionController.php`
+  - Updated the `destroy` method (which handles the logout request).
+  - Changed the return statement from `redirect('/')` to `redirect()->route('login')`.
+  - This ensures that after a user logs out, they are immediately presented with the login screen instead of being sent to the public landing page.
+
+**Commands Executed:**
+```bash
+git add Chatla/app/Http/Controllers/Auth/AuthenticatedSessionController.php Chatla/STEPS.md
+git commit -m "fix(auth): redirect to login page after logout"
+git push
+```
+
+**Code Diffs (Added/Deleted):**
+*app/Http/Controllers/Auth/AuthenticatedSessionController.php*
+```diff
+-        return redirect('/');
++        return redirect()->route('login');
+```
+
+**Result:**
+Logout actions now redirect users straight to the login interface.
