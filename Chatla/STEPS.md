@@ -834,3 +834,31 @@ The nursery owner can now access a beautiful, searchable plant catalogue (grid v
 - Adjusted the plant catalogue grid to display 4 items per row on desktop views (`xl:grid-cols-4`) and increased `PER_PAGE` to 8 for better alignment.
 - Stripped the edit plant modal down to the requested essentials: Plant Name and Family are now displayed in a `readonly` format (grayed out style), preventing modification.
 - Allowed only the essential attributes (Price, Units in Stock, Status, and Photo) to be edited, removing extraneous text inputs (Common Name, Description) to keep the interaction concise and safe.
+
+## Step 23
+**Request:**
+Connect the "Edit" and "Delete" actions inside the Plant Catalogue grid to properly submit API mutations to the backend with validation.
+
+**Actions Performed:**
+- Created migration: `add_price_and_quantity_to_nursery_inventories_table` to add missing inventory configurations to sync with the initial mockup fields.
+- Modified file: `routes/web.php`
+  - Added RESTful endpoints `PUT/POST /nursery/plants/{inventory}` and `DELETE /nursery/plants/{inventory}`.
+- Modified file: `app/Http/Controllers/NurseryInventoryController.php`
+  - Configured `update` method logic to accept a multipart form using validation constraints (`price > 0`, enum-checks, image limits). Fixed reverse-mapping logic back to enum values.
+  - Handled the physical saving process of the provided `image` file and stored its public path inside the `InventoryImage` link.
+  - Implemented `destroy` to cascade item removal from inventory grids.
+- Modified file: `resources/views/nursery/inventory/index.blade.php`
+  - Integrated `FormData` encapsulation inside `submitEdit` via Javascript to support Laravel HTTP form spoofing logic `_method=PUT` concurrently tracking `photo-input` elements.
+  - Updated `deletePlant` with Laravel CSRF tokens matching native frontend bindings for optimal network efficiency entirely skipping browser reloads.
+
+**Commands Executed:**
+```bash
+php artisan make:migration add_price_and_quantity_to_nursery_inventories_table --table=nursery_inventories
+php artisan migrate
+git add database/migrations/2026_04_14_102517_add_price_and_quantity_to_nursery_inventories_table.php app/Http/Controllers/NurseryInventoryController.php routes/web.php resources/views/nursery/inventory/index.blade.php STEPS.md
+git commit -m "feat(inventory): implement and connect edit-delete ajax API endpoints"
+git push
+```
+
+**Result:**
+The plant inventory interface now inherently synchronizes edit updates and delete routines continuously with database storage. The image manipulation and basic text revisions strictly obey backend constraints and validation rules while remaining localized on the SPA grid interface.

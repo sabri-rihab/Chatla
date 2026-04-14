@@ -43,10 +43,10 @@ class NurseryInventoryController extends Controller
                     'common' => $item->plant->common_name ?? '',
                     'family' => $item->plant->family->name ?? 'None',
                     'price' => (float)($item->price ?? 0),
-                    'stock' => $stockMap[$item->stock_quantity] ?? 0,
+                    'stock' => $item->quantity,
                     'status' => $statusMap[$item->stock_quantity] ?? 'out',
                     'desc' => $item->custom_description ?? $item->plant->about_description ?? '',
-                    'img' => $item->images->first()->image_url ?? $item->plant->defaultImages->first()->image_url ?? 'https://via.placeholder.com/400x300?text=Plant'
+                    'img' => $item->images->first()->image_path ?? $item->plant->defaultImages->first()->image_url ?? 'https://via.placeholder.com/400x300?text=Plant'
                 ];
             });
 
@@ -57,5 +57,65 @@ class NurseryInventoryController extends Controller
             'plants' => $formattedInventories,
             'families' => $families
         ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $nursery = Auth::user()->nursery;
+        
+        $inventory = NurseryInventory::where('id', $id)
+            ->where('nursery_id', $nursery->id)
+            ->firstOrFail();
+
+        $validated = $request->validate([
+            'price' => 'numeric|min:0',
+            'quantity' => 'numeric|min:0',
+            'stock_status' => 'string|in:available,low,out',
+            'image' => 'nullable|image|max:5120'
+        ]);
+
+        $statusReverseMap = [
+            'available' => 'in_stock',
+            'low' => 'low_stock',
+            'out' => 'pre_ordered', 
+        ];
+
+        $inventory->price = $validated['price'];
+        $inventory->quantity = $validated['quantity'];
+        $inventory->stock_quantity = $statusReverseMap[$validated['stock_status']] ?? 'in_stock';
+        $inventory->save();
+
+        $imageUrl = null;
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('inventory_images', 'public');
+            $imageUrl = '/storage/' . $path;
+            
+            $image = $inventory->images()->first();
+            if ($image) {
+                $image->update(['image_path' => $imageUrl]);
+            } else {
+                $inventory->images()->create([
+                    'image_path' => $imageUrl
+                ]);
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'image_url' => $imageUrl
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $nursery = Auth::user()->nursery;
+
+        $inventory = NurseryInventory::where('id', $id)
+            ->where('nursery_id', $nursery->id)
+            ->firstOrFail();
+
+        $inventory->delete();
+
+        return response()->json(['success' => true]);
     }
 }

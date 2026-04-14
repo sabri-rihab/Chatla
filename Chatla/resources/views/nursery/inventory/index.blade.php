@@ -4,6 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Plant Catalogue – Chatla</title>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -552,14 +553,61 @@ function submitEdit(e) {
   const price  = parseInt(document.getElementById('f-price').value) || 0;
   const stock  = parseInt(document.getElementById('f-stock').value) || 0;
   const status = document.getElementById('f-status').value;
+  const photoInput = document.getElementById('photo-input');
 
   if (editingId) {
     const p = plants.find(x => x.id === editingId);
-    Object.assign(p, { price, stock, status });
+    
+    // Create FormData for backend
+    const formData = new FormData();
+    formData.append('_method', 'PUT'); // Spoof PUT request for Laravel with file
+    formData.append('price', price);
+    formData.append('quantity', stock);
+    formData.append('stock_status', status);
+    
+    if (photoInput.files.length > 0) {
+      formData.append('image', photoInput.files[0]);
+    }
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+    // Send the fetch request
+    const btn = e.target.querySelector('button[type="submit"]');
+    const oldText = btn.innerHTML;
+    btn.innerHTML = 'Saving...';
+    btn.disabled = true;
+
+    fetch(`/nursery/plants/${editingId}`, {
+      method: 'POST', // using POST with _method=PUT
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+        'Accept': 'application/json'
+      },
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Validation or server error');
+      return response.json();
+    })
+    .then(data => {
+      if(data.success) {
+        // Update local state to reflect UI changes smoothly
+        Object.assign(p, { price, stock, status });
+        if (data.image_url) {
+           p.img = data.image_url;
+        }
+        closeEdit();
+        applyFilters();
+      } else {
+        alert('Could not update plant.');
+      }
+    })
+    .catch(error => alert('Error saving plant.'))
+    .finally(() => {
+      btn.innerHTML = oldText;
+      btn.disabled = false;
+    });
   }
-  
-  closeEdit();
-  applyFilters();
 }
 
 function previewPhoto(e) {
@@ -576,8 +624,27 @@ function previewPhoto(e) {
 function deletePlant(e, id) {
   e.stopPropagation();
   if (!confirm('Delete this plant?')) return;
-  plants = plants.filter(p => p.id !== id);
-  applyFilters();
+  
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+  
+  fetch(`/nursery/plants/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+        'Accept': 'application/json'
+      }
+  })
+  .then(response => {
+      if (!response.ok) throw new Error('Could not delete plant');
+      return response.json();
+  })
+  .then(data => {
+      if (data.success) {
+          plants = plants.filter(p => p.id !== id);
+          applyFilters();
+      }
+  })
+  .catch(error => alert(error.message));
 }
 
 /* ═══════════════════════════════════
