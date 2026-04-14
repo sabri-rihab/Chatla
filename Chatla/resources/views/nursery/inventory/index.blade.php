@@ -322,19 +322,7 @@
 /* ═══════════════════════════════════
    DATA (Populated from Laravel)
 ═══════════════════════════════════ */
-let plants = @json($inventories->map(function($item) {
-    return [
-        'id' => $item->id,
-        'name' => $item->plant->name ?? 'Unknown',
-        'common' => $item->plant->common_name ?? '',
-        'family' => $item->plant->family->name ?? 'None',
-        'price' => $item->price ?? 0,
-        'stock' => $item->stock_quantity === 'in_stock' ? 20 : ($item->stock_quantity === 'low_stock' ? 5 : 0), // Temporary mapping based on enum
-        'status' => $item->stock_quantity === 'in_stock' ? 'available' : ($item->stock_quantity === 'low_stock' ? 'low' : 'out'),
-        'desc' => $item->custom_description ?? $item->plant->about_description ?? '',
-        'img' => $item->images->first()->image_url ?? $item->plant->defaultImages->first()->image_url ?? 'https://via.placeholder.com/400x300?text=Plant'
-    ];
-}));
+let plants = @json($plants);
 
 let editingId = null;
 let selectedFamily = "";
@@ -426,7 +414,7 @@ function renderPagination(total, current) {
   const wrap = document.getElementById('pagination');
   if (total <= 1) { wrap.innerHTML = ''; return; }
 
-  let html = `<button onclick="goPage(${current-1})" \${current===1?'disabled':''} class="w-7 h-7 flex items-center justify-center rounded border border-slate-200 hover:bg-slate-50 text-slate-400 disabled:opacity-40">
+  let html = `<button onclick="goPage(${current-1})" ${current===1?'disabled':''} class="w-7 h-7 flex items-center justify-center rounded border border-slate-200 hover:bg-slate-50 text-slate-400 disabled:opacity-40">
     <span class="material-symbols-outlined mat text-[16px]">chevron_left</span></button>`;
 
   for (let i=1; i<=total; i++) {
@@ -434,10 +422,10 @@ function renderPagination(total, current) {
       if (i === 4) html += `<span class="text-slate-400 text-xs px-1">…</span>`;
       if (i !== current) continue;
     }
-    html += `<button onclick="goPage(\${i})" class="w-7 h-7 flex items-center justify-center rounded \${i===current ? 'bg-primary text-white font-bold' : 'border border-slate-200 hover:bg-slate-50 text-slate-500 font-medium'} text-xs">\${i}</button>`;
+    html += `<button onclick="goPage(${i})" class="w-7 h-7 flex items-center justify-center rounded ${i===current ? 'bg-primary text-white font-bold' : 'border border-slate-200 hover:bg-slate-50 text-slate-500 font-medium'} text-xs">${i}</button>`;
   }
 
-  html += `<button onclick="goPage(\${current+1})" \${current===total?'disabled':''} class="w-7 h-7 flex items-center justify-center rounded border border-slate-200 hover:bg-slate-50 text-slate-400 disabled:opacity-40">
+  html += `<button onclick="goPage(${current+1})" ${current===total?'disabled':''} class="w-7 h-7 flex items-center justify-center rounded border border-slate-200 hover:bg-slate-50 text-slate-400 disabled:opacity-40">
     <span class="material-symbols-outlined mat text-[16px]">chevron_right</span></button>`;
 
   wrap.innerHTML = html;
@@ -489,13 +477,13 @@ function updateChips(q, st, fam) {
   if (st) {
     const labels = { available:'In Stock', low:'Low Stock', out:'Out of Stock' };
     chips.push(`<span class="flex items-center gap-1 text-xs font-medium text-primary bg-primary-light px-2.5 py-1 rounded-full">
-      \${labels[st]}
+      ${labels[st]}
       <button onclick="document.getElementById('status-select').value='';applyFilters()" class="text-primary/60 hover:text-red-500 ml-0.5">
         <span class="material-symbols-outlined mat text-[13px]">close</span></button></span>`);
   }
   if (fam) {
     chips.push(`<span class="flex items-center gap-1 text-xs font-medium text-primary bg-primary-light px-2.5 py-1 rounded-full">
-      \${fam}
+      ${fam}
       <button onclick="selectedFamily='';document.getElementById('family-search').value='';applyFilters()" class="text-primary/60 hover:text-red-500 ml-0.5">
         <span class="material-symbols-outlined mat text-[13px]">close</span></button></span>`);
   }
@@ -562,7 +550,7 @@ function openEdit(id) {
     document.getElementById('f-desc').value   = p.desc;
     // show current image in preview
     document.getElementById('photo-preview').innerHTML = `
-      <img src="\${p.img}" class="w-full h-full object-cover rounded-xl" onerror=""/>`;
+      <img src="${p.img}" class="w-full h-full object-cover rounded-xl" onerror=""/>`;
   } else {
     title.textContent = 'Add New Plant';
     ['f-name','f-common','f-family','f-price','f-stock','f-desc'].forEach(id => document.getElementById(id).value = '');
@@ -603,7 +591,7 @@ function previewPhoto(e) {
   if (!file) return;
   const url = URL.createObjectURL(file);
   document.getElementById('photo-preview').innerHTML = `
-    <img src="\${url}" class="w-full h-full object-cover rounded-xl"/>`;
+    <img src="${url}" class="w-full h-full object-cover rounded-xl"/>`;
 }
 
 /* ═══════════════════════════════════

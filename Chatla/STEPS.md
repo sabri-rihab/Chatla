@@ -825,3 +825,9 @@ git push
 
 **Result:**
 The nursery owner can now access a beautiful, searchable plant catalogue (grid view) by clicking "My Plants" in the sidebar. This page includes real-time filtering, sorting, and placeholders for plant management (Edit/Add).
+
+**Update (Fixing ParseError):**
+- Resolved a `ParseError` caused by a complex multi-line closure inside the `@json` Blade directive.
+- Relocated data transformation logic to `NurseryInventoryController@index` to ensure a cleaner view and stable Blade compilation.
+- Corrected Javascript template literal escapes (`\${}`) in the view to restore dynamic UI functionality (pagination, filter chips).
+- Improved data mapping for `stock_quantity` (enum) and images to match the frontend template requirements.
