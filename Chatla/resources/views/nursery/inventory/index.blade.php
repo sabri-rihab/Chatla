@@ -212,7 +212,7 @@
         </div>
 
         <!-- ─── CATALOGUE GRID ─── -->
-        <div id="catalogue-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        <div id="catalogue-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
 
         <!-- Empty state -->
         <div id="empty-state" class="hidden flex-col items-center justify-center py-24 text-slate-400">
@@ -261,30 +261,22 @@
       <div class="grid grid-cols-2 gap-4">
         <div class="flex flex-col gap-1.5">
           <label class="text-xs font-semibold text-slate-600">Plant Name</label>
-          <input id="f-name" type="text" placeholder="e.g. Monstera Deliciosa"
-            class="bg-bg-page border-none rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 outline-none"/>
+          <input id="f-name" type="text" placeholder="Plant name"
+            class="bg-slate-50 text-slate-500 border border-slate-200 rounded-lg px-3 py-2.5 text-sm cursor-not-allowed outline-none" readonly/>
         </div>
         <div class="flex flex-col gap-1.5">
-          <label class="text-xs font-semibold text-slate-600">Common Name</label>
-          <input id="f-common" type="text" placeholder="e.g. Swiss Cheese Plant"
-            class="bg-bg-page border-none rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 outline-none"/>
+          <label class="text-xs font-semibold text-slate-600">Family</label>
+          <input id="f-family" type="text" placeholder="Plant family"
+            class="bg-slate-50 text-slate-500 border border-slate-200 rounded-lg px-3 py-2.5 text-sm cursor-not-allowed outline-none" readonly/>
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-4">
-        <div class="flex flex-col gap-1.5">
-          <label class="text-xs font-semibold text-slate-600">Family</label>
-          <input id="f-family" type="text" placeholder="e.g. Araceae"
-            class="bg-bg-page border-none rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 outline-none"/>
-        </div>
+      <div class="grid grid-cols-3 gap-4">
         <div class="flex flex-col gap-1.5">
           <label class="text-xs font-semibold text-slate-600">Price (MAD)</label>
           <input id="f-price" type="number" min="0" placeholder="250"
             class="bg-bg-page border-none rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 outline-none"/>
         </div>
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
         <div class="flex flex-col gap-1.5">
           <label class="text-xs font-semibold text-slate-600">Units in Stock</label>
           <input id="f-stock" type="number" min="0" placeholder="42"
@@ -304,12 +296,6 @@
         </div>
       </div>
 
-      <div class="flex flex-col gap-1.5">
-        <label class="text-xs font-semibold text-slate-600">Description</label>
-        <textarea id="f-desc" rows="3" placeholder="Short description of the plant..."
-          class="bg-bg-page border-none rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 outline-none resize-none"></textarea>
-      </div>
-
       <div class="flex items-center justify-end gap-3 pt-2 border-t border-slate-100">
         <button type="button" onclick="closeEdit()" class="text-slate-500 text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-slate-100 transition-colors">Cancel</button>
         <button type="submit" class="bg-primary text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity">Save Plant</button>
@@ -326,7 +312,7 @@ let plants = @json($plants);
 
 let editingId = null;
 let selectedFamily = "";
-const PER_PAGE = 6;
+const PER_PAGE = 8;
 let currentPage = 1;
 
 /* ═══════════════════════════════════
@@ -542,18 +528,16 @@ function openEdit(id) {
     const p = plants.find(x => x.id === id);
     title.textContent = 'Edit Plant';
     document.getElementById('f-name').value   = p.name;
-    document.getElementById('f-common').value = p.common;
     document.getElementById('f-family').value = p.family;
     document.getElementById('f-price').value  = p.price;
     document.getElementById('f-stock').value  = p.stock;
     document.getElementById('f-status').value = p.status;
-    document.getElementById('f-desc').value   = p.desc;
-    // show current image in preview
     document.getElementById('photo-preview').innerHTML = `
       <img src="${p.img}" class="w-full h-full object-cover rounded-xl" onerror=""/>`;
   } else {
+    // For now Add New Plant button handles some default UI, but the backend integration will come later.
     title.textContent = 'Add New Plant';
-    ['f-name','f-common','f-family','f-price','f-stock','f-desc'].forEach(id => document.getElementById(id).value = '');
+    ['f-name','f-family','f-price','f-stock'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('f-status').value = 'available';
   }
   modal.classList.add('open');
@@ -565,23 +549,15 @@ function closeEdit() {
 
 function submitEdit(e) {
   e.preventDefault();
-  const name   = document.getElementById('f-name').value.trim();
-  const common = document.getElementById('f-common').value.trim();
-  const family = document.getElementById('f-family').value.trim();
   const price  = parseInt(document.getElementById('f-price').value) || 0;
   const stock  = parseInt(document.getElementById('f-stock').value) || 0;
   const status = document.getElementById('f-status').value;
-  const desc   = document.getElementById('f-desc').value.trim();
-
-  if (!name) return;
 
   if (editingId) {
     const p = plants.find(x => x.id === editingId);
-    Object.assign(p, { name, common, family, price, stock, status, desc });
-  } else {
-    plants.push({ id: Date.now(), name, common, family, price, stock, status, desc,
-      img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80" });
+    Object.assign(p, { price, stock, status });
   }
+  
   closeEdit();
   applyFilters();
 }

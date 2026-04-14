@@ -830,4 +830,7 @@ The nursery owner can now access a beautiful, searchable plant catalogue (grid v
 - Resolved a `ParseError` caused by a complex multi-line closure inside the `@json` Blade directive.
 - Relocated data transformation logic to `NurseryInventoryController@index` to ensure a cleaner view and stable Blade compilation.
 - Corrected Javascript template literal escapes (`\${}`) in the view to restore dynamic UI functionality (pagination, filter chips).
-- Improved data mapping for `stock_quantity` (enum) and images to match the frontend template requirements.
+**Update (Grid & Modal Optimization):**
+- Adjusted the plant catalogue grid to display 4 items per row on desktop views (`xl:grid-cols-4`) and increased `PER_PAGE` to 8 for better alignment.
+- Stripped the edit plant modal down to the requested essentials: Plant Name and Family are now displayed in a `readonly` format (grayed out style), preventing modification.
+- Allowed only the essential attributes (Price, Units in Stock, Status, and Photo) to be edited, removing extraneous text inputs (Common Name, Description) to keep the interaction concise and safe.
