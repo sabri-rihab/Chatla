@@ -720,3 +720,44 @@ git push
 
 **Result:**
 The dashboard now provides clear feedback on the total number of plants and the current view range directly above the pagination controls.
+
+## Step 20
+**Request:**
+Simplify the pagination/navigation with a total count and cleaner buttons.
+
+**Actions Performed:**
+- Modified file: `resources/views/nursery/dashboard.blade.php`
+  - Replaced the default Laravel pagination (`{{ $inventories->links() }}`) with a completely custom, "Simplified" footer.
+  - Added a prominent "Total Plants" badge on the left.
+  - Implemented custom "Previous" and "Next" buttons with Material Symbols icons.
+  - Added logic to handle disabled states (with appropriate styling) when on the first or last page.
+  - Added a "Page X of Y" summary for better orientation.
+  - This removes the bulky list of page numbers and creates a much more "App-like" premium feeling.
+
+**Commands Executed:**
+```bash
+git add Chatla/resources/views/nursery/dashboard.blade.php Chatla/STEPS.md
+git commit -m "style(dashboard): implement simplified custom pagination with total count"
+git push
+```
+
+**Code Diffs (Added/Deleted):**
+*resources/views/nursery/dashboard.blade.php*
+```diff
++<!-- Simplified Custom Pagination -->
++@if(isset($inventories) && $inventories instanceof \Illuminate\Pagination\LengthAwarePaginator)
++    <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/20 flex items-center justify-between">
++        <p class="text-xs font-medium text-slate-500">
++            Total: <span class="text-slate-800 font-bold">{{ $inventories->total() }}</span> Plants
++        </p>
++        <div class="flex items-center gap-2">
++            <span class="text-[11px] text-slate-400 font-medium mr-2">Page {{ $inventories->currentPage() }} of {{ $inventories->lastPage() }}</span>
++            @if($inventories->onFirstPage()) ... @else <a href="{{ $inventories->previousPageUrl() }}"> ... </a> @endif
++            @if($inventories->hasMorePages()) <a href="{{ $inventories->nextPageUrl() }}"> ... </a> @else ... @endif
++        </div>
++    </div>
++@endif
+```
+
+**Result:**
+The plant inventory list now features a clean, professional navigation bar that is easier to use and fits better into the overall dashboard aesthetics.

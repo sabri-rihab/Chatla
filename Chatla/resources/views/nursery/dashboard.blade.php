@@ -246,16 +246,43 @@
                         </table>
                     </div>
 
-                    <!-- Pagination -->
-                    @if(isset($inventories) && $inventories instanceof \Illuminate\Pagination\LengthAwarePaginator && $inventories->hasPages())
-                        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/30 flex items-center justify-between">
-                            <p class="text-xs text-slate-500">
-                                Showing <span class="font-semibold text-slate-700">{{ $inventories->firstItem() }}</span> 
-                                to <span class="font-semibold text-slate-700">{{ $inventories->lastItem() }}</span> 
-                                of <span class="font-semibold text-slate-700">{{ $inventories->total() }}</span> plants
-                            </p>
-                            <div class="pagination-wrapper flex-shrink-0">
-                                {{ $inventories->links() }}
+                    <!-- Simplified Custom Pagination -->
+                    @if(isset($inventories) && $inventories instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/20 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-primary/40"></span>
+                                <p class="text-xs font-medium text-slate-500">
+                                    Total: <span class="text-slate-800 font-bold">{{ $inventories->total() }}</span> Plants
+                                </p>
+                            </div>
+                            
+                            <div class="flex items-center gap-2">
+                                {{-- Summary for mobile-ish or compact view --}}
+                                <span class="text-[11px] text-slate-400 font-medium mr-2">Page {{ $inventories->currentPage() }} of {{ $inventories->lastPage() }}</span>
+
+                                @if($inventories->onFirstPage())
+                                    <span class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-100 bg-white text-slate-300 text-xs font-semibold cursor-not-allowed">
+                                        <span class="material-symbols-outlined text-[16px]">chevron_left</span>
+                                        Previous
+                                    </span>
+                                @else
+                                    <a href="{{ $inventories->previousPageUrl() }}" class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 text-xs font-semibold hover:bg-slate-50 hover:border-primary/30 hover:text-primary transition-all shadow-sm">
+                                        <span class="material-symbols-outlined text-[16px]">chevron_left</span>
+                                        Previous
+                                    </a>
+                                @endif
+
+                                @if($inventories->hasMorePages())
+                                    <a href="{{ $inventories->nextPageUrl() }}" class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 text-xs font-semibold hover:bg-slate-50 hover:border-primary/30 hover:text-primary transition-all shadow-sm">
+                                        Next
+                                        <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+                                    </a>
+                                @else
+                                    <span class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-100 bg-white text-slate-300 text-xs font-semibold cursor-not-allowed">
+                                        Next
+                                        <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                     @endif
