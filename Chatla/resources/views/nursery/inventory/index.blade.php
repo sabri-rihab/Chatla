@@ -182,6 +182,23 @@
             </div>
           </div>
 
+          <!-- Growth status -->
+          <div class="flex flex-col gap-1.5 min-w-[140px]">
+            <label class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Growth</label>
+            <div class="relative">
+              <span class="material-symbols-outlined mat absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-[16px] pointer-events-none">energy_savings_leaf</span>
+              <select id="growth-select" onchange="applyFilters()"
+                class="w-full bg-bg-page border-none rounded-lg pl-9 pr-8 py-2 text-sm text-slate-700 font-medium focus:ring-2 focus:ring-primary/20 outline-none appearance-none cursor-pointer">
+                <option value="">All growths</option>
+                <option value="Seed">Seed</option>
+                <option value="Seedling">Seedling</option>
+                <option value="Vegetative">Vegetative</option>
+                <option value="Mature">Mature</option>
+              </select>
+              <span class="material-symbols-outlined mat absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 text-[16px] pointer-events-none">expand_more</span>
+            </div>
+          </div>
+
           <!-- Plant family (searchable) -->
           <div class="flex flex-col gap-1.5 min-w-[180px] relative" id="family-wrap">
             <label class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Plant family</label>
@@ -453,7 +470,8 @@ function renderPagination(total, current) {
 function goPage(p) {
   const q = document.getElementById('search-input').value.toLowerCase();
   const st = document.getElementById('status-select').value;
-  const filtered = getFiltered(q, st, selectedFamily);
+  const gr = document.getElementById('growth-select').value;
+  const filtered = getFiltered(q, st, selectedFamily, gr);
   const total = Math.ceil(filtered.length / PER_PAGE);
   if (p < 1 || p > total) return;
   currentPage = p;
@@ -463,13 +481,14 @@ function goPage(p) {
 /* ═══════════════════════════════════
    FILTERS
 ═══════════════════════════════════ */
-function getFiltered(q, status, family) {
+function getFiltered(q, status, family, growth) {
   const sort = document.getElementById('sort-select').value;
   let list = plants.filter(p => {
     const matchQ = !q || p.name.toLowerCase().includes(q) || p.common.toLowerCase().includes(q) || p.family.toLowerCase().includes(q);
     const matchS = !status || p.status === status;
     const matchF = !family || p.family === family;
-    return matchQ && matchS && matchF;
+    const matchG = !growth || p.growth === growth;
+    return matchQ && matchS && matchF && matchG;
   });
   list.sort((a,b) => {
     if (sort==='name') return a.name.localeCompare(b.name);
@@ -484,12 +503,13 @@ function getFiltered(q, status, family) {
 function applyFilters() {
   const q = document.getElementById('search-input').value.toLowerCase();
   const st = document.getElementById('status-select').value;
+  const gr = document.getElementById('growth-select').value;
   currentPage = 1;
-  renderGrid(getFiltered(q, st, selectedFamily));
-  updateChips(q, st, selectedFamily);
+  renderGrid(getFiltered(q, st, selectedFamily, gr));
+  updateChips(q, st, selectedFamily, gr);
 }
 
-function updateChips(q, st, fam) {
+function updateChips(q, st, fam, gr) {
   const wrap = document.getElementById('active-chips');
   const clearBtn = document.getElementById('clear-btn');
   const chips = [];
@@ -506,6 +526,12 @@ function updateChips(q, st, fam) {
       <button onclick="selectedFamily='';document.getElementById('family-search').value='';applyFilters()" class="text-primary/60 hover:text-red-500 ml-0.5">
         <span class="material-symbols-outlined mat text-[13px]">close</span></button></span>`);
   }
+  if (gr) {
+    chips.push(`<span class="flex items-center gap-1 text-xs font-medium text-primary bg-primary-light px-2.5 py-1 rounded-full">
+      ${gr}
+      <button onclick="document.getElementById('growth-select').value='';applyFilters()" class="text-primary/60 hover:text-red-500 ml-0.5">
+        <span class="material-symbols-outlined mat text-[13px]">close</span></button></span>`);
+  }
   wrap.innerHTML = chips.join('');
   if (chips.length || q) { clearBtn.classList.remove('hidden'); clearBtn.classList.add('flex'); }
   else { clearBtn.classList.add('hidden'); clearBtn.classList.remove('flex'); }
@@ -514,6 +540,7 @@ function updateChips(q, st, fam) {
 function clearFilters() {
   document.getElementById('search-input').value = '';
   document.getElementById('status-select').value = '';
+  document.getElementById('growth-select').value = '';
   document.getElementById('family-search').value = '';
   selectedFamily = '';
   currentPage = 1;

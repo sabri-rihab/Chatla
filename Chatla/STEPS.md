@@ -897,3 +897,20 @@ git add resources/views/nursery/inventory/index.blade.php STEPS.md routes/web.ph
 git commit -m "feat(ui): implement custom delete modal and dynamic pop-up toasts for REST actions"
 git push
 ```
+
+## Step 26
+**Request:**
+Add a filter by growth status on the frontend to allow nursery owners to categorize plants effectively.
+
+**Actions Performed:**
+- Modified file: `resources/views/nursery/inventory/index.blade.php`
+  - Injected an interactive `<select>` dropdown parallel to "Stock Status" dedicated to sorting by `'Seed'`, `'Seedling'`, `'Vegetative'`, or `'Mature'` states.
+  - Linked the dropdown to the frontend's reactive `getFiltered()` mapping to validate the string matched directly against the `$item->growth_status` stored locally on load. 
+  - Attached dynamic rendering to `updateChips()` to provide elegant visual feedback (chips) exactly like existing category selections, along with `clearFilters()` clearing the selection seamlessly.
+
+**Commands Executed:**
+```bash
+git add resources/views/nursery/inventory/index.blade.php STEPS.md
+git commit -m "feat(inventory): inject growth sorting logic alongside active filters interface"
+git push
+```
