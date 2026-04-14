@@ -880,3 +880,20 @@ git add app/Http/Controllers/NurseryInventoryController.php resources/views/nurs
 git commit -m "feat(inventory): display dynamic growth status pill in cards and edit modal"
 git push
 ```
+
+## Step 25
+**Request:**
+Replace the native JS `alert`/`confirm` dialogs with custom UI pop-ups for edit validations and delete confirmations.
+
+**Actions Performed:**
+- Modified file: `resources/views/nursery/inventory/index.blade.php`
+  - Designed and injected a dedicated "Delete Confirmation Modal" incorporating Chatla's Tailwind design suite, shielding users from accidental clicks via explicit confirmation logic.
+  - Implemented a dynamic "Toast Notification" component positioned at the bottom-right corner to securely surface both 'success' actions and application 'errors' elegantly over a clean white, color-bordered pill.
+  - Refactored `deletePlant`, `executeDelete`, and `submitEdit` functionality substituting browser `<script>alert()</script>` behavior with asynchronous updates interacting with `showToast()`. 
+
+**Commands Executed:**
+```bash
+git add resources/views/nursery/inventory/index.blade.php STEPS.md routes/web.php
+git commit -m "feat(ui): implement custom delete modal and dynamic pop-up toasts for REST actions"
+git push
+```

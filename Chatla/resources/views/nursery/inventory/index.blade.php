@@ -55,6 +55,8 @@
   /* Modal backdrop */
   #edit-modal { display:none; }
   #edit-modal.open { display:flex; }
+  #delete-modal { display:none; }
+  #delete-modal.open { display:flex; }
 </style>
 </head>
 <body class="bg-bg-page text-slate-900 font-sans">
@@ -308,6 +310,28 @@
       </div>
     </form>
   </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="delete-modal" class="modal fixed inset-0 z-[60] items-center justify-center p-4">
+  <div class="modal-overlay absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onclick="closeDeleteModal()"></div>
+  <div class="modal-content relative bg-white w-full max-w-sm rounded-[24px] shadow-2xl flex flex-col p-6 items-center text-center">
+    <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mb-4 mt-2">
+      <span class="material-symbols-outlined mat text-red-600 text-[28px]">delete</span>
+    </div>
+    <h3 class="font-bold text-xl text-slate-900 mb-2">Delete Plant?</h3>
+    <p class="text-sm text-slate-500 mb-8 leading-relaxed">Are you sure you want to delete this plant? This action cannot be undone.</p>
+    <div class="flex gap-3 w-full">
+      <button onclick="closeDeleteModal()" class="flex-1 px-4 py-3 bg-slate-100 text-slate-600 rounded-xl font-semibold hover:bg-slate-200 transition-colors">Cancel</button>
+      <button id="confirm-delete-btn" class="flex-1 px-4 py-3 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-colors shadow-lg shadow-red-200/50">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="fixed bottom-6 right-6 flex items-center gap-3 px-5 py-3.5 bg-white text-slate-800 border-l-4 rounded-xl shadow-xl transition-all duration-300 translate-y-20 opacity-0 pointer-events-none z-[70]">
+  <span id="toast-icon" class="material-symbols-outlined mat text-xl"></span>
+  <p id="toast-msg" class="text-sm font-semibold"></p>
 </div>
 
 <script>
@@ -607,11 +631,12 @@ function submitEdit(e) {
         }
         closeEdit();
         applyFilters();
+        showToast('Plant updated successfully', 'success');
       } else {
-        alert('Could not update plant.');
+        showToast('Could not update plant.', 'error');
       }
     })
-    .catch(error => alert('Error saving plant.'))
+    .catch(error => showToast('Error saving plant.', 'error'))
     .finally(() => {
       btn.innerHTML = oldText;
       btn.disabled = false;
@@ -630,12 +655,33 @@ function previewPhoto(e) {
 /* ═══════════════════════════════════
    DELETE
 ═══════════════════════════════════ */
+let plantToDelete = null;
+
 function deletePlant(e, id) {
   e.stopPropagation();
-  if (!confirm('Delete this plant?')) return;
-  
+  plantToDelete = id;
+  document.getElementById('delete-modal').classList.add('open');
+}
+
+function closeDeleteModal() {
+  document.getElementById('delete-modal').classList.remove('open');
+  plantToDelete = null;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('confirm-delete-btn').addEventListener('click', () => {
+    if (!plantToDelete) return;
+    executeDelete(plantToDelete);
+  });
+});
+
+function executeDelete(id) {
   const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-  
+  const btn = document.getElementById('confirm-delete-btn');
+  const oldText = btn.innerHTML;
+  btn.innerHTML = 'Deleting...';
+  btn.disabled = true;
+
   fetch(`/nursery/plants/${id}`, {
       method: 'DELETE',
       headers: {
@@ -651,9 +697,45 @@ function deletePlant(e, id) {
       if (data.success) {
           plants = plants.filter(p => p.id !== id);
           applyFilters();
+          closeDeleteModal();
+          showToast('Plant deleted successfully', 'success');
       }
   })
-  .catch(error => alert(error.message));
+  .catch(error => {
+      closeDeleteModal();
+      showToast('Error deleting plant', 'error');
+  })
+  .finally(() => {
+      btn.innerHTML = oldText;
+      btn.disabled = false;
+  });
+}
+
+let toastTimeout;
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast');
+  const icon = document.getElementById('toast-icon');
+  const msg = document.getElementById('toast-msg');
+  
+  clearTimeout(toastTimeout);
+  
+  toast.className = 'fixed bottom-6 right-6 flex items-center gap-3 px-5 py-3.5 bg-white text-slate-800 border-l-4 rounded-xl shadow-xl transition-all duration-300 z-[70]';
+  
+  if (type === 'success') {
+    toast.classList.add('border-green-500');
+    icon.textContent = 'check_circle';
+    icon.className = 'material-symbols-outlined mat text-[22px] text-green-500';
+  } else {
+    toast.classList.add('border-red-500');
+    icon.textContent = 'error';
+    icon.className = 'material-symbols-outlined mat text-[22px] text-red-500';
+  }
+  
+  msg.textContent = message;
+
+  toastTimeout = setTimeout(() => {
+    toast.classList.add('translate-y-[150%]', 'opacity-0', 'pointer-events-none');
+  }, 3500);
 }
 
 /* ═══════════════════════════════════
