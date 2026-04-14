@@ -678,3 +678,45 @@ git push
 
 **Result:**
 The plant inventory list on the dashboard now correctly paginates with 8 items per page, maintaining a clean and premium layout.
+
+## Step 19
+**Request:**
+Add a total count in the bottom of the plants list with pagination buttons.
+
+**Actions Performed:**
+- Modified file: `resources/views/nursery/dashboard.blade.php`
+  - Updated the pagination footer to a `flex justify-between` layout.
+  - Added a "Showing X to Y of Z plants" summary on the left side of the footer using Laravel's paginator helpers (`firstItem()`, `lastItem()`, and `total()`).
+  - Positioned the pagination navigation buttons on the right side.
+
+**Commands Executed:**
+```bash
+git add Chatla/resources/views/nursery/dashboard.blade.php Chatla/STEPS.md
+git commit -m "feat(dashboard): add inventory count summary to pagination footer"
+git push
+```
+
+**Code Diffs (Added/Deleted):**
+*resources/views/nursery/dashboard.blade.php*
+```diff
+-                        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/30">
+-                            <div class="flex items-center justify-center">
+-                                <div class="pagination-wrapper">
+-                                    {{ $inventories->links() }}
+-                                </div>
+-                            </div>
+-                        </div>
++                        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/30 flex items-center justify-between">
++                            <p class="text-xs text-slate-500">
++                                Showing <span class="font-semibold text-slate-700">{{ $inventories->firstItem() }}</span> 
++                                to <span class="font-semibold text-slate-700">{{ $inventories->lastItem() }}</span> 
++                                of <span class="font-semibold text-slate-700">{{ $inventories->total() }}</span> plants
++                            </p>
++                            <div class="pagination-wrapper flex-shrink-0">
++                                {{ $inventories->links() }}
++                            </div>
++                        </div>
+```
+
+**Result:**
+The dashboard now provides clear feedback on the total number of plants and the current view range directly above the pagination controls.
