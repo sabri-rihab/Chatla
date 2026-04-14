@@ -788,3 +788,40 @@ git push
 
 **Result:**
 Logout actions now redirect users straight to the login interface.
+
+## Step 22
+**Request:**
+When the owner clicks on "My Plant" in the menu, it should take them to a new "Plant Catalogue" page with a specific grid design and filtering capabilities (template provided).
+
+**Actions Performed:**
+- Created file: `app/Http/Controllers/NurseryInventoryController.php`
+  - Handles fetching all inventory items for the authenticated nursery owner, including plant and family relationships.
+- Modified file: `routes/web.php`
+  - Defined the route `nursery.inventory.index` for the URL `/nursery/plants`.
+- Created file: `resources/views/nursery/inventory/index.blade.php`
+  - Implemented the user-provided HTML template.
+  - Dynamically populated the list using Blade + JSON to maintain the template's robust Javascript filtering/sorting logic.
+  - Linked the sidebar navigation to ensure "My Plants" is correctly highlighted and navigable.
+- Modified files: `dashboard.blade.php` and `profile.blade.php`
+  - Updated the sidebar "My Plants" links to point to the new route.
+
+**Commands Executed:**
+```bash
+git add Chatla/app/Http/Controllers/NurseryInventoryController.php Chatla/routes/web.php Chatla/resources/views/nursery/inventory/index.blade.php Chatla/resources/views/nursery/dashboard.blade.php Chatla/resources/views/nursery/profile.blade.php Chatla/STEPS.md
+git commit -m "feat(inventory): implement new plant catalogue grid view with filtering"
+git push
+```
+
+**Code Diffs (Added/Deleted):**
+*routes/web.php*
+```diff
++    Route::get('/nursery/plants', [\App\Http\Controllers\NurseryInventoryController::class, 'index'])->name('nursery.inventory.index');
+```
+
+*resources/views/nursery/inventory/index.blade.php*
+```diff
++let plants = @json($inventories->map(function($item) { ... }));
+```
+
+**Result:**
+The nursery owner can now access a beautiful, searchable plant catalogue (grid view) by clicking "My Plants" in the sidebar. This page includes real-time filtering, sorting, and placeholders for plant management (Edit/Add).

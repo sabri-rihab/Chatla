@@ -52,7 +52,7 @@
                 <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">grid_view</span>
                 Overview
             </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-primary/8 hover:text-primary rounded-lg text-sm font-medium transition-colors">
+            <a href="{{ route('nursery.inventory.index') }}" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-primary/8 hover:text-primary rounded-lg text-sm font-medium transition-colors">
                 <span class="material-symbols-outlined text-[20px]">potted_plant</span>
                 My Plants
             </a>

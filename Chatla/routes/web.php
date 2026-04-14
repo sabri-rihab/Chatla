@@ -26,6 +26,8 @@ Route::middleware(['auth', 'verified', 'nursery_owner'])->group(function () {
 
     Route::get('/nursery/profile', [\App\Http\Controllers\NurseryProfileController::class, 'edit'])->name('nursery.profile.edit');
     Route::put('/nursery/profile', [\App\Http\Controllers\NurseryProfileController::class, 'update'])->name('nursery.profile.update');
+
+    Route::get('/nursery/plants', [\App\Http\Controllers\NurseryInventoryController::class, 'index'])->name('nursery.inventory.index');
 });
 
 Route::middleware('auth')->group(function () {
