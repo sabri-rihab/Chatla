@@ -136,7 +136,7 @@
     @csrf
     <div class="space-y-6">
 
-      <div class="bg-white rounded-2xl border border-slate-100 p-6 slide-up" style="animation-delay:.05s">
+      <div class="bg-white rounded-2xl border border-slate-100 p-6 slide-up relative z-20" style="animation-delay:.05s">
         <div class="section-head">
           <div class="section-num">1</div>
           <span class="section-title">Plant Identity</span>
@@ -156,7 +156,7 @@
             <div id="fam-drop" class="fam-dropdown absolute w-full mt-1 z-30 bg-white border border-slate-100 rounded-xl shadow-xl overflow-hidden">
               <div class="max-h-48 overflow-y-auto py-1" id="fam-list"></div>
             </div>
-            <input type="hidden" id="family-value" name="family"/>
+            <input type="hidden" id="family-value" name="family_id"/>
             <p class="err-msg text-[11px] text-red-500 hidden">Please select a family</p>
           </div>
 
@@ -166,19 +166,19 @@
               <svg class="ico-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 20h10M12 4v16M4 8l8-4 8 4"/></svg>
               <input id="name-input" type="text" placeholder="Select plant name…" autocomplete="off"
                 class="field-input field-input-icon"
-                onfocus="openNameDrop()" oninput="filterName()" disabled required/>
+                onfocus="openNameDrop()" oninput="filterName()" required/>
               <span class="material-symbols-outlined mat absolute right-3 top-1/2 -translate-y-1/2 text-[16px] text-slate-300 pointer-events-none">expand_more</span>
             </div>
             <div id="name-drop" class="fam-dropdown absolute w-full mt-1 z-30 bg-white border border-slate-100 rounded-xl shadow-xl overflow-hidden">
               <div class="max-h-48 overflow-y-auto py-1" id="name-list"></div>
             </div>
-            <input type="hidden" id="name-value" name="plant_name"/>
+            <input type="hidden" id="name-value" name="plant_id"/>
             <p class="err-msg text-[11px] text-red-500 hidden">Please select a plant name</p>
           </div>
         </div>
       </div>
 
-      <div class="bg-white rounded-2xl border border-slate-100 p-6 slide-up" style="animation-delay:.10s">
+      <div class="bg-white rounded-2xl border border-slate-100 p-6 slide-up relative z-10" style="animation-delay:.10s">
         <div class="section-head">
           <div class="section-num">2</div>
           <span class="section-title">Growth Stage</span>
@@ -358,32 +358,19 @@
 
 @push('scripts')
 <script>
-/* ── DATA — botanical families + plant names ── */
-const PLANT_DB = {
-  "Araceae":      { plants:[{n:"Monstera Deliciosa"},{n:"Philodendron Hederaceum"},{n:"Spathiphyllum Wallisii"},{n:"Anthurium Andraeanum"}] },
-  "Cactaceae":    { plants:[{n:"Echinocactus Grusonii"},{n:"Ferocactus Wislizeni"},{n:"Opuntia Ficus-Indica"},{n:"Cereus Repandus"}] },
-  "Arecaceae":    { plants:[{n:"Bismarckia Nobilis"},{n:"Phoenix Dactylifera"},{n:"Washingtonia Filifera"},{n:"Chamaerops Humilis"}] },
-  "Oleaceae":     { plants:[{n:"Olea Europaea Arbequina"},{n:"Olea Europaea Picholine"},{n:"Jasminum Officinale"}] },
-  "Rosaceae":     { plants:[{n:"Rosa Damascena"},{n:"Rosa Canina"},{n:"Prunus Persica"},{n:"Malus Domestica"}] },
-  "Agavaceae":    { plants:[{n:"Agave Americana"},{n:"Agave Attenuata"},{n:"Agave Variegata"},{n:"Yucca Elephantipes"}] },
-  "Lamiaceae":    { plants:[{n:"Lavandula Angustifolia"},{n:"Rosmarinus Officinalis"},{n:"Ocimum Basilicum"},{n:"Salvia Officinalis"}] },
-  "Asparagaceae": { plants:[{n:"Sansevieria Trifasciata"},{n:"Dracaena Marginata"},{n:"Chlorophytum Comosum"}] },
-  "Moraceae":     { plants:[{n:"Ficus Lyrata"},{n:"Ficus Elastica"},{n:"Ficus Benjamina"}] },
-  "Crassulaceae": { plants:[{n:"Echeveria Elegans"},{n:"Kalanchoe Blossfeldiana"},{n:"Sedum Morganianum"}] },
-};
-
-const families = Object.keys(PLANT_DB).sort();
+/* ── DATA — from database ── */
+const families = @json($families);
+const plants = @json($plants);
 
 /* ── FAMILY SEARCHABLE DROPDOWN ── */
-let selectedFam = "";
-let currentPlants = [];
+let selectedFamId = null;
 
 function buildFamList(query = "") {
   const list = document.getElementById('fam-list');
   const q = query.toLowerCase();
-  const matches = families.filter(f => f.toLowerCase().includes(q));
+  const matches = families.filter(f => f.name.toLowerCase().includes(q));
   list.innerHTML = matches.length
-    ? matches.map(f => `<div class="fam-opt px-3 py-2 text-sm text-slate-600 hover:bg-primary-light hover:text-primary cursor-pointer rounded-lg mx-1" onclick="pickFam('${f}')">${f}</div>`).join('')
+    ? matches.map(f => `<div class="fam-opt px-3 py-2 text-sm text-slate-600 hover:bg-primary-light hover:text-primary cursor-pointer rounded-lg mx-1" onclick="pickFam(${f.id}, '${f.name.replace(/'/g, "\\'")}')">${f.name}</div>`).join('')
     : `<div class="px-3 py-2 text-sm text-slate-400">No results</div>`;
 }
 
@@ -394,57 +381,65 @@ function openFamDrop() {
 
 function filterFam() {
   buildFamList(document.getElementById('family-input').value);
-  selectedFam = "";
+  selectedFamId = null;
   document.getElementById('family-value').value = "";
-  document.getElementById('name-input').value = '';
-  document.getElementById('name-value').value = '';
-  document.getElementById('name-input').disabled = true;
-  currentPlants = [];
 }
 
-function pickFam(fam) {
-  selectedFam = fam;
-  document.getElementById('family-input').value = fam;
-  document.getElementById('family-value').value = fam;
+function pickFam(id, name) {
+  selectedFamId = id;
+  document.getElementById('family-input').value = name;
+  document.getElementById('family-value').value = id;
   document.getElementById('fam-drop').classList.remove('open');
   clearErr(document.getElementById('family-input'));
-  currentPlants = PLANT_DB[fam].plants;
-  document.getElementById('name-input').disabled = false;
-  document.getElementById('name-input').value = '';
-  document.getElementById('name-value').value = '';
-  buildNameList('');
+  
+  // If current plant doesn't belong to this family, clear it
+  const currentPlantId = document.getElementById('name-value').value;
+  if(currentPlantId) {
+    const p = plants.find(x => x.id == currentPlantId);
+    if(p && p.family_id != id) {
+        document.getElementById('name-input').value = '';
+        document.getElementById('name-value').value = '';
+    }
+  }
 }
 
 /* ── PLANT NAME SEARCHABLE DROPDOWN ── */
-let selectedName = "";
-
 function buildNameList(query = "") {
   const list = document.getElementById('name-list');
   const q = query.toLowerCase();
-  const matches = currentPlants.filter(p => p.n.toLowerCase().includes(q));
+  
+  // Filter by family if selected, then by query
+  let matches = plants;
+  if (selectedFamId) {
+    matches = matches.filter(p => p.family_id == selectedFamId);
+  }
+  matches = matches.filter(p => p.name.toLowerCase().includes(q));
+
   list.innerHTML = matches.length
-    ? matches.map(p => `<div class="fam-opt px-3 py-2 text-sm text-slate-600 hover:bg-primary-light hover:text-primary cursor-pointer rounded-lg mx-1" onclick="pickName('${p.n}')">${p.n}</div>`).join('')
+    ? matches.map(p => `<div class="fam-opt px-3 py-2 text-sm text-slate-600 hover:bg-primary-light hover:text-primary cursor-pointer rounded-lg mx-1" onclick="pickName(${p.id}, '${p.name.replace(/'/g, "\\'")}', ${p.family_id}, '${p.family.name.replace(/'/g, "\\'")}')">${p.name}</div>`).join('')
     : `<div class="px-3 py-2 text-sm text-slate-400">No results</div>`;
 }
 
 function openNameDrop() {
-  if (document.getElementById('name-input').disabled) return;
   document.getElementById('name-drop').classList.add('open');
   buildNameList(document.getElementById('name-input').value);
 }
 
 function filterName() {
   buildNameList(document.getElementById('name-input').value);
-  selectedName = "";
   document.getElementById('name-value').value = "";
 }
 
-function pickName(name) {
-  selectedName = name;
+function pickName(id, name, famId, famName) {
   document.getElementById('name-input').value = name;
-  document.getElementById('name-value').value = name;
+  document.getElementById('name-value').value = id;
   document.getElementById('name-drop').classList.remove('open');
   clearErr(document.getElementById('name-input'));
+
+  // Logic: Auto-select family if not already correct
+  if (selectedFamId != famId) {
+    pickFam(famId, famName);
+  }
 }
 
 document.addEventListener('click', e => {
@@ -572,12 +567,9 @@ function resetForm() {
   document.getElementById('plant-form').reset();
   document.getElementById('family-input').value = '';
   document.getElementById('family-value').value = '';
-  selectedFam = '';
+  selectedFamId = null;
   document.getElementById('name-input').value = '';
   document.getElementById('name-value').value = '';
-  document.getElementById('name-input').disabled = true;
-  selectedName = '';
-  currentPlants = [];
   removePhoto({stopPropagation:()=>{}});
   document.getElementById('char-count').textContent = '0/500';
   document.getElementById('status-hint').classList.add('hidden');
