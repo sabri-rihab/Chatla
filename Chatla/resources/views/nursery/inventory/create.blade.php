@@ -143,14 +143,14 @@
           <div class="section-head-line"></div>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 gap-4 max-w-xl">
           <div class="flex flex-col gap-1.5" id="family-wrap">
             <label class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Plant Family <span class="text-red-400">*</span></label>
             <div class="relative">
               <svg class="ico-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22V12M12 12C8 12 4 9 4 4a8 8 0 0116 0c0 5-4 8-8 8z"/></svg>
               <input id="family-input" type="text" placeholder="Search family…" autocomplete="off"
                 class="field-input field-input-icon"
-                onfocus="openFamDrop()" oninput="filterFam()" required/>
+                onfocus="openFamDrop(true)" oninput="filterFam()" required/>
               <span class="material-symbols-outlined mat absolute right-3 top-1/2 -translate-y-1/2 text-[16px] text-slate-300 pointer-events-none">expand_more</span>
             </div>
             <div id="fam-drop" class="fam-dropdown absolute w-full mt-1 z-30 bg-white border border-slate-100 rounded-xl shadow-xl overflow-hidden">
@@ -166,7 +166,7 @@
               <svg class="ico-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 20h10M12 4v16M4 8l8-4 8 4"/></svg>
               <input id="name-input" type="text" placeholder="Select plant name…" autocomplete="off"
                 class="field-input field-input-icon"
-                onfocus="openNameDrop()" oninput="filterName()" required/>
+                onfocus="openNameDrop(true)" oninput="filterName()" required/>
               <span class="material-symbols-outlined mat absolute right-3 top-1/2 -translate-y-1/2 text-[16px] text-slate-300 pointer-events-none">expand_more</span>
             </div>
             <div id="name-drop" class="fam-dropdown absolute w-full mt-1 z-30 bg-white border border-slate-100 rounded-xl shadow-xl overflow-hidden">
@@ -374,9 +374,10 @@ function buildFamList(query = "") {
     : `<div class="px-3 py-2 text-sm text-slate-400">No results</div>`;
 }
 
-function openFamDrop() {
+function openFamDrop(isClick = false) {
   document.getElementById('fam-drop').classList.add('open');
-  buildFamList(document.getElementById('family-input').value);
+  const query = isClick ? "" : document.getElementById('family-input').value;
+  buildFamList(query);
 }
 
 function filterFam() {
@@ -385,21 +386,17 @@ function filterFam() {
   document.getElementById('family-value').value = "";
 }
 
-function pickFam(id, name) {
+function pickFam(id, name, isAuto = false) {
   selectedFamId = id;
   document.getElementById('family-input').value = name;
   document.getElementById('family-value').value = id;
   document.getElementById('fam-drop').classList.remove('open');
   clearErr(document.getElementById('family-input'));
   
-  // If current plant doesn't belong to this family, clear it
-  const currentPlantId = document.getElementById('name-value').value;
-  if(currentPlantId) {
-    const p = plants.find(x => x.id == currentPlantId);
-    if(p && p.family_id != id) {
-        document.getElementById('name-input').value = '';
-        document.getElementById('name-value').value = '';
-    }
+  // If picked manually, ALWAYS clear the plant name
+  if(!isAuto) {
+    document.getElementById('name-input').value = '';
+    document.getElementById('name-value').value = '';
   }
 }
 
@@ -420,9 +417,10 @@ function buildNameList(query = "") {
     : `<div class="px-3 py-2 text-sm text-slate-400">No results</div>`;
 }
 
-function openNameDrop() {
+function openNameDrop(isClick = false) {
   document.getElementById('name-drop').classList.add('open');
-  buildNameList(document.getElementById('name-input').value);
+  const query = isClick ? "" : document.getElementById('name-input').value;
+  buildNameList(query);
 }
 
 function filterName() {
@@ -436,9 +434,9 @@ function pickName(id, name, famId, famName) {
   document.getElementById('name-drop').classList.remove('open');
   clearErr(document.getElementById('name-input'));
 
-  // Logic: Auto-select family if not already correct
+  // Logic: Auto-select family if not already correct (pass isAuto = true)
   if (selectedFamId != famId) {
-    pickFam(famId, famName);
+    pickFam(famId, famName, true);
   }
 }
 
