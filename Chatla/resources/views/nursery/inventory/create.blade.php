@@ -539,18 +539,39 @@ function handleSubmit(e) {
   if (!valid) return;
 
   const btn = document.getElementById('submit-btn');
+  const originalHtml = btn.innerHTML;
   btn.innerHTML = `<span class="material-symbols-outlined mat text-[18px]">hourglass_top</span> Publishing…`;
   btn.disabled = true;
 
-  setTimeout(() => {
-    btn.innerHTML = `<span class="material-symbols-outlined matf text-[18px]">check_circle</span> Published!`;
-    showToast();
-    setTimeout(() => {
-      btn.innerHTML = `<span class="material-symbols-outlined mat text-[18px]">check_circle</span> Publish Plant`;
+  const formData = new FormData(document.getElementById('plant-form'));
+
+  fetch("{{ route('nursery.inventory.store') }}", {
+    method: "POST",
+    body: formData,
+    headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      btn.innerHTML = `<span class="material-symbols-outlined matf text-[18px]">check_circle</span> Published!`;
+      showToast();
+      setTimeout(() => {
+        window.location.href = data.redirect;
+      }, 1500);
+    } else {
+      btn.innerHTML = originalHtml;
       btn.disabled = false;
-      resetForm();
-    }, 3000);
-  }, 1200);
+      alert(data.message || 'Error occurred while saving');
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    btn.innerHTML = originalHtml;
+    btn.disabled = false;
+    alert('Failed to connect to server');
+  });
 }
 
 function showToast() {

@@ -107,6 +107,50 @@ class NurseryInventoryController extends Controller
         ]);
     }
 
+    public function store(Request $request)
+    {
+        $nursery = Auth::user()->nursery;
+        
+        $validated = $request->validate([
+            'plant_id' => 'required|exists:plants,id',
+            'growth_stage' => 'required|string|in:seed,seedling,vegetative,mature',
+            'stock_units' => 'required|integer|min:0',
+            'price' => 'nullable|numeric|min:0',
+            'stock_status' => 'required|string|in:available,low,out',
+            'description' => 'nullable|string|max:500',
+            'plant_photo' => 'nullable|image|max:10240'
+        ]);
+
+        $statusReverseMap = [
+            'available' => 'in_stock',
+            'low' => 'low_stock',
+            'out' => 'pre_ordered', 
+        ];
+
+        $inventory = NurseryInventory::create([
+            'nursery_id' => $nursery->id,
+            'plant_id' => $validated['plant_id'],
+            'growth_status' => $validated['growth_stage'],
+            'quantity' => $validated['stock_units'],
+            'price' => $validated['price'],
+            'stock_quantity' => $statusReverseMap[$validated['stock_status']] ?? 'in_stock',
+            'custom_description' => $validated['description'],
+        ]);
+
+        if ($request->hasFile('plant_photo')) {
+            $path = $request->file('plant_photo')->store('inventory_images', 'public');
+            $inventory->images()->create([
+                'image_path' => '/storage/' . $path
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Plant added to inventory successfully',
+            'redirect' => route('nursery.inventory.index')
+        ]);
+    }
+
     public function destroy($id)
     {
         $nursery = Auth::user()->nursery;

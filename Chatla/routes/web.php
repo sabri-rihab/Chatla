@@ -33,6 +33,7 @@ Route::middleware(['auth', 'verified', 'nursery_owner'])->group(function () {
         $plants = \App\Models\Plant::with('family:id,name')->orderBy('name')->get(['id', 'name', 'family_id']);
         return view('nursery.inventory.create', compact('families', 'plants'));
     })->name('nursery.inventory.create');
+    Route::post('/nursery/plants', [\App\Http\Controllers\NurseryInventoryController::class, 'store'])->name('nursery.inventory.store');
     Route::put('/nursery/plants/{inventory}', [\App\Http\Controllers\NurseryInventoryController::class, 'update'])->name('nursery.inventory.update'); 
     Route::delete('/nursery/plants/{inventory}', [\App\Http\Controllers\NurseryInventoryController::class, 'destroy'])->name('nursery.inventory.destroy');
 });
