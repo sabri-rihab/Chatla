@@ -28,6 +28,9 @@ Route::middleware(['auth', 'verified', 'nursery_owner'])->group(function () {
     Route::put('/nursery/profile', [\App\Http\Controllers\NurseryProfileController::class, 'update'])->name('nursery.profile.update');
 
     Route::get('/nursery/plants', [\App\Http\Controllers\NurseryInventoryController::class, 'index'])->name('nursery.inventory.index');
+    Route::get('/nursery/plants/create', function () {
+        return view('nursery.inventory.create');
+    })->name('nursery.inventory.create');
     Route::put('/nursery/plants/{inventory}', [\App\Http\Controllers\NurseryInventoryController::class, 'update'])->name('nursery.inventory.update'); 
     Route::delete('/nursery/plants/{inventory}', [\App\Http\Controllers\NurseryInventoryController::class, 'destroy'])->name('nursery.inventory.destroy');
 });

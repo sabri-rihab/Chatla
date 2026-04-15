@@ -46,10 +46,10 @@
           <div>
             <h2 class="text-xl font-bold tracking-tight">Catalogue <span class="text-slate-400 font-normal text-base" id="count-label">(0 plants)</span></h2>
           </div>
-          <button onclick="openEdit(null)"
+          <a href="{{ route('nursery.inventory.create') }}"
             class="bg-primary text-white px-4 py-2.5 rounded-lg flex items-center gap-2 font-semibold text-sm hover:opacity-90 transition-opacity">
             <span class="material-symbols-outlined mat text-[18px]">add</span>Add New Plant
-          </button>
+          </a>
         </div>
 
         <!-- ─── FILTER BAR ─── -->

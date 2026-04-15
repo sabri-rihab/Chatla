@@ -11,10 +11,10 @@
                         <h2 class="text-2xl font-bold tracking-tight">Nursery Overview</h2>
                         <p class="text-slate-500 text-sm mt-1">Good morning, {{ explode(' ', auth()->user()->name)[0] }}. Here's what's happening with your inventory.</p>
                     </div>
-                    <button class="bg-primary text-white px-5 py-2.5 rounded-lg flex items-center gap-2 font-semibold text-sm hover:opacity-90 transition-opacity">
+                    <a href="{{ route('nursery.inventory.create') }}" class="bg-primary text-white px-5 py-2.5 rounded-lg flex items-center gap-2 font-semibold text-sm hover:opacity-90 transition-opacity">
                         <span class="material-symbols-outlined text-[18px]">add</span>
                         Add New Plant
-                    </button>
+                    </a>
                 </div>
 
                 <!-- Stats -->

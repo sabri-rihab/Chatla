@@ -23,8 +23,8 @@
             <span class="material-symbols-outlined {{ $route === 'nursery.inventory.index' ? 'mat-fill' : 'mat' }} text-[20px]">potted_plant</span>
             My Plants
         </a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-primary/8 hover:text-primary rounded-lg text-sm font-medium transition-colors">
-            <span class="material-symbols-outlined mat text-[20px]">add_circle</span>
+        <a href="{{ route('nursery.inventory.create') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ $route === 'nursery.inventory.create' ? 'bg-primary text-white font-semibold' : 'text-slate-600 hover:bg-primary/8 hover:text-primary' }}">
+            <span class="material-symbols-outlined {{ $route === 'nursery.inventory.create' ? 'mat-fill' : 'mat' }} text-[20px]">add_circle</span>
             Add New Plant
         </a>
         <a href="{{ route('nursery.profile.edit') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ $route === 'nursery.profile.edit' ? 'bg-primary text-white font-semibold' : 'text-slate-600 hover:bg-primary/8 hover:text-primary' }}">
