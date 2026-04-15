@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+php<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
@@ -387,6 +387,24 @@
             </div>
           </div>
 
+          <!-- ── Location Map Preview ── -->
+          <div class="mb-6">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Location Preview</h2>
+            <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
+              <div class="relative h-44">
+                <div class="absolute inset-0 bg-cover bg-center opacity-50"
+                  style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCA0oGZsMYjsEEYvMT2e85QC4gyCGr2v6rjybCjK8oDmQKX7jX-3ezwHHaMjHeVEUc4EgPy1_ecArCmrhHmxf-AaQTy_d0SJY7Mp7ZUgaIhsT-HBq52GeidWA1qsXdNVZmP9UmZROM3C1ciDpgQUS18F3NzrpZytpsj3kV8hslowTiC1DmhWPgzKFuv5EKhpzbFabrbCTJEhoJ6Unm4I28MRAK9PLAa-4VaKwcXvmTdHAEmcaR9CEApt3L-fX-FQhz5EBhk4DO80KE')">
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div class="p-3 bg-white rounded-full shadow-lg">
+                    <span class="material-symbols-outlined mat-fill text-primary text-[28px]">location_on</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          //  save&cancel buttons
           <div class="flex items-center justify-end gap-3 py-2">
             <a href="{{ route('dashboard') }}" class="text-slate-500 text-sm font-medium px-4 py-2 rounded-lg hover:bg-slate-100 transition-colors">Discard changes</a>
             <button type="submit" class="bg-primary text-white px-8 py-2.5 rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity shadow-sm">Save Profile</button>

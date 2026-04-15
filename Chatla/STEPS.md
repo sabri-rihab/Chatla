@@ -914,3 +914,20 @@ git add resources/views/nursery/inventory/index.blade.php STEPS.md
 git commit -m "feat(inventory): inject growth sorting logic alongside active filters interface"
 git push
 ```
+
+## Step 27
+**Request:**
+Add the location section to the bottom of the nursery profile just after the operating hours.
+
+**Actions Performed:**
+- Modified file: `resources/views/nursery/profile.blade.php`
+  - Injected the provided Location Map Preview HTML block containing a styled mock map and pin icon.
+  - Placed the code immediately under the 'Operating Hours' section block.
+  - Adjusted the top-level container structure (`<div class="mb-6">`) to align styling margins properly with the rest of the form components.
+
+**Commands Executed:**
+```bash
+git add resources/views/nursery/profile.blade.php STEPS.md
+git commit -m "feat(profile): add location map preview to nursery profile"
+git push
+```
