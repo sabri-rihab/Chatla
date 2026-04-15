@@ -75,7 +75,7 @@
   .section-title{ font-size:13px; font-weight:700; color:#1a2e22; letter-spacing:.01em; }
 
   /* ── Searchable dropdown ── */
-  .fam-dropdown{ display:none; }
+  .fam-dropdown{ display:none; width:100%; left:0; }
   .fam-dropdown.open{ display:block; }
 
   /* ── Slide-in animation ── */
@@ -146,15 +146,15 @@
         <div class="grid grid-cols-2 gap-4 max-w-xl">
           <div class="flex flex-col gap-1.5" id="family-wrap">
             <label class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Plant Family <span class="text-red-400">*</span></label>
-            <div class="relative">
+            <div class="relative w-full">
               <svg class="ico-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22V12M12 12C8 12 4 9 4 4a8 8 0 0116 0c0 5-4 8-8 8z"/></svg>
               <input id="family-input" type="text" placeholder="Search family…" autocomplete="off"
                 class="field-input field-input-icon"
                 onfocus="openFamDrop(true)" oninput="filterFam()" required/>
               <span class="material-symbols-outlined mat absolute right-3 top-1/2 -translate-y-1/2 text-[16px] text-slate-300 pointer-events-none">expand_more</span>
-            </div>
-            <div id="fam-drop" class="fam-dropdown absolute w-full mt-1 z-30 bg-white border border-slate-100 rounded-xl shadow-xl overflow-hidden">
-              <div class="max-h-48 overflow-y-auto py-1" id="fam-list"></div>
+              <div id="fam-drop" class="fam-dropdown absolute left-0 w-full mt-1 z-30 bg-white border border-slate-100 rounded-xl shadow-xl overflow-hidden">
+                <div class="max-h-48 overflow-y-auto py-1" id="fam-list"></div>
+              </div>
             </div>
             <input type="hidden" id="family-value" name="family_id"/>
             <p class="err-msg text-[11px] text-red-500 hidden">Please select a family</p>
@@ -162,15 +162,15 @@
 
           <div class="flex flex-col gap-1.5" id="name-wrap">
             <label class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Plant Name <span class="text-red-400">*</span></label>
-            <div class="relative">
+            <div class="relative w-full">
               <svg class="ico-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 20h10M12 4v16M4 8l8-4 8 4"/></svg>
               <input id="name-input" type="text" placeholder="Select plant name…" autocomplete="off"
                 class="field-input field-input-icon"
                 onfocus="openNameDrop(true)" oninput="filterName()" required/>
               <span class="material-symbols-outlined mat absolute right-3 top-1/2 -translate-y-1/2 text-[16px] text-slate-300 pointer-events-none">expand_more</span>
-            </div>
-            <div id="name-drop" class="fam-dropdown absolute w-full mt-1 z-30 bg-white border border-slate-100 rounded-xl shadow-xl overflow-hidden">
-              <div class="max-h-48 overflow-y-auto py-1" id="name-list"></div>
+              <div id="name-drop" class="fam-dropdown absolute left-0 w-full mt-1 z-30 bg-white border border-slate-100 rounded-xl shadow-xl overflow-hidden">
+                <div class="max-h-48 overflow-y-auto py-1" id="name-list"></div>
+              </div>
             </div>
             <input type="hidden" id="name-value" name="plant_id"/>
             <p class="err-msg text-[11px] text-red-500 hidden">Please select a plant name</p>
