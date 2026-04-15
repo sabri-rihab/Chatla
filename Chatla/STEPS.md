@@ -931,3 +931,27 @@ git add resources/views/nursery/profile.blade.php STEPS.md
 git commit -m "feat(profile): add location map preview to nursery profile"
 git push
 ```
+
+## Step 28
+**Request:**
+Refactor redundant HTML structure across multiple nursery management Blade files into a clean, maintainable architecture.
+
+**Actions Performed:**
+- Created `resources/views/layouts/partials/nursery-sidebar.blade.php`:
+    - Centralized sidebar navigation and logo.
+    - Implemented active-state logic using `Route::currentRouteName()`.
+- Created `resources/views/layouts/nursery.blade.php`:
+    - Established master layout with standardized head, Tailwind config, and fonts.
+    - Provided structured `@yield` points for title, header, search input, and content.
+    - Added `@stack` support for page-specific styles and scripts.
+- Refactored Views:
+    - `resources/views/nursery/dashboard.blade.php`: Migrated to `@extends('layouts.nursery')`.
+    - `resources/views/nursery/profile.blade.php`: Migrated to `@extends`, extracting assets and overriding header buttons.
+    - `resources/views/nursery/inventory/index.blade.php`: Migrated to `@extends`, injecting search input into the master header via `@section('search_input')`.
+
+**Commands Executed:**
+```bash
+git add resources/views/layouts/ resources/views/nursery/ STEPS.md
+git commit -m "refactor: implement nursery master layout and extract partials"
+git push
+```

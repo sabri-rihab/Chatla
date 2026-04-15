@@ -1,126 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#2c5926",
-                        "background-light": "#f6f7f6",
-                        "background-dark": "#161d15",
-                    },
-                    fontFamily: { "display": ["Inter", "sans-serif"] },
-                    borderRadius: {
-                        "DEFAULT": "0.5rem",
-                        "lg": "1rem",
-                        "xl": "1.5rem",
-                        "full": "9999px"
-                    },
-                },
-            },
-        }
-    </script>
-    <title>{{ auth()->user()->nursery->name ?? 'Chatla' }} - Nursery Admin Dashboard</title>
-</head>
-<body class="bg-background-light font-display text-slate-900">
-<div class="flex h-screen overflow-hidden">
+@extends('layouts.nursery')
 
-    <!-- ── SIDEBAR ── -->
-    <aside class="w-52 flex flex-col bg-white border-r border-slate-100 shrink-0">
+@section('title', (auth()->user()->nursery->name ?? 'Chatla') . ' - Nursery Admin Dashboard')
 
-        <!-- Logo -->
-        <div class="flex items-center gap-3 px-5 py-5 border-b border-slate-100">
-            <div class="w-9 h-9 bg-primary rounded-full flex items-center justify-center text-white shrink-0">
-                <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">psychiatry</span>
-            </div>
-            <div class="leading-tight">
-                <p class="font-bold text-[15px] text-primary">Chatla</p>
-                <p class="text-[10px] text-slate-400 font-medium">Nursery Admin</p>
-            </div>
-        </div>
-
-        <!-- Nav -->
-        <nav class="flex-1 px-3 py-5 space-y-0.5">
-            <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 bg-primary text-white rounded-lg text-sm font-semibold">
-                <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">grid_view</span>
-                Overview
-            </a>
-            <a href="{{ route('nursery.inventory.index') }}" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-primary/8 hover:text-primary rounded-lg text-sm font-medium transition-colors">
-                <span class="material-symbols-outlined text-[20px]">potted_plant</span>
-                My Plants
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-primary/8 hover:text-primary rounded-lg text-sm font-medium transition-colors">
-                <span class="material-symbols-outlined text-[20px]">add_circle</span>
-                Add New Plant
-            </a>
-            <a href="{{ route('nursery.profile.edit') }}" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-primary/8 hover:text-primary rounded-lg text-sm font-medium transition-colors">
-                <span class="material-symbols-outlined text-[20px]">storefront</span>
-                Nursery Info
-            </a>
-        </nav>
-
-        <!-- Settings -->
-        <div class="px-3 py-4 border-t border-slate-100">
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-red-50 hover:text-red-600 rounded-lg text-sm font-medium transition-colors cursor-pointer text-left">
-                    <span class="material-symbols-outlined text-[20px]">logout</span>
-                    Log Out
-                </button>
-            </form>
-        </div>
-    </aside>
-
-    <!-- ── MAIN COLUMN ── -->
-    <div class="flex flex-col flex-1 overflow-hidden">
-
-        <!-- ── HEADER ── -->
-        <header class="h-14 bg-white border-b border-slate-100 flex items-center justify-between px-6 shrink-0">
-            <!-- Search -->
-            <div class="relative w-72">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
-                <input
-                    class="w-full bg-background-light border-none rounded-full py-2 pl-10 pr-4 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 outline-none"
-                    placeholder="Search plants, orders, or leads..."
-                    type="text"
-                />
-            </div>
-
-            <!-- Right side -->
-            <div class="flex items-center gap-4">
-                <!-- Bell -->
-                <button class="text-slate-400 hover:text-primary transition-colors p-1.5">
-                    <span class="material-symbols-outlined text-[22px]">notifications</span>
-                </button>
-
-                <div class="h-6 w-px bg-slate-200"></div>
-
-                <!-- User -->
-                <div class="flex items-center gap-2.5">
-                    <div class="text-right">
-                        <p class="text-sm font-semibold leading-tight">{{ auth()->user()->name }}</p>
-                        <p class="text-[11px] text-slate-400">Owner</p>
-                    </div>
-                    @if(auth()->user()->profile_img)
-                        <div class="w-9 h-9 rounded-full bg-cover bg-center border border-slate-200" style="background-image: url('{{ auth()->user()->profile_img }}')"></div>
-                    @else
-                        <div class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 text-primary font-bold">
-                            {{ substr(auth()->user()->name, 0, 1) }}
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </header>
-
-        <!-- ── PAGE CONTENT ── -->
-        <main class="flex-1 overflow-y-auto bg-background-light">
+@section('content')
             <div class="p-8 space-y-6">
 
                 <!-- Page title -->
@@ -289,8 +171,4 @@
 
                 </div>
             </div>
-        </main>
-    </div>
-</div>
-</body>
-</html>
+@endsection

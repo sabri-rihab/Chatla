@@ -1,33 +1,9 @@
-php<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Edit Nursery Profile - Chatla</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-  tailwind.config = {
-    darkMode: "class",
-    theme: {
-      extend: {
-        colors: {
-          "primary": "#2c5926",
-          "background-light": "#f6f7f6",
-          "background-dark": "#161d15",
-        },
-        fontFamily: { "display": ["Inter", "sans-serif"] },
-        borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
-      },
-    },
-  }
-</script>
-<style>
-  body { font-family: 'Inter', sans-serif; }
-  .mat { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-  .mat-fill { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+@extends('layouts.nursery')
 
+@section('title', 'Edit Nursery Profile - Chatla')
+
+@push('styles')
+<style>
   /* Toggle switch */
   .toggle-input:checked + .toggle-track { background-color: #2c5926; }
   .toggle-input:checked + .toggle-track .toggle-thumb { transform: translateX(20px); }
@@ -35,68 +11,24 @@ php<!DOCTYPE html>
   /* Time input styling */
   input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.4; cursor: pointer; }
 </style>
-</head>
-<body class="bg-background-light text-slate-900 font-display">
-<div class="flex h-screen overflow-hidden">
+@endpush
 
-  <aside class="w-52 flex flex-col bg-white border-r border-slate-100 shrink-0">
+@section('header')
+<header class="h-14 bg-white border-b border-slate-100 flex items-center justify-between px-6 shrink-0">
+  <h1 class="text-base font-bold">Edit Nursery Profile</h1>
+  <div class="flex items-center gap-3">
+    <button class="text-slate-400 hover:text-primary transition-colors p-1.5 relative">
+      <span class="material-symbols-outlined mat text-[22px]">notifications</span>
+      <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+    </button>
+    <button type="submit" form="nursery-profile-form" class="bg-primary text-white px-5 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity">
+      Save Changes
+    </button>
+  </div>
+</header>
+@endsection
 
-    <div class="flex items-center gap-3 px-5 py-5 border-b border-slate-100">
-      <div class="w-9 h-9 bg-primary rounded-full flex items-center justify-center text-white shrink-0">
-        <span class="material-symbols-outlined mat-fill text-[20px]">psychiatry</span>
-      </div>
-      <div class="leading-tight">
-        <p class="font-bold text-[15px] text-primary">Chatla</p>
-        <p class="text-[10px] text-slate-400 font-medium">Nursery Admin</p>
-      </div>
-    </div>
-
-    <nav class="flex-1 px-3 py-5 space-y-0.5">
-      <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-primary/8 hover:text-primary rounded-lg text-sm font-medium transition-colors">
-        <span class="material-symbols-outlined mat text-[20px]">grid_view</span>
-        Overview
-      </a>
-      <a href="{{ route('nursery.inventory.index') }}" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-primary/8 hover:text-primary rounded-lg text-sm font-medium transition-colors">
-        <span class="material-symbols-outlined mat text-[20px]">potted_plant</span>
-        My Plants
-      </a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-primary/8 hover:text-primary rounded-lg text-sm font-medium transition-colors">
-        <span class="material-symbols-outlined mat text-[20px]">add_circle</span>
-        Add New Plant
-      </a>
-      <a href="{{ route('nursery.profile.edit') }}" class="flex items-center gap-3 px-3 py-2.5 bg-primary text-white rounded-lg text-sm font-semibold">
-        <span class="material-symbols-outlined mat-fill text-[20px]">storefront</span>
-        Nursery Info
-      </a>
-    </nav>
-
-    <div class="px-3 py-4 border-t border-slate-100">
-      <form method="POST" action="{{ route('logout') }}">
-          @csrf
-          <button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-red-50 hover:text-red-600 rounded-lg text-sm font-medium transition-colors">
-              <span class="material-symbols-outlined text-[20px]">logout</span>
-              Log Out
-          </button>
-      </form>
-    </div>
-  </aside>
-
-  <div class="flex flex-col flex-1 overflow-hidden">
-
-    <header class="h-14 bg-white border-b border-slate-100 flex items-center justify-between px-6 shrink-0">
-      <h1 class="text-base font-bold">Edit Nursery Profile</h1>
-      <div class="flex items-center gap-3">
-        <button class="text-slate-400 hover:text-primary transition-colors p-1.5 relative">
-          <span class="material-symbols-outlined mat text-[22px]">notifications</span>
-          <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-        </button>
-        <button type="submit" form="nursery-profile-form" class="bg-primary text-white px-5 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity">
-          Save Changes
-        </button>
-      </div>
-    </header>
-
-    <main class="flex-1 overflow-y-auto bg-background-light">
+@section('content')
       <div class="max-w-3xl mx-auto px-6 py-8 space-y-6">
 
         @if (session('status') === 'profile-updated')
@@ -415,6 +347,7 @@ php<!DOCTYPE html>
   </div>
 </div>
 
+@push('scripts')
 <script>
 /* ── Toggle day on/off ── */
 function toggleDay(cb) {
@@ -619,5 +552,5 @@ function previewNurseryLogo(event) {
   reader.readAsDataURL(file);
 }
 </script>
-</body>
-</html>
+@endpush
+@endsection

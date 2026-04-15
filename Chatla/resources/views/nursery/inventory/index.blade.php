@@ -1,33 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Plant Catalogue – Chatla</title>
-<meta name="csrf-token" content="{{ csrf_token() }}">
-<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          primary: "#2c5926",
-          "primary-light": "#eaf3e8",
-          "bg-page": "#f6f7f6",
-        },
-        fontFamily: { sans: ["Inter", "sans-serif"] },
-      },
-    },
-  };
-</script>
-<style>
-  * { box-sizing: border-box; }
-  body { font-family: 'Inter', sans-serif; }
-  .mat  { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-  .matf { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+@extends('layouts.nursery')
 
+@section('title', 'Plant Catalogue – Chatla')
+
+@push('styles')
+<style>
   /* Toggle switch */
   .tog-input:checked + .tog-track { background:#2c5926; }
   .tog-input:checked + .tog-track .tog-thumb { transform:translateX(18px); }
@@ -35,10 +11,6 @@
   /* Card hover overlay */
   .plant-card .card-overlay { opacity:0; transition:opacity .18s; }
   .plant-card:hover .card-overlay { opacity:1; }
-
-  /* Custom scrollbar */
-  ::-webkit-scrollbar { width:5px; height:5px; }
-  ::-webkit-scrollbar-thumb { background:#d1d5db; border-radius:9999px; }
 
   /* Family dropdown */
   .family-dropdown { display:none; }
@@ -58,83 +30,15 @@
   #delete-modal { display:none; }
   #delete-modal.open { display:flex; }
 </style>
-</head>
-<body class="bg-bg-page text-slate-900 font-sans">
-<div class="flex h-screen overflow-hidden">
+@endpush
 
-  <!-- ═══════════════ SIDEBAR ═══════════════ -->
-  <aside class="w-52 flex flex-col bg-white border-r border-slate-100 shrink-0">
-    <!-- Logo -->
-    <div class="flex items-center gap-3 px-5 py-5 border-b border-slate-100">
-      <div class="w-9 h-9 bg-primary rounded-full flex items-center justify-center text-white shrink-0">
-        <span class="material-symbols-outlined matf text-[20px]">psychiatry</span>
-      </div>
-      <div class="leading-tight">
-        <p class="font-bold text-[15px] text-primary">Chatla</p>
-        <p class="text-[10px] text-slate-400 font-medium">Nursery Admin</p>
-      </div>
-    </div>
-    <!-- Nav -->
-    <nav class="flex-1 px-3 py-5 space-y-0.5">
-      <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-primary/8 hover:text-primary rounded-lg text-sm font-medium transition-colors">
-        <span class="material-symbols-outlined mat text-[20px]">grid_view</span>Overview
-      </a>
-      <a href="{{ route('nursery.inventory.index') }}" class="flex items-center gap-3 px-3 py-2.5 bg-primary text-white rounded-lg text-sm font-semibold">
-        <span class="material-symbols-outlined matf text-[20px]">potted_plant</span>My Plants
-      </a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-primary/8 hover:text-primary rounded-lg text-sm font-medium transition-colors">
-        <span class="material-symbols-outlined mat text-[20px]">add_circle</span>Add New Plant
-      </a>
-      <a href="{{ route('nursery.profile.edit') }}" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-primary/8 hover:text-primary rounded-lg text-sm font-medium transition-colors">
-        <span class="material-symbols-outlined mat text-[20px]">storefront</span>Nursery Info
-      </a>
-    </nav>
-    <!-- Logout / Bottom -->
-    <div class="px-3 py-4 border-t border-slate-100">
-      <form method="POST" action="{{ route('logout') }}">
-          @csrf
-          <button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-red-50 hover:text-red-600 rounded-lg text-sm font-medium transition-colors cursor-pointer text-left">
-              <span class="material-symbols-outlined mat text-[20px]">logout</span>Log Out
-          </button>
-      </form>
-    </div>
-  </aside>
+@section('search_input')
+<input id="search-input" type="text" placeholder="Search plants, orders, or leads..."
+  class="w-full bg-bg-page border-none rounded-full py-2 pl-10 pr-4 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 outline-none"
+  oninput="applyFilters()"/>
+@endsection
 
-  <!-- ═══════════════ MAIN ═══════════════ -->
-  <div class="flex flex-col flex-1 overflow-hidden">
-
-    <!-- HEADER -->
-    <header class="h-14 bg-white border-b border-slate-100 flex items-center justify-between px-6 shrink-0">
-      <div class="relative w-72">
-        <span class="material-symbols-outlined mat absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
-        <input id="search-input" type="text" placeholder="Search plants, orders, or leads..."
-          class="w-full bg-bg-page border-none rounded-full py-2 pl-10 pr-4 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 outline-none"
-          oninput="applyFilters()"/>
-      </div>
-      <div class="flex items-center gap-4">
-        <button class="text-slate-400 hover:text-primary transition-colors p-1.5 relative">
-          <span class="material-symbols-outlined mat text-[22px]">notifications</span>
-          <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-        </button>
-        <div class="h-6 w-px bg-slate-200"></div>
-        <div class="flex items-center gap-2.5">
-          <div class="text-right">
-            <p class="text-sm font-semibold leading-tight">{{ auth()->user()->name }}</p>
-            <p class="text-[11px] text-slate-400">Owner</p>
-          </div>
-          @if(auth()->user()->profile_img)
-            <div class="w-9 h-9 rounded-full bg-cover bg-center border border-slate-200" style="background-image:url('{{ auth()->user()->profile_img }}')"></div>
-          @else
-            <div class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 text-primary font-bold">
-              {{ substr(auth()->user()->name, 0, 1) }}
-            </div>
-          @endif
-        </div>
-      </div>
-    </header>
-
-    <!-- PAGE BODY -->
-    <main class="flex-1 overflow-y-auto bg-bg-page">
+@section('content')
       <div class="px-8 py-7">
 
         <!-- ─── Page title row ─── -->
@@ -351,6 +255,7 @@
   <p id="toast-msg" class="text-sm font-semibold"></p>
 </div>
 
+@push('scripts')
 <script>
 /* ═══════════════════════════════════
    DATA (Populated from Laravel)
@@ -770,5 +675,5 @@ function showToast(message, type = 'success') {
 ═══════════════════════════════════ */
 applyFilters();
 </script>
-</body>
-</html>
+@endpush
+@endsection
