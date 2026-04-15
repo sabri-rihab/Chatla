@@ -62,9 +62,7 @@
               <select id="sort-select" onchange="applyFilters()"
                 class="w-full bg-bg-page border-none rounded-lg pl-3 pr-8 py-2 text-sm text-slate-700 font-medium focus:ring-2 focus:ring-primary/20 outline-none appearance-none cursor-pointer">
                 <option value="name">Name A–Z</option>
-                <option value="price-asc">Price ↑</option>
-                <option value="price-desc">Price ↓</option>
-                <option value="stock-desc">Most Stock</option>
+                <option value="price-asc">Name Z–A</option>
               </select>
               <span class="material-symbols-outlined mat absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 text-[16px] pointer-events-none">expand_more</span>
             </div>
@@ -396,10 +394,10 @@ function getFiltered(q, status, family, growth) {
     return matchQ && matchS && matchF && matchG;
   });
   list.sort((a,b) => {
-    if (sort==='name') return a.name.localeCompare(b.name);
-    if (sort==='price-asc') return a.price - b.price;
-    if (sort==='price-desc') return b.price - a.price;
-    if (sort==='stock-desc') return b.stock - a.stock;
+    if (sort === 'name') return a.name.localeCompare(b.name);
+    if (sort === 'price-asc') return b.name.localeCompare(a.name); // Using price-asc as the "Name Z-A" key as per user HTML
+    if (sort === 'price-desc') return b.price - a.price;
+    if (sort === 'stock-desc') return b.stock - a.stock;
     return 0;
   });
   return list;
