@@ -12,18 +12,27 @@ Route::get('/test-api', function () {
     return view('test-api', compact('plants'));
 });
 
+Route::middleware(['auth', 'verified'])->get('/dashboard', function (\Illuminate\Http\Request $request) {
+    $user = $request->user();
+
+    if ($user->role === 'simple') {
+        return view('welcome');
+    }
+
+    // Nursery Owner Logic
+    $nursery = $user->nursery;
+    if (!$nursery) {
+        abort(403, 'No nursery found for this account.');
+    }
+
+    $totalPlants = $nursery->inventory()->count();
+    $outOfStock = $nursery->inventory()->where('stock_quantity', '<=', 0)->count();
+    $inventories = $nursery->inventory()->with(['plant', 'plant.family'])->paginate(8);
+
+    return view('nursery.dashboard', compact('totalPlants', 'outOfStock', 'inventories'));
+})->name('dashboard');
+
 Route::middleware(['auth', 'verified', 'nursery_owner'])->group(function () {
-    Route::get('/dashboard', function (\Illuminate\Http\Request $request) {
-        $nursery = $request->attributes->get('nursery');
-
-        $totalPlants = $nursery->inventory()->count();
-        $outOfStock = $nursery->inventory()->where('stock_quantity', '<=', 0)->count();
-        
-        $inventories = $nursery->inventory()->with(['plant', 'plant.family'])->paginate(8);
-            
-        return view('nursery.dashboard', compact('totalPlants', 'outOfStock', 'inventories'));
-    })->name('dashboard');
-
     Route::get('/nursery/profile', [\App\Http\Controllers\NurseryProfileController::class, 'edit'])->name('nursery.profile.edit');
     Route::put('/nursery/profile', [\App\Http\Controllers\NurseryProfileController::class, 'update'])->name('nursery.profile.update');
 

@@ -955,3 +955,42 @@ git add resources/views/layouts/ resources/views/nursery/ STEPS.md
 git commit -m "refactor: implement nursery master layout and extract partials"
 git push
 ```
+\ # #   S t e p   3 7 
+ * * R e q u e s t : * * 
+ A p p l y   t h e   l a n d i n g   p a g e   d e s i g n   a s   t h e   d a s h b o a r d   f o r   s i m p l e   u s e r s   a n d   g u e s t s . 
+ 
+ * * A c t i o n s   P e r f o r m e d * * : 
+ -   * * W e l c o m e   P a g e   T r a n s f o r m a t i o n * * : 
+         -   R e p l a c e d   t h e   d e f a u l t   L a r a v e l   o n b o a r d i n g   t e m p l a t e   i n   \  e s o u r c e s / v i e w s / w e l c o m e . b l a d e . p h p \   w i t h   t h e   p r o v i d e d   p r e m i u m   l a n d i n g   p a g e   d e s i g n . 
+         -   I n t e g r a t e d   L a r a v e l   B l a d e   l o g i c   t o   m a k e   t h e   n a v i g a t i o n   d y n a m i c : 
+                 -   * * G u e s t s * *   s e e   \ L o g i n \   a n d   \ G e t  
+ S t a r t e d \   ( l i n k i n g   t o   s i m p l e   u s e r   r e g i s t r a t i o n ) . 
+                 -   * * N u r s e r y   O w n e r s * *   s e e   a   l i n k   t o   \ M y  
+ N u r s e r y \ . 
+                 -   * * S i m p l e   U s e r s * *   s e e   a   p e r s o n a l i z e d   g r e e t i n g   a n d   a   \ L o g o u t \   b u t t o n . 
+         -   U p d a t e d   C T A   b u t t o n s   t o   l i n k   t o   t h e   r e g i s t r a t i o n   f l o w . 
+ -   * * S m a r t   D a s h b o a r d   R o u t i n g * * : 
+         -   R e f a c t o r e d   t h e   \ / d a s h b o a r d \   r o u t e   i n   \  o u t e s / w e b . p h p \ . 
+         -   I t   n o w   a u t o m a t i c a l l y   d e t e c t s   t h e   u s e r ' s   r o l e : 
+                 -   \ s i m p l e \   u s e r s   a r e   s e r v e d   t h e   u n i f i e d   l a n d i n g / d a s h b o a r d   v i e w   ( \ w e l c o m e . b l a d e . p h p \ ) . 
+                 -   \ 
+ u r s e r y _ o w n e r \   u s e r s   c o n t i n u e   t o   s e e   t h e i r   p r o f e s s i o n a l   n u r s e r y   m a n a g e m e n t   d a s h b o a r d . 
+ -   * * C o n s i s t e n c y * * : 
+         -   L i n k e d   t h e   \ F o r  
+ N u r s e r i e s \   l i n k   i n   t h e   h e a d e r   a n d   f o o t e r   t o   t h e   N u r s e r y   O w n e r   r e g i s t r a t i o n   f l o w . 
+ 
+ * * C o m m a n d s   E x e c u t e d * * : 
+ \ \ \  a s h 
+ g i t   a d d   r e s o u r c e s / v i e w s / w e l c o m e . b l a d e . p h p   r o u t e s / w e b . p h p   S T E P S . m d 
+ g i t   c o m m i t   - m   \ \ \ f e a t :  
+ u n i f i e d  
+ l a n d i n g  
+ p a g e  
+ a n d  
+ d a s h b o a r d  
+ f o r  
+ s i m p l e  
+ u s e r s \ \ \ 
+ g i t   p u s h 
+ \ \ \ \  
+ 
