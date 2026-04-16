@@ -92,6 +92,21 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <!-- Left Column: Report Form -->
             <div class="lg:col-span-7 bg-white dark:bg-slate-900 rounded-3xl p-10 shadow-xl shadow-primary/5 border border-slate-100 dark:border-slate-800">
+                
+                @if(session('success'))
+                    <div class="mb-8 p-4 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-xl flex items-center gap-3 text-emerald-700 dark:text-emerald-300 animate-in fade-in slide-in-from-top-4">
+                        <span class="material-symbols-outlined">check_circle</span>
+                        <p class="text-sm font-bold">{{ session('success') }}</p>
+                    </div>
+                @endif
+
+                @if($errors->any())
+                    <div class="mb-8 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl flex items-center gap-3 text-red-700 dark:text-red-300">
+                        <span class="material-symbols-outlined">error</span>
+                        <p class="text-sm font-bold">Please correct the errors in the form.</p>
+                    </div>
+                @endif
+
                 <div class="flex items-center gap-3 mb-8">
                     <span class="material-symbols-outlined text-primary text-3xl">report</span>
                     <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Send us a Message</h2>
@@ -99,34 +114,37 @@
                 
                 <div class="mb-10">
                     <label class="text-xs font-bold uppercase tracking-widest text-slate-500 block mb-4">Select Category</label>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-4 py-2 rounded-full bg-primary text-white text-sm font-bold cursor-pointer">Bug/Error</span>
-                        <span class="px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 cursor-pointer transition-colors">False information</span>
-                        <span class="px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 cursor-pointer transition-colors">Feature Request</span>
-                        <span class="px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 cursor-pointer transition-colors">Missing Content</span>
-                        <span class="px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 cursor-pointer transition-colors">Other</span>
+                    <input type="hidden" name="request_type" id="request_type" value="Bug/Error">
+                    <div class="flex flex-wrap gap-2" id="request-type-container">
+                        <span onclick="selectType(this, 'Bug/Error')" class="request-type-pill px-4 py-2 rounded-full bg-primary text-white text-sm font-bold cursor-pointer transition-all">Bug/Error</span>
+                        <span onclick="selectType(this, 'false information')" class="request-type-pill px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 cursor-pointer transition-all">False information</span>
+                        <span onclick="selectType(this, 'feature request')" class="request-type-pill px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 cursor-pointer transition-all">Feature Request</span>
+                        <span onclick="selectType(this, 'missing content')" class="request-type-pill px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 cursor-pointer transition-all">Missing Content</span>
+                        <span onclick="selectType(this, 'other')" class="request-type-pill px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 cursor-pointer transition-all">Other</span>
                     </div>
                 </div>
 
-                <form class="space-y-6">
+                <form action="{{ route('contact.store') }}" method="POST" class="space-y-6">
+                    @csrf
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Full Name</label>
-                            <input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" placeholder="John Doe" type="text"/>
+                            <input name="name" class="w-full bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" placeholder="John Doe" type="text" value="{{ auth()->check() ? auth()->user()->name : old('name') }}" required/>
                         </div>
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Email Address</label>
-                            <input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" placeholder="john@example.com" type="email"/>
+                            <input name="email" class="w-full bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" placeholder="john@example.com" type="email" value="{{ auth()->check() ? auth()->user()->email : old('email') }}" required/>
                         </div>
                     </div>
                     <div class="space-y-2">
                         <label class="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Subject (Optional)</label>
-                        <input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" placeholder="How can we help?" type="text"/>
+                        <input name="subject" class="w-full bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" placeholder="How can we help?" type="text" value="{{ old('subject') }}"/>
                     </div>
                     <div class="space-y-2">
                         <label class="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Message</label>
                         <div class="relative">
-                            <textarea class="w-full bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none resize-none" placeholder="Write your message here..." rows="6"></textarea>
+                            <textarea name="message" class="w-full bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none resize-none" placeholder="Write your message here..." rows="6" required>{{ old('message') }}</textarea>
                         </div>
                     </div>
                     <button class="w-full md:w-auto flex items-center justify-center gap-2 bg-primary text-white px-10 py-4 rounded-full font-bold shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5 transition-all">
@@ -216,6 +234,24 @@
         </div>
     </div>
 </footer>
+
+<script>
+    function selectType(element, typeValue) {
+        // Set hidden input value
+        document.getElementById('request_type').value = typeValue;
+
+        // Reset all pills
+        const pills = document.querySelectorAll('.request-type-pill');
+        pills.forEach(pill => {
+            pill.classList.remove('bg-primary', 'text-white');
+            pill.classList.add('bg-primary/5', 'text-primary');
+        });
+
+        // Set active pill
+        element.classList.remove('bg-primary/5', 'text-primary');
+        element.classList.add('bg-primary', 'text-white');
+    }
+</script>
 
 </body>
 </html>
