@@ -340,6 +340,18 @@
                         <p class="text-sm text-slate-500">Already registered? <a class="text-primary font-bold hover:underline" href="{{ route('login') }}">Log in to your account</a></p>
                     </div>
                 </form>
+
+                <div class="mt-8 pt-8 border-t border-slate-100">
+                    <div class="bg-primary/5 p-6 rounded-2xl border border-primary/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div>
+                            <p class="text-base font-bold text-primary mb-1">Looking for a personal account?</p>
+                            <p class="text-sm text-slate-600">Join our community to buy plants and share tips.</p>
+                        </div>
+                        <a class="bg-primary/10 text-primary text-sm font-bold px-5 py-2.5 rounded-xl hover:bg-primary hover:text-white transition-all whitespace-nowrap" href="{{ route('register', ['role' => 'user']) }}">
+                            Register as User
+                        </a>
+                    </div>
+                </div>
             </div>
 
         </div>

@@ -11,7 +11,7 @@ class Nursery extends Model
 
     protected $fillable = [
         'owner_id', 'city_id', 'name', 'phone', 'address', 
-        'status', 'website', 'rating', 'operating_hours', 'profile_img'
+        'status', 'website', 'rating', 'operating_hours', 'profile_img', 'latitude', 'longitude'
     ];
 
     // ─── Relationships ────────────────────────────────────────────────

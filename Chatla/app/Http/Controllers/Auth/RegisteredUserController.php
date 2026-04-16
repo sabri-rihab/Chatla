@@ -19,12 +19,18 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
+        $role = $request->query('role', 'nursery_owner');
+
+        if ($role === 'user') {
+            return view('auth.register-user');
+        }
+
         $cities = City::orderBy('name')->get();
         return view('auth.register', [
             'cities' => $cities,
-            'role'   => $request->query('role', 'nursery_owner'),
+            'role'   => $role,
         ]);
     }
 
@@ -33,37 +39,49 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            // ── User fields ──────────────────────────────────────────
-            'email'        => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password'     => ['required', Rules\Password::defaults()],
-            'terms'        => ['accepted'],
+        $role = $request->input('role', 'nursery_owner');
 
-            // ── Nursery fields ───────────────────────────────────────
-            'nursery_name' => ['required', 'string', 'max:255'],
-            'city_id'      => ['required', 'integer', 'exists:cities,id'],
-            'phone'        => ['required', 'string', 'max:30'],
-            'address'      => ['required', 'string', 'max:500'],
-        ]);
+        $commonRules = [
+            'email'    => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'terms'    => ['accepted'],
+        ];
 
-        // BUG 3 fix: form has no 'name' field — derive it from nursery_name
-        // BUG 3 fix: form has no 'role' field — hard-code it as nursery_owner
-        $user = User::create([
-            'name'     => $request->nursery_name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => User::ROLE_NURSERY_OWNER,
-        ]);
+        if ($role === 'user') {
+            $request->validate(array_merge($commonRules, [
+                'name' => ['required', 'string', 'max:255'],
+            ]));
 
-        // BUG 4 fix: Nursery record was never created — create it now
-        Nursery::create([
-            'owner_id' => $user->id,
-            'name'     => $request->nursery_name,
-            'city_id'  => $request->city_id,
-            'phone'    => $request->phone,
-            'address'  => $request->address,
-            'status'   => 'pending',
-        ]);
+            $user = User::create([
+                'name'     => $request->name,
+                'email'    => $request->email,
+                'password' => Hash::make($request->password),
+                'role'     => User::ROLE_USER,
+            ]);
+        } else {
+            $request->validate(array_merge($commonRules, [
+                'nursery_name' => ['required', 'string', 'max:255'],
+                'city_id'      => ['required', 'integer', 'exists:cities,id'],
+                'phone'        => ['required', 'string', 'max:30'],
+                'address'      => ['required', 'string', 'max:500'],
+            ]));
+
+            $user = User::create([
+                'name'     => $request->nursery_name,
+                'email'    => $request->email,
+                'password' => Hash::make($request->password),
+                'role'     => User::ROLE_NURSERY_OWNER,
+            ]);
+
+            Nursery::create([
+                'owner_id' => $user->id,
+                'name'     => $request->nursery_name,
+                'city_id'  => $request->city_id,
+                'phone'    => $request->phone,
+                'address'  => $request->address,
+                'status'   => 'pending',
+            ]);
+        }
 
         event(new Registered($user));
 
