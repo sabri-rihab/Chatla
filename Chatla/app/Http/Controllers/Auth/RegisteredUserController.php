@@ -56,7 +56,7 @@ class RegisteredUserController extends Controller
                 'name'     => $request->name,
                 'email'    => $request->email,
                 'password' => Hash::make($request->password),
-                'role'     => User::ROLE_USER,
+                'role'     => User::ROLE_SIMPLE,
             ]);
         } else {
             $request->validate(array_merge($commonRules, [

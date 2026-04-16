@@ -130,7 +130,7 @@
     <nav class="w-full bg-transparent h-20 px-8 flex items-center justify-between border-b border-gray-200 bg-white">
         <a href="/" class="flex items-center gap-2 text-slate-900 font-bold text-xl">
             <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                <span class="material-symbols-outlined text-white text-lg">spa</span>
             </div>
             Chatla
         </a>
@@ -361,7 +361,9 @@
     <footer class="mt-auto px-8 py-6 border-t border-gray-200 bg-white">
         <div class="max-w-[1100px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-2 text-slate-500">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                <div class="w-6 h-6 rounded bg-primary flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-[14px]">spa</span>
+                </div>
                 <p class="text-xs font-semibold tracking-wider">CHATLA © 2026</p>
             </div>
             <div class="flex gap-8">

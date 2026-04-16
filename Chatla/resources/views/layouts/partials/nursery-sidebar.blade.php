@@ -1,8 +1,8 @@
 <aside class="w-52 flex flex-col bg-white border-r border-slate-100 shrink-0">
     <!-- Logo -->
     <div class="flex items-center gap-3 px-5 py-5 border-b border-slate-100">
-        <div class="w-9 h-9 bg-primary rounded-full flex items-center justify-center text-white shrink-0">
-            <span class="material-symbols-outlined mat-fill text-[20px]">psychiatry</span>
+        <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center text-white shrink-0">
+            <span class="material-symbols-outlined mat-fill text-[20px]">spa</span>
         </div>
         <div class="leading-tight">
             <p class="font-bold text-[15px] text-primary">Chatla</p>

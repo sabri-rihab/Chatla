@@ -34,8 +34,10 @@
 <header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10 px-6 lg:px-20 py-4">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
         <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-3xl">psychology_alt</span>
-            <h2 class="text-primary text-xl font-extrabold tracking-tight">Chatla 🌱</h2>
+            <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                <span class="material-symbols-outlined text-white text-lg">spa</span>
+            </div>
+            <h2 class="text-primary text-xl font-bold tracking-tight">Chatla</h2>
         </div>
         <nav class="hidden md:flex items-center gap-8">
             <a class="hover:text-primary transition-colors text-sm font-semibold" href="{{ url('/') }}">Home</a>
@@ -277,8 +279,10 @@
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
         <div class="col-span-1 md:col-span-1 space-y-6">
             <div class="flex items-center gap-2 text-white">
-                <span class="material-symbols-outlined text-primary text-3xl">psychology_alt</span>
-                <h2 class="text-xl font-extrabold">Chatla 🌱</h2>
+                <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-lg">spa</span>
+                </div>
+                <h2 class="text-xl font-bold">Chatla</h2>
             </div>
             <p class="text-sm leading-relaxed">
                 The Kingdom's leading digital platform for nurseries and garden enthusiasts. Growing together since 2024.
