@@ -137,8 +137,15 @@
         <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
             <a href="#" class="hover:text-slate-900 transition-colors">Home</a>
             <a href="#" class="hover:text-slate-900 transition-colors">Explore</a>
-            <a href="#" class="hover:text-slate-900 transition-colors">Contact us</a>
-            <a href="{{ route('login') }}" class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-sm">Login</a>
+            <a href="{{ route('contact') }}" class="hover:text-slate-900 transition-colors">Contact us</a>
+            @auth
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+                    <button type="submit" class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-sm">Logout</button>
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-sm">Login</a>
+            @endauth
         </div>
     </nav>
 

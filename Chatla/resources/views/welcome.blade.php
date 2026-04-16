@@ -40,25 +40,21 @@
             <h2 class="text-primary text-xl font-bold tracking-tight">Chatla</h2>
         </div>
         <nav class="hidden md:flex items-center gap-8">
-            <a class="hover:text-primary transition-colors text-sm font-semibold" href="{{ url('/') }}">Home</a>
-            <a class="hover:text-primary transition-colors text-sm font-semibold" href="#">Explore</a>
-            <a class="hover:text-primary transition-colors text-sm font-semibold" href="{{ route('register', ['role' => 'nursery_owner']) }}">For Nurseries</a>
+            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600" href="{{ url('/') }}">Home</a>
+            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600" href="#">Explore</a>
+            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600" href="{{ route('contact') }}">Contact us</a>
             
             @if (Route::has('login'))
                 @auth
-                    @if(auth()->user()->role === 'nursery_owner')
-                        <a class="hover:text-primary transition-colors text-sm font-semibold" href="{{ route('dashboard') }}">My Nursery</a>
-                    @else
-                        <span class="text-slate-500 text-sm font-medium">Hello, {{ explode(' ', auth()->user()->name)[0] }}</span>
-                    @endif
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
-                        <button type="submit" class="hover:text-red-600 transition-colors text-sm font-semibold">Logout</button>
+                        <button type="submit" class="bg-primary hover:bg-primary/90 text-white px-8 py-2.5 rounded-full text-sm font-bold transition-all shadow-sm">
+                            Logout
+                        </button>
                     </form>
                 @else
-                    <a class="hover:text-primary transition-colors text-sm font-semibold" href="{{ route('login') }}">Login</a>
-                    <a href="{{ route('register', ['role' => 'simple']) }}" class="bg-primary text-white hover:bg-primary/90 transition-all px-6 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-primary/20">
-                        Get Started
+                    <a href="{{ route('login') }}" class="bg-primary hover:bg-primary/90 text-white px-8 py-2.5 rounded-full text-sm font-bold transition-all shadow-sm">
+                        Login
                     </a>
                 @endauth
             @endif

@@ -12,6 +12,10 @@ Route::get('/test-api', function () {
     return view('test-api', compact('plants'));
 });
 
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
 Route::middleware(['auth', 'verified'])->get('/dashboard', function (\Illuminate\Http\Request $request) {
     $user = $request->user();
 
