@@ -86,7 +86,7 @@
 
                 <form method="POST" action="{{ route('register') }}" class="space-y-6">
                     @csrf
-                    <input type="hidden" name="role" value="user">
+                    <input type="hidden" name="role" value="simple">
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <label class="flex flex-col gap-2.5">

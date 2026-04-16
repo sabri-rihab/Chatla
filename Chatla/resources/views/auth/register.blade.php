@@ -347,7 +347,7 @@
                             <p class="text-base font-bold text-primary mb-1">Looking for a personal account?</p>
                             <p class="text-sm text-slate-600">Join our community to buy plants and share tips.</p>
                         </div>
-                        <a class="bg-primary/10 text-primary text-sm font-bold px-5 py-2.5 rounded-xl hover:bg-primary hover:text-white transition-all whitespace-nowrap" href="{{ route('register', ['role' => 'user']) }}">
+                        <a class="bg-primary/10 text-primary text-sm font-bold px-5 py-2.5 rounded-xl hover:bg-primary hover:text-white transition-all whitespace-nowrap" href="{{ route('register', ['role' => 'simple']) }}">
                             Register as User
                         </a>
                     </div>

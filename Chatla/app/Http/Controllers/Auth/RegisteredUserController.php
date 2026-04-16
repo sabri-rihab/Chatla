@@ -23,8 +23,8 @@ class RegisteredUserController extends Controller
     {
         $role = $request->query('role', 'nursery_owner');
 
-        if ($role === 'user') {
-            return view('auth.register-user');
+        if ($role === 'simple') {
+            return view('auth.register-simple');
         }
 
         $cities = City::orderBy('name')->get();
@@ -47,7 +47,7 @@ class RegisteredUserController extends Controller
             'terms'    => ['accepted'],
         ];
 
-        if ($role === 'user') {
+        if ($role === 'simple') {
             $request->validate(array_merge($commonRules, [
                 'name' => ['required', 'string', 'max:255'],
             ]));
