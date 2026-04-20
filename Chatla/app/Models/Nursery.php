@@ -15,6 +15,18 @@ class Nursery extends Model
     ];
 
     /**
+     * The "booted" method of the model.
+     */
+    protected static function booted()
+    {
+        static::creating(function ($nursery) {
+            if (empty($nursery->slug)) {
+                $nursery->slug = \Illuminate\Support\Str::slug($nursery->name);
+            }
+        });
+    }
+
+    /**
      * Get the route key for the model.
      */
     public function getRouteKeyName()

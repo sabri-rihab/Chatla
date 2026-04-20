@@ -136,7 +136,7 @@
                             : 'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&q=80&w=400';
                         $plantCount = $nursery->inventory()->count();
                     @endphp
-                    <a href="{{ route('nurseries.show', $nursery) }}"
+                    <a href="{{ route('public.nurseries.show', $nursery) }}"
                        class="nursery-card bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
 
                         {{-- Logo Banner --}}

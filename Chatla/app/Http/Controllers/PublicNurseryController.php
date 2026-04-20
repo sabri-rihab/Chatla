@@ -13,7 +13,18 @@ class PublicNurseryController extends Controller
      */
     public function show(Request $request, Nursery $nursery)
     {
-        $query = $nursery->inventory()->with(['plant.family', 'images']);
+        // 1. Add the select() and join() so we can sort by plant names
+        $query = $nursery->inventory()
+            ->select('nursery_inventories.*') // Keeps inventory IDs safe
+            ->join('plants', 'nursery_inventories.plant_id', '=', 'plants.id')
+            ->with(['plant.family', 'images']);
+
+        //Sort result a-z/z-a
+        if($request->sort === 'a-z'){
+            $query->orderBy('plants.name', 'asc');
+        }else{
+            $query->orderBy('plants.name', 'desc');
+        }
 
         // Filter by Search Query
         if ($request->filled('search')) {
@@ -30,6 +41,7 @@ class PublicNurseryController extends Controller
                 $q->whereIn('family_id', $familyIds);
             });
         }
+        
 
         // Filter by Stock Status
         if ($request->filled('stock_status')) {
@@ -43,5 +55,28 @@ class PublicNurseryController extends Controller
         $allCities = \App\Models\City::orderBy('name')->get(['id', 'name']);
 
         return view('nurseries.show', compact('nursery', 'catalog', 'allFamilies', 'allCities'));
+    }
+
+    public function rate(Request $request, Nursery $nursery)
+    {
+        // 1. Make sure they actually sent a number between 1 and 5
+        $request->validate([
+            'rate' => 'required|integer|min:1|max:5'
+        ]);
+
+        // 2. Save the rating to the database!
+        // We use 'updateOrCreate' so if the user rates again, it just updates their old score instead of crashing.
+        $nursery->ratings()->updateOrCreate(
+            ['user_id' => auth()->id()], // Look for an existing rating by this user
+            ['rate' => $request->rate]   // Update it (or create it) with the new value
+        );
+
+        // 3. Optional: Update the simple "rating" column on your main nurseries table
+        // We calculate the new average and round it to a whole number to save it
+        $newAverage = $nursery->ratings()->avg('rate');
+        $nursery->update(['rating' => round($newAverage)]);
+
+        // 4. Send them back to the page they were just on
+        return back()->with('success', 'Thank you for rating this nursery!');
     }
 }

@@ -21,22 +21,22 @@ use Illuminate\Support\Facades\Route;
 //  NURSERY – Public routes
 // ══════════════════════════════════════════════════════════════════════
 
-Route::prefix('nurseries')->group(function () {
+// Route::prefix('nurseries')->group(function () {
 
     // GET /api/nurseries/search?region=&city=&name=
-    Route::get('/search', [NurseryController::class, 'search'])
-        ->name('nurseries.search');
+    // Route::get('/search', [NurseryController::class, 'search'])
+    //     ->name('nurseries.search');
 
     // GET /api/nurseries/{id}
-    Route::get('/{id}', [NurseryController::class, 'show'])
-        ->name('nurseries.show')
-        ->whereNumber('id');
+    // Route::get('/{id}', [NurseryController::class, 'show'])
+    //     ->name('nurseries.show')
+    //     ->whereNumber('id');
 
     // GET /api/nurseries/{id}/plants?per_page=15
-    Route::get('/{id}/plants', [NurseryController::class, 'plants'])
-        ->name('nurseries.plants')
-        ->whereNumber('id');
-});
+//     Route::get('/{id}/plants', [NurseryController::class, 'plants'])
+//         ->name('nurseries.plants')
+//         ->whereNumber('id');
+// });
 
 // ══════════════════════════════════════════════════════════════════════
 //  PLANTS – Public search routes

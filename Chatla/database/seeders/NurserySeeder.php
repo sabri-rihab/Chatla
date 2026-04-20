@@ -6,6 +6,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\City; // <-- Added this so we can fetch the City IDs
 
+use Illuminate\Support\Str;
+
 class NurserySeeder extends Seeder
 {
     public function run(): void
@@ -132,8 +134,9 @@ class NurserySeeder extends Seeder
             // 2. Insert into the database using 'city_id' instead of 'city'
             DB::table('nurseries')->insert([
                 'owner_id'        => $nursery['owner_id'],
-                'city_id'         => $city->id,  // <-- This is the crucial fix!
+                'city_id'         => $city->id,
                 'name'            => $nursery['name'],
+                'slug'            => Str::slug($nursery['name']),
                 'phone'           => $nursery['phone'],
                 'address'         => $nursery['address'],
                 'status'          => $nursery['status'],

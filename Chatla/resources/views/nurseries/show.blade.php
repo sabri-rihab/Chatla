@@ -41,7 +41,7 @@
         </a>
         <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600 dark:text-slate-400">
             <a href="{{ url('/') }}" class="hover:text-primary transition-colors">Home</a>
-            <a href="#" class="hover:text-primary transition-colors">Nurseries</a>
+            <a href="{{ route('nurseries.index') }}" class="hover:text-primary transition-colors">Nurseries</a>
             <a href="{{ route('explore') }}" class="hover:text-primary transition-colors">Explore</a>
             <a href="{{ route('contact') }}" class="hover:text-primary transition-colors">Contact us</a>
             @auth
@@ -57,13 +57,13 @@
 
     <main class="max-w-7xl mx-auto w-full px-4 md:px-10 py-6">
         <!-- Breadcrumbs -->
-        <nav class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-6 font-medium">
+        <!-- <nav class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-6 font-medium">
             <a class="hover:text-primary" href="{{ url('/') }}">Home</a>
             <span class="material-symbols-outlined text-xs">chevron_right</span>
             <a class="hover:text-primary" href="{{ route('explore') }}">Explore</a>
             <span class="material-symbols-outlined text-xs">chevron_right</span>
             <span class="text-slate-900 dark:text-slate-100 font-bold underline decoration-primary/30 underline-offset-4">{{ $nursery->name }}</span>
-        </nav>
+        </nav> -->
 
         <!-- Nursery Hero Profile -->
         <section class="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-sm border border-primary/5 mb-8">
@@ -82,11 +82,32 @@
                 <div class="flex-1 space-y-4">
                     <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
                         <div>
-                            <h1 class="text-3xl font-bold text-slate-900 dark:text-white">{{ $nursery->name }}</h1>
-                            <p class="text-primary font-medium mt-1">{{ $nursery->city->name ?? 'Morocco' }}</p>
+                            <h1 class="text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                                {{ $nursery->name }}
+                                
+                                <span class="bg-amber-100 text-amber-600 text-sm px-2 py-1 rounded-lg flex items-center gap-1 shadow-sm">
+                                    <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1">star</span>
+                                    {{ number_format($nursery->ratings()->avg('rate') ?? 0, 1) }}
+                                </span>
+                            </h1>                            <p class="text-primary font-medium mt-1">{{ $nursery->city->name ?? 'Morocco' }}</p>
                             <p class="text-slate-600 dark:text-slate-400 mt-2 max-w-2xl">
                                 {{ $nursery->custom_description ?? 'Specializing in Mediterranean flora and exotic varieties. Providing the highest quality plants with sustainable nursery practices.' }}
                             </p>
+                        </div>
+                        <!-- rating section -->
+                        <div class="flex flex-col items-start md:items-end gap-2">
+                            <p class="text-xs text-slate-500 uppercase tracking-wider font-bold">Rate this Nursery</p>
+                            <div class="relative">
+                                <select class="appearance-none bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl pl-4 pr-10 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary cursor-pointer shadow-sm hover:border-primary/50 transition-all">
+                                    <option value="" disabled selected>Rate...</option>
+                                    <option value="1">⭐</option>
+                                    <option value="2">⭐⭐</option>
+                                    <option value="3">⭐⭐⭐</option>
+                                    <option value="4">⭐⭐⭐⭐</option>
+                                    <option value="5">⭐⭐⭐⭐⭐</option>
+                                </select>
+                                <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none">expand_more</span>
+                            </div>
                         </div>
 
                     </div>
@@ -124,14 +145,14 @@
         </section>
 
         <!-- Catalog Section -->
-        <form id="filter-form" action="{{ route('nurseries.show', $nursery) }}" method="GET" class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <form id="filter-form" action="{{ route('public.nurseries.show', $nursery) }}" method="GET" class="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <!-- Sidebar: Filters and Info -->
             <aside class="space-y-8">
                 <!-- Internal Search & Filters -->
                 <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-primary/5 space-y-6">
                     <div class="flex items-center justify-between">
                         <h3 class="font-bold text-lg">Filters</h3>
-                        <a href="{{ route('nurseries.show', $nursery) }}" onclick="localStorage.removeItem('recent_family_nursery')" class="text-xs text-primary hover:underline">Reset</a>
+                        <a href="{{ route('public.nurseries.show', $nursery) }}" onclick="localStorage.removeItem('recent_family_nursery')" class="text-xs text-primary hover:underline">Reset</a>
                     </div>
                     <div class="space-y-4">
                         <label class="block">
@@ -232,10 +253,9 @@
                     <h2 class="text-2xl font-bold">Catalog <span class="text-slate-400 font-normal text-lg ml-2">({{ $catalog->total() }} plants)</span></h2>
                     <div class="flex items-center gap-2">
                         <span class="text-sm text-slate-500">Sort by:</span>
-                        <select class="bg-transparent border-none text-sm font-semibold focus:ring-0 text-primary cursor-pointer">
-                            <option>Popularity</option>
-                            <option>Newest</option>
-                            <option>Price: Low to High</option>
+                        <select name='sort' onchange="document.getElementById('filter-form').submit()" class="bg-transparent border-none text-sm font-semibold focus:ring-0 text-primary cursor-pointer">
+                            <option value="a-z" {{ request('sort') === 'a-z' ? 'selected' : '' }}>A-Z</option>
+                            <option value="z-a" {{ request('sort') === 'z-a' ? 'selected' : '' }}>Z-A</option>
                         </select>
                     </div>
                 </div>
@@ -263,10 +283,6 @@
                             <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 line-clamp-2">{{ $inventory->custom_description ?? $inventory->plant->about_description }}</p>
                             <div class="mt-4 flex items-center justify-between">
                                 <span class="text-xl font-bold">{{ number_format($inventory->price, 0) }} MAD</span>
-                                <div class="flex items-center text-amber-500">
-                                    <span class="material-symbols-outlined text-sm">star</span>
-                                    <span class="text-xs font-bold ml-1">4.9</span>
-                                </div>
                             </div>
                         </div>
                     </div>

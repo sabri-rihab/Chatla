@@ -41,7 +41,7 @@
         </div>
         <nav class="hidden md:flex items-center gap-8">
             <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ url('/') }}">Home</a>
-            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="#">Nurseries</a>
+            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ route('nurseries.index') }}">Nurseries</a>
             <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ route('explore') }}">Explore</a>
             <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ route('contact') }}">Contact us</a>
             
@@ -139,7 +139,7 @@
                     <h2 class="text-3xl font-extrabold mb-2">Featured Nurseries</h2>
                     <p class="text-slate-600 dark:text-slate-400">Discover the finest botanical collections from top-rated local growers.</p>
                 </div>
-                <a class="text-primary font-bold flex items-center gap-1 hover:underline underline-offset-4" href="#">
+                <a class="text-primary font-bold flex items-center gap-1 hover:underline underline-offset-4" href="{{ route('nurseries.index') }}">
                     View All Nurseries <span class="material-symbols-outlined text-sm">arrow_forward</span>
                 </a>
             </div>

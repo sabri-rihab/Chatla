@@ -47,7 +47,7 @@
         </div>
         <nav class="hidden md:flex items-center gap-8">
             <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ url('/') }}">Home</a>
-            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="#">Nurseries</a>
+            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ route('nurseries.index') }}">Nurseries</a>
             <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ route('explore') }}">Explore</a>
             <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ route('contact') }}">Contact us</a>
             

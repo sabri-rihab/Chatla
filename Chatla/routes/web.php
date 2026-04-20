@@ -18,7 +18,10 @@ Route::get('/contact', function () {
 
 Route::get('/explore', [\App\Http\Controllers\ExploreController::class, 'index'])->name('explore');
 Route::get('/nurseries', [\App\Http\Controllers\NurseriesController::class, 'index'])->name('nurseries.index');
-Route::get('/nurseries/{nursery}', [\App\Http\Controllers\PublicNurseryController::class, 'show'])->name('nurseries.show');
+Route::get('/nurseries/{nursery}', [\App\Http\Controllers\PublicNurseryController::class, 'show'])->name('public.nurseries.show');
+Route::post('/nurseries/{nursery}/rate', [\App\Http\Controllers\PublicNurseryController::class, 'rate'])
+    ->name('public.nurseries.rate')
+    ->middleware('auth');
 
 Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
 
