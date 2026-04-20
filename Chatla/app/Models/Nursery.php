@@ -10,9 +10,17 @@ class Nursery extends Model
     use HasFactory;
 
     protected $fillable = [
-        'owner_id', 'city_id', 'name', 'phone', 'address', 
+        'owner_id', 'city_id', 'name', 'slug', 'phone', 'address', 
         'status', 'website', 'rating', 'operating_hours', 'profile_img', 'latitude', 'longitude'
     ];
+
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     // ─── Relationships ────────────────────────────────────────────────
 

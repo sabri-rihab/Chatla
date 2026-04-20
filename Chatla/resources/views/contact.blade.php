@@ -46,7 +46,8 @@
         </div>
         <nav class="hidden md:flex items-center gap-8">
             <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ url('/') }}">Home</a>
-            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="#">Explore</a>
+            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="#">Nurseries</a>
+            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ route('explore') }}">Explore</a>
             <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ route('contact') }}">Contact us</a>
             
             @if (Route::has('login'))
@@ -103,7 +104,14 @@
                 @if($errors->any())
                     <div class="mb-8 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl flex items-center gap-3 text-red-700 dark:text-red-300">
                         <span class="material-symbols-outlined">error</span>
-                        <p class="text-sm font-bold">Please correct the errors in the form.</p>
+                        <div>
+                            <p class="text-sm font-bold">Please correct the following errors:</p>
+                            <ul class="mt-1 text-xs list-disc list-inside">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
                 @endif
 
@@ -112,20 +120,20 @@
                     <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Send us a Message</h2>
                 </div>
                 
-                <div class="mb-10">
-                    <label class="text-xs font-bold uppercase tracking-widest text-slate-500 block mb-4">Select Category</label>
-                    <input type="hidden" name="request_type" id="request_type" value="Bug/Error">
-                    <div class="flex flex-wrap gap-2" id="request-type-container">
-                        <span onclick="selectType(this, 'Bug/Error')" class="request-type-pill px-4 py-2 rounded-full bg-primary text-white text-sm font-bold cursor-pointer transition-all">Bug/Error</span>
-                        <span onclick="selectType(this, 'false information')" class="request-type-pill px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 cursor-pointer transition-all">False information</span>
-                        <span onclick="selectType(this, 'feature request')" class="request-type-pill px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 cursor-pointer transition-all">Feature Request</span>
-                        <span onclick="selectType(this, 'missing content')" class="request-type-pill px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 cursor-pointer transition-all">Missing Content</span>
-                        <span onclick="selectType(this, 'other')" class="request-type-pill px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 cursor-pointer transition-all">Other</span>
-                    </div>
-                </div>
-
                 <form action="{{ route('contact.store') }}" method="POST" class="space-y-6">
                     @csrf
+
+                    <div class="mb-10">
+                        <label class="text-xs font-bold uppercase tracking-widest text-slate-500 block mb-4">Select Category</label>
+                        <input type="hidden" name="request_type" id="request_type" value="Bug/Error">
+                        <div class="flex flex-wrap gap-2" id="request-type-container">
+                            <span onclick="selectType(this, 'Bug/Error')" class="request-type-pill px-4 py-2 rounded-full bg-primary text-white text-sm font-bold cursor-pointer transition-all">Bug/Error</span>
+                            <span onclick="selectType(this, 'false information')" class="request-type-pill px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 cursor-pointer transition-all">False information</span>
+                            <span onclick="selectType(this, 'feature request')" class="request-type-pill px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 cursor-pointer transition-all">Feature Request</span>
+                            <span onclick="selectType(this, 'missing content')" class="request-type-pill px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 cursor-pointer transition-all">Missing Content</span>
+                            <span onclick="selectType(this, 'other')" class="request-type-pill px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 cursor-pointer transition-all">Other</span>
+                        </div>
+                    </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">

@@ -16,6 +16,10 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
+Route::get('/explore', [\App\Http\Controllers\ExploreController::class, 'index'])->name('explore');
+Route::get('/nurseries', [\App\Http\Controllers\NurseriesController::class, 'index'])->name('nurseries.index');
+Route::get('/nurseries/{nursery}', [\App\Http\Controllers\PublicNurseryController::class, 'show'])->name('nurseries.show');
+
 Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', function (\Illuminate\Http\Request $request) {

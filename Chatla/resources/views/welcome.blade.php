@@ -40,9 +40,10 @@
             <h2 class="text-primary text-xl font-bold tracking-tight">Chatla</h2>
         </div>
         <nav class="hidden md:flex items-center gap-8">
-            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600" href="{{ url('/') }}">Home</a>
-            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600" href="#">Explore</a>
-            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600" href="{{ route('contact') }}">Contact us</a>
+            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ url('/') }}">Home</a>
+            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="#">Nurseries</a>
+            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ route('explore') }}">Explore</a>
+            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ route('contact') }}">Contact us</a>
             
             @if (Route::has('login'))
                 @auth
@@ -78,15 +79,15 @@
                     <p class="text-lg md:text-xl text-slate-600 dark:text-slate-300">
                         Connecting local growers with plant lovers across the Kingdom. Find rare species, outdoor plants, and everything your garden needs.
                     </p>
-                    <div class="flex flex-col sm:flex-row items-center bg-white dark:bg-slate-800 p-2 rounded-2xl shadow-xl shadow-primary/10 border border-primary/5 w-full max-w-2xl mx-auto">
+                    <form action="{{ route('explore') }}" method="GET" class="flex flex-col sm:flex-row items-center bg-white dark:bg-slate-800 p-2 rounded-2xl shadow-xl shadow-primary/10 border border-primary/5 w-full max-w-2xl mx-auto">
                         <div class="flex items-center flex-1 px-4 gap-3 w-full border-b sm:border-b-0 sm:border-r border-slate-100 dark:border-slate-700 py-3 sm:py-0">
                             <span class="material-symbols-outlined text-primary/60">search</span>
-                            <input class="bg-transparent border-none focus:ring-0 w-full text-slate-900 dark:text-white placeholder:text-slate-400" placeholder="Search for plants or nurseries..." type="text"/>
+                            <input name="search" class="bg-transparent border-none focus:ring-0 w-full text-slate-900 dark:text-white placeholder:text-slate-400" placeholder="Search for plants or botanical families..." type="text" value="{{ request('search') }}"/>
                         </div>
-                        <button class="w-full sm:w-auto bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-primary/90 transition-all flex items-center justify-center gap-2">
+                        <button type="submit" class="w-full sm:w-auto bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-primary/90 transition-all flex items-center justify-center gap-2">
                             Search
                         </button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -147,7 +148,6 @@
                 <div class="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all">
                     <div class="h-48 overflow-hidden relative">
                         <div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500" style="background-image: url('https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&q=80')"></div>
-                        <div class="absolute top-4 left-4 bg-primary text-white px-3 py-1 rounded-full text-xs font-bold">Recommended</div>
                     </div>
                     <div class="p-6">
                         <h4 class="text-xl font-bold mb-1">Atlas Green Haven</h4>

@@ -40,7 +40,8 @@
         </a>
         <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
             <a href="{{ url('/') }}" class="hover:text-slate-900 transition-colors">Home</a>
-            <a href="#" class="hover:text-slate-900 transition-colors">Explore</a>
+            <a href="#" class="hover:text-slate-900 transition-colors">Nurseries</a>
+            <a href="{{ route('explore') }}" class="hover:text-slate-900 transition-colors">Explore</a>
             <a href="{{ route('contact') }}" class="hover:text-slate-900 transition-colors">Contact us</a>
             @auth
                 <form method="POST" action="{{ route('logout') }}" class="inline">
