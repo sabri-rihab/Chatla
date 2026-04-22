@@ -87,7 +87,8 @@
                                 
                                 <span class="bg-amber-100 text-amber-600 text-sm px-2 py-1 rounded-lg flex items-center gap-1 shadow-sm">
                                     <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1">star</span>
-                                    {{ number_format($nursery->ratings()->avg('rate') ?? 0, 1) }}
+                                    <!-- {{ number_format($nursery->ratings()->avg('rate') ?? 0, 1) }} -->
+                                      {{ $nursery->average_rating }}
                                 </span>
                             </h1>                            <p class="text-primary font-medium mt-1">{{ $nursery->city->name ?? 'Morocco' }}</p>
                             <p class="text-slate-600 dark:text-slate-400 mt-2 max-w-2xl">
@@ -98,14 +99,23 @@
                         <div class="flex flex-col items-start md:items-end gap-2">
                             <p class="text-xs text-slate-500 uppercase tracking-wider font-bold">Rate this Nursery</p>
                             <div class="relative">
-                                <select class="appearance-none bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl pl-4 pr-10 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary cursor-pointer shadow-sm hover:border-primary/50 transition-all">
-                                    <option value="" disabled selected>Rate...</option>
-                                    <option value="1">⭐</option>
-                                    <option value="2">⭐⭐</option>
-                                    <option value="3">⭐⭐⭐</option>
-                                    <option value="4">⭐⭐⭐⭐</option>
-                                    <option value="5">⭐⭐⭐⭐⭐</option>
-                                </select>
+                                <form action="{{ route('public.nurseries.rate', $nursery) }}" method="POST" class="inline-block">
+                                    @csrf
+                                    
+                                    @php
+                                        // Find the user's current rating if they are logged in
+                                        $currentRating = auth()->check() ? $nursery->ratings()->where('user_id', auth()->id())->value('rate') : null;
+                                    @endphp
+
+                                    <select name="rate" onchange="this.form.submit()" class="appearance-none bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl pl-4 pr-10 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary cursor-pointer shadow-sm hover:border-primary/50 transition-all">
+                                        <option value="" {{ is_null($currentRating) ? 'selected' : '' }}>Rate...</option>
+                                        <option value="1" {{ $currentRating == 1 ? 'selected' : '' }}>⭐</option>
+                                        <option value="2" {{ $currentRating == 2 ? 'selected' : '' }}>⭐⭐</option>
+                                        <option value="3" {{ $currentRating == 3 ? 'selected' : '' }}>⭐⭐⭐</option>
+                                        <option value="4" {{ $currentRating == 4 ? 'selected' : '' }}>⭐⭐⭐⭐</option>
+                                        <option value="5" {{ $currentRating == 5 ? 'selected' : '' }}>⭐⭐⭐⭐⭐</option>
+                                    </select>
+                                </form>
                                 <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none">expand_more</span>
                             </div>
                         </div>
@@ -263,7 +273,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     @forelse($catalog as $inventory)
                     <div class="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-primary/5 hover:shadow-xl hover:-translate-y-1 transition-all group">
-                        <div class="h-64 relative overflow-hidden bg-slate-50 dark:bg-slate-800/50">
+                        <a href="{{ route('public.plants.show', $inventory) }}" class="h-64 relative overflow-hidden bg-slate-50 dark:bg-slate-800/50 block">
                             @php
                                 $firstImage = $inventory->images->first();
                                 $imageUrl = $firstImage ? asset('storage/' . $firstImage->image_path) : 'https://images.unsplash.com/photo-1599599810694-d5c4d7e4c0f5?auto=format&fit=crop&q=80';
@@ -276,10 +286,12 @@
                                 {{ str_replace('_', ' ', $inventory->stock_status) }}
                             </div>
 
-                        </div>
+                        </a>
                         <div class="p-5 text-left">
                             <p class="text-xs text-primary font-bold uppercase tracking-wider">{{ $inventory->plant->family->name ?? 'Botanical' }}</p>
-                            <h4 class="text-lg font-bold mt-1 group-hover:text-primary transition-colors leading-tight">{{ $inventory->plant->name }}</h4>
+                            <a href="{{ route('public.plants.show', $inventory) }}" class="block">
+                                <h4 class="text-lg font-bold mt-1 group-hover:text-primary transition-colors leading-tight">{{ $inventory->plant->name }}</h4>
+                            </a>
                             <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 line-clamp-2">{{ $inventory->custom_description ?? $inventory->plant->about_description }}</p>
                             <div class="mt-4 flex items-center justify-between">
                                 <span class="text-xl font-bold">{{ number_format($inventory->price, 0) }} MAD</span>

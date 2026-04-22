@@ -231,7 +231,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 font-display">
                     @forelse($inventories as $inventory)
                     <div class="group bg-white dark:bg-slate-800 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-slate-100 dark:border-slate-700">
-                        <div class="relative aspect-square overflow-hidden bg-slate-50 dark:bg-slate-900">
+                        <a href="{{ route('public.plants.show', $inventory) }}" class="relative aspect-square overflow-hidden bg-slate-50 dark:bg-slate-900 block">
                             @php
                                 $firstImage = $inventory->images->first();
                                 $imageUrl = $firstImage ? asset('storage/' . $firstImage->image_path) : 'https://images.unsplash.com/photo-1599599810694-d5c4d7e4c0f5?auto=format&fit=crop&q=80';
@@ -241,15 +241,17 @@
                             <div class="absolute top-4 right-4 {{ $inventory->stock_status === 'out_of_stock' ? 'bg-red-500/10 text-red-500' : 'bg-primary/10 text-primary' }} backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase border border-white/20">
                                 {{ str_replace('_', ' ', $inventory->stock_status) }}
                             </div>
-                        </div>
+                        </a>
                         <div class="p-8">
                             <p class="text-[10px] font-black text-primary mb-3 tracking-[0.2em] uppercase">{{ $inventory->plant->family->name ?? 'Unknown Family' }}</p>
-                            <h3 class="text-xl font-bold mb-6 text-slate-900 dark:text-white group-hover:text-primary transition-colors leading-tight">{{ $inventory->plant->name }}</h3>
+                            <a href="{{ route('public.plants.show', $inventory) }}" class="block">
+                                <h3 class="text-xl font-bold mb-6 text-slate-900 dark:text-white group-hover:text-primary transition-colors leading-tight">{{ $inventory->plant->name }}</h3>
+                            </a>
                             
                             <div class="space-y-3 pt-6 border-t border-slate-50 dark:border-slate-700">
                                 <div class="flex items-center gap-3 text-slate-500 dark:text-slate-400 group/nursery">
                                     <span class="material-symbols-outlined text-lg opacity-60">storefront</span>
-                                    <a href="{{ route('nurseries.show', $inventory->nursery) }}" class="text-sm font-medium hover:text-primary transition-colors cursor-pointer">
+                                    <a href="{{ route('public.nurseries.show', $inventory->nursery) }}" class="text-sm font-medium hover:text-primary transition-colors cursor-pointer">
                                         {{ $inventory->nursery->name }}
                                     </a>
                                 </div>

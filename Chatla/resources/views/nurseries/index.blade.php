@@ -146,7 +146,7 @@
                             @if($nursery->rating)
                                 <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-sm">
                                     <span class="material-symbols-outlined text-yellow-400 text-base" style="font-variation-settings:'FILL' 1">star</span>
-                                    <span class="text-xs font-bold text-slate-800">{{ number_format($nursery->rating, 1) }}</span>
+                                    <span class="text-xs font-bold text-slate-800">{{ $nursery->average_rating }}</span>
                                 </div>
                             @endif
                         </div>

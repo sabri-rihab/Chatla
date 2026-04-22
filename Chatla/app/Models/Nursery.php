@@ -62,4 +62,11 @@ class Nursery extends Model
     {
         return $this->hasMany(NurseryRating::class);
     }
+
+    
+    // avg rating
+    public function getAverageRatingAttribute()
+    {
+        return number_format($this->ratings()->avg('rate') ?? 0, 1);
+    }
 }

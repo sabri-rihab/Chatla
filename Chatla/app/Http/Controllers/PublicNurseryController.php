@@ -59,24 +59,31 @@ class PublicNurseryController extends Controller
 
     public function rate(Request $request, Nursery $nursery)
     {
-        // 1. Make sure they actually sent a number between 1 and 5
+        // 1. Change 'required' to 'nullable' so empty values don't cause errors
         $request->validate([
-            'rate' => 'required|integer|min:1|max:5'
+            'rate' => 'nullable|integer|min:1|max:5'
         ]);
 
-        // 2. Save the rating to the database!
-        // We use 'updateOrCreate' so if the user rates again, it just updates their old score instead of crashing.
-        $nursery->ratings()->updateOrCreate(
-            ['user_id' => auth()->id()], // Look for an existing rating by this user
-            ['rate' => $request->rate]   // Update it (or create it) with the new value
-        );
+        // 2. If the rate is empty (null), delete the existing rating
+        if (is_null($request->rate)) {
+            $nursery->ratings()->where('user_id', auth()->id())->delete();
+            $message = 'Your rating has been removed.';
+        } else {
+            // Otherwise, save or update the new rating
+            $nursery->ratings()->updateOrCreate(
+                ['user_id' => auth()->id()], 
+                ['rate' => $request->rate]   
+            );
+            $message = 'Thank you for rating this nursery!';
+        }
 
-        // 3. Optional: Update the simple "rating" column on your main nurseries table
-        // We calculate the new average and round it to a whole number to save it
-        $newAverage = $nursery->ratings()->avg('rate');
+        // 3. Recalculate the average (if there are no ratings left, default to 0)
+        $newAverage = $nursery->ratings()->avg('rate') ?? 0;
+        
+        // Update the main nursery table
         $nursery->update(['rating' => round($newAverage)]);
 
-        // 4. Send them back to the page they were just on
-        return back()->with('success', 'Thank you for rating this nursery!');
+        // 4. Send them back with a success message
+        return back()->with('success', $message);
     }
 }
