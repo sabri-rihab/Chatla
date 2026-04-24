@@ -44,30 +44,40 @@
 </head>
 <body class="bg-background-light font-display text-slate-900 min-h-screen flex flex-col">
 
-    {{-- ── Header (Login-page style) ──────────────────────────────────── --}}
-    <nav class="w-full bg-white h-20 px-4 md:px-10 flex items-center justify-between border-b border-slate-100 sticky top-0 z-50">
-        <a href="{{ url('/') }}" class="flex items-center gap-2 text-slate-900 font-bold text-xl">
-            <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                <span class="material-symbols-outlined text-white text-lg">spa</span>
-            </div>
-            Chatla
-        </a>
-        <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-            <a href="{{ url('/') }}" class="hover:text-primary transition-colors">Home</a>
-            <a href="{{ route('nurseries.index') }}" class="text-primary font-bold transition-colors">Nurseries</a>
-            <a href="{{ route('explore') }}" class="hover:text-primary transition-colors">Explore</a>
-            <a href="{{ route('contact') }}" class="hover:text-primary transition-colors">Contact us</a>
-            @auth
-                <form method="POST" action="{{ route('logout') }}" class="inline">
-                    @csrf
-                    <button type="submit" class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-sm">Logout</button>
-                </form>
-            @else
-                <a href="{{ route('login') }}" class="bg-primary hover:bg-primary/90 text-white px-8 py-2.5 rounded-full text-sm font-bold transition-all shadow-sm">Login</a>
-            @endauth
+    {{-- ── Header (Official Chatla Style) ────────────────────────────────── --}}
+    <header class="sticky top-0 z-50 bg-background-light/80 backdrop-blur-md border-b border-primary/10 px-4 md:px-10 lg:px-20 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="{{ url('/') }}" class="flex items-center gap-2 text-slate-900 font-bold text-xl">
+                <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-lg">spa</span>
+                </div>
+                <h2 class="text-primary text-xl font-bold tracking-tight">Chatla</h2>
+            </a>
+            <nav class="hidden md:flex items-center gap-8">
+                @if(auth()->check() && auth()->user()->role === \App\Models\User::ROLE_ADMIN)
+                    <a href="{{ route('admin.dashboard') }}" class="hover:text-primary transition-colors text-sm font-medium text-slate-600">Dashboard_admin</a>
+                @else
+                    <a href="{{ url('/') }}" class="hover:text-primary transition-colors text-sm font-medium text-slate-600">Home</a>
+                @endif
+                <a href="{{ route('nurseries.index') }}" class="text-primary font-bold transition-colors text-sm font-medium">Nurseries</a>
+                <a href="{{ route('explore') }}" class="hover:text-primary transition-colors text-sm font-medium text-slate-600">Explore</a>
+                @if(auth()->check() && auth()->user()->role === \App\Models\User::ROLE_ADMIN)
+                    <a href="{{ route('admin.requests') }}" class="hover:text-primary transition-colors text-sm font-medium text-slate-600">Requests</a>
+                @else
+                    <a href="{{ route('contact') }}" class="hover:text-primary transition-colors text-sm font-medium text-slate-600">Contact us</a>
+                @endif
+                @auth
+                    <form method="POST" action="{{ route('logout') }}" class="inline">
+                        @csrf
+                        <button type="submit" class="bg-primary hover:bg-primary/90 text-white px-8 py-2.5 rounded-full text-sm font-bold transition-all shadow-sm">Logout</button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="bg-primary hover:bg-primary/90 text-white px-8 py-2.5 rounded-full text-sm font-bold transition-all shadow-sm">Login</a>
+                @endauth
+            </nav>
+            <button class="md:hidden text-primary"><span class="material-symbols-outlined">menu</span></button>
         </div>
-        <button class="md:hidden text-primary"><span class="material-symbols-outlined">menu</span></button>
-    </nav>
+    </header>
 
     {{-- ── Page Body ─────────────────────────────────────────────────── --}}
     <form id="filter-form" action="{{ route('nurseries.index') }}" method="GET"

@@ -43,7 +43,11 @@
             <a href="/" class="hover:text-primary transition-colors">Home</a>
             <a href="#" class="hover:text-primary transition-colors">Nurseries</a>
             <a href="{{ route('explore') }}" class="hover:text-primary transition-colors">Explore</a>
-            <a href="{{ route('contact') }}" class="hover:text-primary transition-colors">Contact us</a>
+            @if(auth()->check() && auth()->user()->role === \App\Models\User::ROLE_ADMIN)
+                <a href="{{ route('admin.requests') }}" class="hover:text-primary transition-colors">Requests</a>
+            @else
+                <a href="{{ route('contact') }}" class="hover:text-primary transition-colors">Contact us</a>
+            @endif
             @auth
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf

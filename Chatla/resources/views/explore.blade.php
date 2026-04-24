@@ -46,10 +46,18 @@
             <h2 class="text-primary text-xl font-bold tracking-tight">Chatla</h2>
         </div>
         <nav class="hidden md:flex items-center gap-8">
-            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ url('/') }}">Home</a>
+            @if(auth()->check() && auth()->user()->role === \App\Models\User::ROLE_ADMIN)
+                <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ route('admin.dashboard') }}">Dashboard_admin</a>
+            @else
+                <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ url('/') }}">Home</a>
+            @endif
             <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ route('nurseries.index') }}">Nurseries</a>
             <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ route('explore') }}">Explore</a>
-            <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ route('contact') }}">Contact us</a>
+            @if(auth()->check() && auth()->user()->role === \App\Models\User::ROLE_ADMIN)
+                <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ route('admin.requests') }}">Requests</a>
+            @else
+                <a class="hover:text-primary transition-colors text-sm font-medium text-slate-600 dark:text-slate-300" href="{{ route('contact') }}">Contact us</a>
+            @endif
             
             @if (Route::has('login'))
                 @auth

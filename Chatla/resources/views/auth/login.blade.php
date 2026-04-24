@@ -39,10 +39,18 @@
             Chatla
         </a>
         <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-            <a href="{{ url('/') }}" class="hover:text-slate-900 transition-colors">Home</a>
+            @if(auth()->check() && auth()->user()->role === \App\Models\User::ROLE_ADMIN)
+                <a href="{{ route('admin.dashboard') }}" class="hover:text-slate-900 transition-colors">Dashboard_admin</a>
+            @else
+                <a href="{{ url('/') }}" class="hover:text-slate-900 transition-colors">Home</a>
+            @endif
             <a href="{{ route('nurseries.index') }}" class="hover:text-slate-900 transition-colors">Nurseries</a>
             <a href="{{ route('explore') }}" class="hover:text-slate-900 transition-colors">Explore</a>
-            <a href="{{ route('contact') }}" class="hover:text-slate-900 transition-colors">Contact us</a>
+            @if(auth()->check() && auth()->user()->role === \App\Models\User::ROLE_ADMIN)
+                <a href="{{ route('admin.requests') }}" class="hover:text-slate-900 transition-colors">Requests</a>
+            @else
+                <a href="{{ route('contact') }}" class="hover:text-slate-900 transition-colors">Contact us</a>
+            @endif
             @auth
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf

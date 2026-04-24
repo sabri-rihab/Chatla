@@ -135,10 +135,18 @@
             Chatla
         </a>
         <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-            <a href="{{ url('/') }}" class="hover:text-slate-900 transition-colors">Home</a>
+            @if(auth()->check() && auth()->user()->role === \App\Models\User::ROLE_ADMIN)
+                <a href="{{ route('admin.dashboard') }}" class="hover:text-slate-900 transition-colors">Dashboard_admin</a>
+            @else
+                <a href="{{ url('/') }}" class="hover:text-slate-900 transition-colors">Home</a>
+            @endif
             <a href="{{ route('nurseries.index') }}" class="hover:text-slate-900 transition-colors">Nurseries</a>
             <a href="{{ route('explore') }}" class="hover:text-slate-900 transition-colors">Explore</a>
-            <a href="{{ route('contact') }}" class="hover:text-slate-900 transition-colors">Contact us</a>
+            @if(auth()->check() && auth()->user()->role === \App\Models\User::ROLE_ADMIN)
+                <a href="{{ route('admin.requests') }}" class="hover:text-slate-900 transition-colors">Requests</a>
+            @else
+                <a href="{{ route('contact') }}" class="hover:text-slate-900 transition-colors">Contact us</a>
+            @endif
             @auth
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf
@@ -323,12 +331,23 @@
                         <div class="relative">
                             <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                             <input id="password" name="password" required class="w-full pl-12 pr-12 py-3.5 bg-background-light border-0 ring-1 ring-slate-200 focus:ring-2 focus:ring-primary rounded-xl text-slate-900 placeholder:text-slate-400 transition-all outline-none tracking-widest" placeholder="••••••••" type="password"/>
-                            <button onclick="togglePassword()" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary transition-colors focus:outline-none" type="button" id="togglePasswordIcon">
+                            <button onclick="togglePassword('password', 'togglePasswordIcon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary transition-colors focus:outline-none" type="button" id="togglePasswordIcon">
                                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                             </button>
                         </div>
                         <x-input-error :messages="$errors->get('password')" class="text-xs text-red-600 mt-1" />
                         <p class="text-[11px] text-slate-400 mt-1">Must contain at least 8 characters, one number and one special character.</p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-slate-700">Confirm Password</label>
+                        <div class="relative">
+                            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                            <input id="password_confirmation" name="password_confirmation" required class="w-full pl-12 pr-12 py-3.5 bg-background-light border-0 ring-1 ring-slate-200 focus:ring-2 focus:ring-primary rounded-xl text-slate-900 placeholder:text-slate-400 transition-all outline-none tracking-widest" placeholder="••••••••" type="password"/>
+                            <button onclick="togglePassword('password_confirmation', 'toggleConfirmPasswordIcon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary transition-colors focus:outline-none" type="button" id="toggleConfirmPasswordIcon">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="flex items-center gap-2 py-1">
@@ -445,9 +464,9 @@
             });
         });
 
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const toggleIconBtn = document.getElementById('togglePasswordIcon');
+        function togglePassword(inputId, iconId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIconBtn = document.getElementById(iconId);
             
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
