@@ -5,16 +5,36 @@
 @section('content')
             <div class="p-8 space-y-6">
 
+                @if($status === \App\Models\User::STATUS_PENDING)
+                <!-- Pending Account Warning -->
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-6 flex items-center gap-4 text-amber-800 animate-pulse">
+                    <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-amber-600 text-3xl">hourglass_empty</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg">Pending Account</h4>
+                        <p class="text-sm opacity-90">Wait for our team to activate your account. You won't be able to manage inventory or public profiles until then.</p>
+                    </div>
+                </div>
+                @endif
+
                 <!-- Page title -->
                 <div class="flex items-end justify-between">
                     <div>
                         <h2 class="text-2xl font-bold tracking-tight">Nursery Overview</h2>
                         <p class="text-slate-500 text-sm mt-1">Good morning, {{ explode(' ', auth()->user()->name)[0] }}. Here's what's happening with your inventory.</p>
                     </div>
+                    @if($status === \App\Models\User::STATUS_ACTIVE)
                     <a href="{{ route('nursery.inventory.create') }}" class="bg-primary text-white px-5 py-2.5 rounded-lg flex items-center gap-2 font-semibold text-sm hover:opacity-90 transition-opacity">
                         <span class="material-symbols-outlined text-[18px]">add</span>
                         Add New Plant
                     </a>
+                    @else
+                    <button disabled class="bg-slate-200 text-slate-400 px-5 py-2.5 rounded-lg flex items-center gap-2 font-semibold text-sm cursor-not-allowed">
+                        <span class="material-symbols-outlined text-[18px]">lock</span>
+                        Add New Plant
+                    </button>
+                    @endif
                 </div>
 
                 <!-- Stats -->
@@ -38,18 +58,18 @@
 
                     <div class="bg-white rounded-xl border border-slate-100 p-5">
                         <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-500 mb-4">
-                            <span class="material-symbols-outlined text-[22px]" style="font-variation-settings:'FILL' 1">visibility</span>
+                            <span class="material-symbols-outlined text-[22px]" style="font-variation-settings:'FILL' 1">notification_important</span>
                         </div>
-                        <p class="text-slate-500 text-sm">Total Views</p>
-                        <p class="text-2xl font-bold mt-0.5">8.4k</p>
+                        <p class="text-slate-500 text-sm">Low Stock Items (Alerts)</p>
+                        <p class="text-2xl font-bold mt-0.5">{{ $lowStock ?? 0 }}</p>
                     </div>
 
                     <div class="bg-white rounded-xl border border-slate-100 p-5">
                         <div class="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center text-orange-500 mb-4">
-                            <span class="material-symbols-outlined text-[22px]" style="font-variation-settings:'FILL' 1">contacts</span>
+                            <span class="material-symbols-outlined text-[22px]" style="font-variation-settings:'FILL' 1">category</span>
                         </div>
-                        <p class="text-slate-500 text-sm">Monthly Leads</p>
-                        <p class="text-2xl font-bold mt-0.5">156</p>
+                        <p class="text-slate-500 text-sm">Plant Families</p>
+                        <p class="text-2xl font-bold mt-0.5">{{ $familyCount ?? 0 }}</p>
                     </div>
 
                 </div>

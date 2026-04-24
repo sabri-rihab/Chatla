@@ -29,21 +29,34 @@ Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store'
 Route::middleware(['auth', 'verified'])->get('/dashboard', function (\Illuminate\Http\Request $request) {
     $user = $request->user();
 
-    if ($user->role === 'simple') {
+    if ($user->role === \App\Models\User::ROLE_SIMPLE) {
         return view('welcome');
+    }
+
+    if ($user->role === \App\Models\User::ROLE_ADMIN) {
+        return redirect()->route('admin.dashboard');
     }
 
     // Nursery Owner Logic
     $nursery = $user->nursery;
+    $status = $user->status;
+
     if (!$nursery) {
         abort(403, 'No nursery found for this account.');
     }
 
     $totalPlants = $nursery->inventory()->count();
     $outOfStock = $nursery->inventory()->where('stock_quantity', '<=', 0)->count();
+    $lowStock = $nursery->inventory()->where('stock_quantity', '>', 0)->where('stock_quantity', '<=', 10)->count();
+    
+    $familyCount = $nursery->inventory()
+        ->join('plants', 'nursery_inventories.plant_id', '=', 'plants.id')
+        ->distinct('plants.family_id')
+        ->count('plants.family_id');
+
     $inventories = $nursery->inventory()->with(['plant', 'plant.family'])->paginate(8);
 
-    return view('nursery.dashboard', compact('totalPlants', 'outOfStock', 'inventories'));
+    return view('nursery.dashboard', compact('totalPlants', 'outOfStock', 'lowStock', 'familyCount', 'inventories', 'status'));
 })->name('dashboard');
 
 Route::middleware(['auth', 'verified', 'nursery_owner'])->group(function () {
@@ -65,6 +78,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::patch('/admin/users/{user}/status', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'updateStatus'])->name('admin.users.status.update');
+    
+    Route::get('/admin/requests', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'requests'])->name('admin.requests');
+    Route::patch('/admin/requests/{report}/status', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'updateRequestStatus'])->name('admin.requests.status.update');
 });
 
 require __DIR__.'/auth.php';
