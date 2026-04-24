@@ -12,5 +12,20 @@ class Report extends Model
         'request_type',
         'subject',
         'message',
+        'status',
     ];
+
+    /**
+     * Get enum values for request_type from the database schema.
+     */
+    public static function getRequestTypes()
+    {
+        return [
+            'Bug/Error',
+            'false information',
+            'feature request',
+            'missing content',
+            'other'
+        ];
+    }
 }
