@@ -32,10 +32,20 @@ class NurseryOwnerMiddleware
 
         // ── 2. Must have the nursery_owner role ───────────────────────
         if ($user->role !== 'nursery_owner') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Access denied. Nursery owners only.',
-            ], Response::HTTP_FORBIDDEN);       // 403
+            return $request->expectsJson()
+                ? response()->json(['success' => false, 'message' => 'Access denied.'], Response::HTTP_FORBIDDEN)
+                : abort(403, 'Access denied. Nursery owners only.');
+        }
+
+        // ── 2b. Must be active (not pending or inactive) ───────────────
+        if ($user->status !== \App\Models\User::STATUS_ACTIVE) {
+            $message = $user->status === \App\Models\User::STATUS_PENDING
+                ? 'Pending account, wait for our team to activate your account.'
+                : 'Inactive account, contact the support team.';
+
+            return $request->expectsJson()
+                ? response()->json(['success' => false, 'message' => $message], Response::HTTP_FORBIDDEN)
+                : redirect()->route('dashboard')->with('error', $message);
         }
 
         // ── 3. Must own a nursery ─────────────────────────────────────

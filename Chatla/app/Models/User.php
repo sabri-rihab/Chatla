@@ -18,11 +18,17 @@ class User extends Authenticatable
     const ROLE_NURSERY_OWNER = 'nursery_owner';
     const ROLE_ADMIN         = 'admin';
 
+    // ─── Status constants ─────────────────────────────────────────────
+    const STATUS_ACTIVE   = 'active';
+    const STATUS_INACTIVE = 'inactive';
+    const STATUS_PENDING  = 'pending';
+
     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
+        'status',
         'profile_img',
     ];
 
