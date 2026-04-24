@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Register the nursery_owner alias so routes can use it declaratively
         $middleware->alias([
             'nursery_owner' => NurseryOwnerMiddleware::class,
+            'admin'         => \App\Http\Middleware\AdminMiddleware::class,
         ]);
 
         // Enable stateful (session) capabilities on API endpoints

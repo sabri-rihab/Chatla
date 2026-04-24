@@ -3,6 +3,7 @@
 @section('title', 'Edit Nursery Profile - Chatla')
 
 @push('styles')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
   /* Toggle switch */
   .toggle-input:checked + .toggle-track { background-color: #2c5926; }
@@ -322,7 +323,19 @@
           <!-- ── Location Map Preview ── -->
           <div class="mb-6">
             <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Location Preview</h2>
-            <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            
+            <p class="text-xs text-slate-400 mb-3">Click on the map to place a pin for your nursery's location.</p>
+
+            <input type="hidden" name="latitude" id="lat-input" value="{{ old('latitude', auth()->user()->nursery->latitude ?? '') }}">
+            <input type="hidden" name="longitude" id="lng-input" value="{{ old('longitude', auth()->user()->nursery->longitude ?? '') }}">
+
+            <div class="bg-white rounded-xl border border-slate-100 overflow-hidden shadow-sm relative">
+              <div id="map" class="w-full z-0" style="height: 250px;"></div>
+            </div>
+          </div>
+          <!-- <div class="mb-6">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Location Preview</h2>
+            <div id = "map" class="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div class="relative h-44">
                 <div class="absolute inset-0 bg-cover bg-center opacity-50"
                   style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCA0oGZsMYjsEEYvMT2e85QC4gyCGr2v6rjybCjK8oDmQKX7jX-3ezwHHaMjHeVEUc4EgPy1_ecArCmrhHmxf-AaQTy_d0SJY7Mp7ZUgaIhsT-HBq52GeidWA1qsXdNVZmP9UmZROM3C1ciDpgQUS18F3NzrpZytpsj3kV8hslowTiC1DmhWPgzKFuv5EKhpzbFabrbCTJEhoJ6Unm4I28MRAK9PLAa-4VaKwcXvmTdHAEmcaR9CEApt3L-fX-FQhz5EBhk4DO80KE')">
@@ -334,9 +347,9 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
 
-          //  save&cancel buttons
+          <!--  save&cancel buttons -->
           <div class="flex items-center justify-end gap-3 py-2">
             <a href="{{ route('dashboard') }}" class="text-slate-500 text-sm font-medium px-4 py-2 rounded-lg hover:bg-slate-100 transition-colors">Discard changes</a>
             <button type="submit" class="bg-primary text-white px-8 py-2.5 rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity shadow-sm">Save Profile</button>
@@ -551,6 +564,63 @@ function previewNurseryLogo(event) {
   };
   reader.readAsDataURL(file);
 }
+
+
+
+</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script>
+
+
+    // update the localisation 
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        // 1. Grab our hidden inputs so we can put data in them later
+        const latInput = document.getElementById('lat-input');
+        const lngInput = document.getElementById('lng-input');
+
+        // 2. Figure out where to start the map. 
+        // If there is data in the input, use it. If not, default to Safi.
+        let startLat = latInput.value ? parseFloat(latInput.value) : 32.2994;
+        let startLng = lngInput.value ? parseFloat(lngInput.value) : -9.2372;
+
+        // 3. Build the map using those starting coordinates
+        const map = L.map('map').setView([startLat, startLng], 13);
+        
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap'
+        }).addTo(map);
+
+        // 4. Create an empty variable to hold our blue pin
+        let marker;
+
+        // 5. If we already have a saved location from the database, draw the pin immediately!
+        if (latInput.value && lngInput.value) {
+            marker = L.marker([startLat, startLng]).addTo(map);
+        }
+
+        // 6. The Click Event: Listen for anytime the user clicks the map
+        map.on('click', function(e) {
+            // Get the exact latitude and longitude of where they clicked
+            const clickedLat = e.latlng.lat;
+            const clickedLng = e.latlng.lng;
+
+            // If a pin already exists, just move it to the new spot.
+            // If it doesn't exist yet, create it.
+            if (marker) {
+                marker.setLatLng(e.latlng);
+            } else {
+                marker = L.marker(e.latlng).addTo(map);
+            }
+
+            // Finally, write those numbers into our hidden HTML inputs
+            latInput.value = clickedLat;
+            lngInput.value = clickedLng;
+        });
+
+    });
 </script>
 @endpush
 @endsection

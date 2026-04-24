@@ -27,6 +27,8 @@ class NurseryProfileController extends Controller
             'operating_hours' => ['nullable', 'string', 'max:1000'],
             'profile_img'     => ['nullable', 'image', 'max:2048'],
             'owner_profile_img' => ['nullable', 'image', 'max:2048'],
+            'latitude'        => ['nullable', 'numeric'],
+            'longitude'       => ['nullable', 'numeric'],
         ]);
 
         $user = $request->user();
@@ -57,6 +59,9 @@ class NurseryProfileController extends Controller
             'website'         => $request->website,
             'phone'           => $request->phone,
             'operating_hours' => $request->operating_hours,
+            'latitude'        => $request->latitude,
+            'longitude'       => $request->longitude,
+            
         ];
 
         // Handle image upload with the correct profile_img schema name
