@@ -64,10 +64,18 @@
 
     <main class="flex-1 px-6 md:px-10 py-8 max-w-7xl mx-auto w-full">
         <!-- Page Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">Management Dashboard</h1>
-            <p class="text-slate-600 dark:text-slate-400">Manage and monitor all nurseries and clients</p>
+        <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">Management Dashboard</h1>
+                <p class="text-slate-600 dark:text-slate-400">Manage and monitor all nurseries and clients</p>
+            </div>
+            <button onclick="document.getElementById('create-admin-section').scrollIntoView({ behavior: 'smooth' })" class="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg font-bold transition-all shadow-sm flex items-center gap-2 text-sm self-start md:self-auto">
+                <span class="material-symbols-outlined text-[20px]">add</span>
+                Add Admin
+            </button>
         </div>
+
+
 
         <!-- Filters and Search Section -->
         <div class="bg-white dark:bg-slate-800/50 rounded-xl border border-primary/5 shadow-sm p-6 mb-8">
@@ -219,6 +227,86 @@
                 {{ $users->links() }}
             </div>
         </div>
+
+        <!-- Admin Creation Section -->
+        <section id="create-admin-section" class="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-8 mt-8 border-t border-slate-200 dark:border-slate-800">
+            <!-- Form Column -->
+            <div class="bg-white dark:bg-slate-800/50 rounded-xl border border-primary/10 p-8 shadow-sm">
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold">Create New Administrator</h3>
+                    <p class="text-sm text-slate-500 mt-1">Provide the details for the new platform administrator.</p>
+                </div>
+
+                @if(session('success'))
+                    <div class="mb-6 p-4 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 text-sm font-medium flex items-start gap-3">
+                        <span class="material-symbols-outlined text-xl">check_circle</span>
+                        <p class="mt-0.5">{{ session('success') }}</p>
+                    </div>
+                @endif
+
+                <form action="{{ route('admin.store') }}" method="POST" class="space-y-4">
+                    @csrf
+                    <div>
+                        <label class="block text-sm font-semibold mb-1.5">Full Name</label>
+                        <input name="name" value="{{ old('name') }}" class="w-full px-4 py-2.5 bg-primary/5 dark:bg-slate-900 border border-primary/10 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary/20 outline-none transition-all @error('name') border-red-500 focus:ring-red-500/30 @enderror" placeholder="e.g. John Doe" type="text" required/>
+                        @error('name')
+                            <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1.5">Email Address</label>
+                        <input name="email" value="{{ old('email') }}" class="w-full px-4 py-2.5 bg-primary/5 dark:bg-slate-900 border border-primary/10 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary/20 outline-none transition-all @error('email') border-red-500 focus:ring-red-500/30 @enderror" placeholder="john.doe@chatla.com" type="email" required/>
+                        @error('email')
+                            <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold mb-1.5">Password</label>
+                        <div class="relative">
+                            <input id="admin_password" name="password" class="w-full px-4 py-2.5 bg-primary/5 dark:bg-slate-900 border border-primary/10 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary/20 outline-none transition-all @error('password') border-red-500 focus:ring-red-500/30 @enderror" placeholder="••••••••" type="password" required/>
+                            <button onclick="toggleAdminPassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary transition-colors focus:outline-none" type="button" id="toggleAdminPasswordIcon">
+                                <span class="material-symbols-outlined text-[20px]">visibility</span>
+                            </button>
+                        </div>
+                        @error('password')
+                            <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
+                        @else
+                            <p class="text-[10px] text-slate-400 mt-1 uppercase font-bold tracking-wider">Must contain 8+ characters, one number and one special char</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1.5">Confirm Password</label>
+                        <div class="relative">
+                            <input id="admin_password_confirmation" name="password_confirmation" class="w-full px-4 py-2.5 bg-primary/5 dark:bg-slate-900 border border-primary/10 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary/20 outline-none transition-all" placeholder="••••••••" type="password" required/>
+                        </div>
+                    </div>
+                    <div class="pt-4">
+                        <button class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-primary/90 shadow-lg shadow-primary/10 flex items-center justify-center gap-2 transition-all" type="submit">
+                            <span class="material-symbols-outlined text-[20px]">verified_user</span> Create Admin Account
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Privileges Column -->
+            <div class="bg-primary/5 dark:bg-primary/10 rounded-xl border border-dashed border-primary/20 p-8 flex flex-col items-center justify-center text-center space-y-4">
+                <div class="size-20 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined text-[40px]">security</span>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg">Admin Privileges</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 max-w-sm mt-2">
+                        Administrators can manage users, nurseries, and access platform-wide analytics. Ensure you grant access only to authorized personnel.
+                    </p>
+                </div>
+                <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-2 text-left w-full max-w-xs mx-auto">
+                    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-500 text-sm">check_circle</span> Access to financial reports</li>
+                    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-500 text-sm">check_circle</span> User permission management</li>
+                    <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-500 text-sm">check_circle</span> Nursery data verification</li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <!-- Footer (Matched to Login) -->
@@ -238,5 +326,19 @@
         </div>
     </footer>
 
+    <script>
+        function toggleAdminPassword() {
+            const passwordInput = document.getElementById('admin_password');
+            const toggleIconBtn = document.getElementById('toggleAdminPasswordIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIconBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">visibility_off</span>';
+            } else {
+                passwordInput.type = 'password';
+                toggleIconBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">visibility</span>';
+            }
+        }
+    </script>
 </body>
 </html>

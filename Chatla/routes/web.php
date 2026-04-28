@@ -82,6 +82,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::post('/admin/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'store'])->name('admin.store');
     Route::patch('/admin/users/{user}/status', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'updateStatus'])->name('admin.users.status.update');
     
     Route::get('/admin/requests', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'requests'])->name('admin.requests');

@@ -62,6 +62,25 @@ class AdminDashboardController extends Controller
         return back()->with('success', 'User status updated successfully.');
     }
 
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+            'role' => User::ROLE_ADMIN,
+            'status' => 'active',
+        ]);
+
+        return redirect()->route('admin.dashboard')->with('success', 'Admin account created successfully.');
+    }
+
     public function requests(Request $request)
     {
         $query = Report::query();
