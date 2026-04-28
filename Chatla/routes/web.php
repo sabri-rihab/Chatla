@@ -1,6 +1,14 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ExploreController;
+use App\Http\Controllers\NurseriesController;
+use App\Http\Controllers\PublicNurseryController;
+use App\Http\Controllers\PublicPlantController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\NurseryProfileController;
+use App\Http\Controllers\NurseryInventoryController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,15 +24,15 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
-Route::get('/explore', [\App\Http\Controllers\ExploreController::class, 'index'])->name('explore');
-Route::get('/nurseries', [\App\Http\Controllers\NurseriesController::class, 'index'])->name('nurseries.index');
-Route::get('/nurseries/{nursery}', [\App\Http\Controllers\PublicNurseryController::class, 'show'])->name('public.nurseries.show');
-Route::get('/plants/{inventory}', [\App\Http\Controllers\PublicPlantController::class, 'show'])->name('public.plants.show');
-Route::post('/nurseries/{nursery}/rate', [\App\Http\Controllers\PublicNurseryController::class, 'rate'])
+Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
+Route::get('/nurseries', [NurseriesController::class, 'index'])->name('nurseries.index');
+Route::get('/nurseries/{nursery}', [PublicNurseryController::class, 'show'])->name('public.nurseries.show');
+Route::get('/plants/{inventory}', [PublicPlantController::class, 'show'])->name('public.plants.show');
+Route::post('/nurseries/{nursery}/rate', [PublicNurseryController::class, 'rate'])
     ->name('public.nurseries.rate')
     ->middleware('auth');
 
-Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', function (\Illuminate\Http\Request $request) {
     $user = $request->user();
@@ -60,18 +68,18 @@ Route::middleware(['auth', 'verified'])->get('/dashboard', function (\Illuminate
 })->name('dashboard');
 
 Route::middleware(['auth', 'verified', 'nursery_owner'])->group(function () {
-    Route::get('/nursery/profile', [\App\Http\Controllers\NurseryProfileController::class, 'edit'])->name('nursery.profile.edit');
-    Route::put('/nursery/profile', [\App\Http\Controllers\NurseryProfileController::class, 'update'])->name('nursery.profile.update');
+    Route::get('/nursery/profile', [NurseryProfileController::class, 'edit'])->name('nursery.profile.edit');
+    Route::put('/nursery/profile', [NurseryProfileController::class, 'update'])->name('nursery.profile.update');
 
-    Route::get('/nursery/plants', [\App\Http\Controllers\NurseryInventoryController::class, 'index'])->name('nursery.inventory.index');
+    Route::get('/nursery/plants', [NurseryInventoryController::class, 'index'])->name('nursery.inventory.index');
     Route::get('/nursery/plants/create', function () {
         $families = \App\Models\PlantFamily::orderBy('name')->get(['id', 'name']);
         $plants = \App\Models\Plant::with('family:id,name')->orderBy('name')->get(['id', 'name', 'family_id']);
         return view('nursery.inventory.create', compact('families', 'plants'));
     })->name('nursery.inventory.create');
-    Route::post('/nursery/plants', [\App\Http\Controllers\NurseryInventoryController::class, 'store'])->name('nursery.inventory.store');
-    Route::put('/nursery/plants/{inventory}', [\App\Http\Controllers\NurseryInventoryController::class, 'update'])->name('nursery.inventory.update'); 
-    Route::delete('/nursery/plants/{inventory}', [\App\Http\Controllers\NurseryInventoryController::class, 'destroy'])->name('nursery.inventory.destroy');
+    Route::post('/nursery/plants', [NurseryInventoryController::class, 'store'])->name('nursery.inventory.store');
+    Route::put('/nursery/plants/{inventory}', [NurseryInventoryController::class, 'update'])->name('nursery.inventory.update'); 
+    Route::delete('/nursery/plants/{inventory}', [NurseryInventoryController::class, 'destroy'])->name('nursery.inventory.destroy');
 });
 
 Route::middleware('auth')->group(function () {
@@ -81,12 +89,12 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    Route::post('/admin/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'store'])->name('admin.store');
-    Route::patch('/admin/users/{user}/status', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'updateStatus'])->name('admin.users.status.update');
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::post('/admin/dashboard', [AdminDashboardController::class, 'store'])->name('admin.store');
+    Route::patch('/admin/users/{user}/status', [AdminDashboardController::class, 'updateStatus'])->name('admin.users.status.update');
     
-    Route::get('/admin/requests', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'requests'])->name('admin.requests');
-    Route::patch('/admin/requests/{report}/status', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'updateRequestStatus'])->name('admin.requests.status.update');
+    Route::get('/admin/requests', [AdminDashboardController::class, 'requests'])->name('admin.requests');
+    Route::patch('/admin/requests/{report}/status', [AdminDashboardController::class, 'updateRequestStatus'])->name('admin.requests.status.update');
 });
 
 require __DIR__.'/auth.php';
