@@ -337,7 +337,7 @@ function renderGrid(list) {
         <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-3">${p.desc}</p>
         <div class="flex items-center justify-between">
           <p class="text-sm font-bold text-primary">${p.price.toLocaleString()} MAD</p>
-          <p class="text-sm font-medium text-slate-500">${p.stock} units</p>
+          ${p.stock > 0 ? `<p class="text-sm font-medium text-slate-500">${p.stock} units</p>` : ''}
         </div>
       </div>
     </div>
