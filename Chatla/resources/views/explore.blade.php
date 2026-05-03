@@ -240,11 +240,11 @@
                     @forelse($inventories as $inventory)
                     <div class="group bg-white dark:bg-slate-800 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-slate-100 dark:border-slate-700">
                         <a href="{{ route('public.plants.show', $inventory) }}" class="relative aspect-square overflow-hidden bg-slate-50 dark:bg-slate-900 block">
-                            @php
-                                $firstImage = $inventory->images->first();
-                                $imageUrl = $firstImage ? asset('storage/' . $firstImage->image_path) : 'https://images.unsplash.com/photo-1599599810694-d5c4d7e4c0f5?auto=format&fit=crop&q=80';
-                            @endphp
-                            <img src="{{ $imageUrl }}" alt="{{ $inventory->plant->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"/>
+                            <!-- 
+                              We use the display_image helper directly. 
+                              It automatically handles falling back to default images and wrapping local paths in asset('storage/...')! 
+                            -->
+                            <img src="{{ $inventory->display_image }}" alt="{{ $inventory->plant->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"/>
                             
                             <div class="absolute top-4 right-4 {{ $inventory->stock_status === 'out_of_stock' ? 'bg-red-500/10 text-red-500' : 'bg-primary/10 text-primary' }} backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase border border-white/20">
                                 {{ str_replace('_', ' ', $inventory->stock_status) }}

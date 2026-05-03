@@ -15,7 +15,7 @@ class ExploreController extends Controller
     public function index(Request $request)
     {
         $query = NurseryInventory::query()
-            ->with(['plant.family', 'nursery.city', 'images']);
+            ->with(['plant.family', 'plant.defaultImages', 'nursery.city', 'images']);
 
         // 1. GLOBAL SEARCH (Name, Slug, or Family Name)
         if ($request->filled('search')) {
@@ -43,6 +43,12 @@ class ExploreController extends Controller
             $query->whereHas('plant', function ($q) use ($familyIds) {
                 $q->whereIn('family_id', $familyIds);
             });
+        }
+
+        // 4. GROWTH STAGE FILTER
+        if ($request->filled('growth_stages')) {
+            $stages = is_array($request->growth_stages) ? $request->growth_stages : explode(',', $request->growth_stages);
+            $query->whereIn('growth_status', $stages);
         }
 
         // Paginate results (9 per page as per requirement)

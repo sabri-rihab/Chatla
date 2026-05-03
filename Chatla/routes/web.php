@@ -30,7 +30,7 @@ Route::get('/nurseries/{nursery}', [PublicNurseryController::class, 'show'])->na
 Route::get('/plants/{inventory}', [PublicPlantController::class, 'show'])->name('public.plants.show');
 Route::post('/nurseries/{nursery}/rate', [PublicNurseryController::class, 'rate'])
     ->name('public.nurseries.rate')
-    ->middleware('auth');
+    ->middleware(['auth', 'simple']);
 
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 

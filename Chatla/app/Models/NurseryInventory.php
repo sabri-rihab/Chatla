@@ -85,4 +85,36 @@ class NurseryInventory extends Model
     {
         return $query->where('growth_status', $growth);
     }
+
+    /**
+     * Get the display image for the frontend.
+     * Logic:
+     * 1. Check for custom nursery uploaded inventory image.
+     * 2. Fallback to plant's primary default image.
+     * 3. Fallback to a generic placeholder.
+     */
+    public function getDisplayImageAttribute()
+    {
+        $firstImage = $this->images->first();
+        if ($firstImage) {
+            $path = $firstImage->image_path;
+            if (str_starts_with($path, 'http')) {
+                return $path;
+            }
+            if (str_starts_with($path, '/storage/')) {
+                return asset($path);
+            }
+            return asset('storage/' . $path);
+        }
+
+        if ($this->plant) {
+            $defaultImage = $this->plant->defaultImages->firstWhere('is_primary', true) ?? $this->plant->defaultImages->firstWhere('is_primary', 1);
+            if ($defaultImage) {
+                $path = $defaultImage->image_path;
+                return str_starts_with($path, 'http') ? $path : asset('storage/' . $path);
+            }
+        }
+
+        return 'https://images.unsplash.com/photo-1599599810694-d5c4d7e4c0f5?auto=format&fit=crop&q=80';
+    }
 }

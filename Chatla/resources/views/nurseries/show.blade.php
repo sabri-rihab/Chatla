@@ -6,6 +6,7 @@
     <title>{{ $nursery->name }} - Chatla</title>
     <base href="/">
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -106,6 +107,7 @@
                                 {{ $nursery->custom_description ?? 'Specializing in Mediterranean flora and exotic varieties. Providing the highest quality plants with sustainable nursery practices.' }}
                             </p>
                         </div>
+                        @if(auth()->check() && auth()->user()->role === \App\Models\User::ROLE_SIMPLE)
                         <!-- rating section -->
                         <div class="flex flex-col items-start md:items-end gap-2">
                             <p class="text-xs text-slate-500 uppercase tracking-wider font-bold">Rate this Nursery</p>
@@ -130,6 +132,7 @@
                                 <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none">expand_more</span>
                             </div>
                         </div>
+                        @endif
 
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
@@ -255,17 +258,21 @@
                 </div>
 
                 <!-- Map Section -->
-                <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-primary/5">
-                    <h3 class="font-bold text-lg mb-4 px-2">Location</h3>
-                    <div class="h-48 w-full bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden relative group">
-                        <div class="absolute inset-0 bg-primary/5 mix-blend-multiply transition-colors group-hover:bg-transparent"></div>
-                        <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80" alt="Map view"/>
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                            <span class="material-symbols-outlined text-primary text-4xl drop-shadow-md">location_on</span>
-                        </div>
+                @if($nursery->latitude && $nursery->longitude)
+                    <div class="w-full h-40 rounded-lg overflow-hidden mb-6 bg-slate-100 relative">
+                        <div id="display-map" class="w-full h-full z-0"></div>
                     </div>
-                    <p class="text-xs text-slate-500 mt-3 px-2">{{ $nursery->address }}</p>
-                </div>
+                @else
+                    <div class="w-full h-40 rounded-lg overflow-hidden mb-6 bg-slate-100 relative">
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent opacity-50"></div>
+                        <div class="absolute inset-0 flex items-center justify-center z-10">
+                            <div class="bg-white p-2 rounded-full shadow-lg border border-primary/20">
+                                <span class="material-symbols-outlined text-primary text-3xl">location_on</span>
+                            </div>
+                        </div>
+                        <img class="w-full h-full object-cover opacity-60" src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=400" alt="Map view"/>
+                    </div>
+                @endif
             </aside>
 
             <!-- Plant Grid -->
@@ -286,8 +293,7 @@
                     <div class="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-primary/5 hover:shadow-xl hover:-translate-y-1 transition-all group">
                         <a href="{{ route('public.plants.show', $inventory) }}" class="h-64 relative overflow-hidden bg-slate-50 dark:bg-slate-800/50 block">
                             @php
-                                $firstImage = $inventory->images->first();
-                                $imageUrl = $firstImage ? asset('storage/' . $firstImage->image_path) : 'https://images.unsplash.com/photo-1599599810694-d5c4d7e4c0f5?auto=format&fit=crop&q=80';
+                                $imageUrl = $inventory->display_image;
                             @endphp
                             <img class="w-full h-full object-cover transition-transform group-hover:scale-105" src="{{ $imageUrl }}" alt="{{ $inventory->plant->name }}"/>
                             
@@ -404,6 +410,34 @@
         setupSearchable('city-search', 'cities-data', 'city', 'cities');
         setupSearchable('family-search', 'families-data', 'family', 'families');
     });
-</script>
+
+
+    // the map display
+    
+    @if($nursery->latitude && $nursery->longitude)
+        document.addEventListener('DOMContentLoaded', function () {
+            const lat = {{ $nursery->latitude }};
+                const lng = {{ $nursery->longitude }};
+                const nurseryName = "{{ $nursery->name ?? 'Our Nursery' }}";
+                
+                // Initialize map
+                const map = L.map('display-map').setView([lat, lng], 15);
+                
+                // Load street tiles
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; OpenStreetMap'
+                }).addTo(map);
+                
+                // Add the pin
+                L.marker([lat, lng]).addTo(map)
+                .bindPopup(`<b>${nurseryName}</b>`)
+                .openPopup();
+            });
+        @endif
+            
+            
+        </script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </body>
 </html>

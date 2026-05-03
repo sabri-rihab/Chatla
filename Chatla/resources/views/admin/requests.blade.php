@@ -185,11 +185,16 @@
                                     <p class="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{{ $report->message }}</p>
                                     <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
                                         <span class="text-xs text-slate-400">Received on: {{ $report->created_at->format('M d, Y - H:i') }}</span>
-                                        <a href="mailto:{{ $report->email }}" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                                        <!-- opens the defaul app for emails -->
+                                        <!-- <a href="mailto:{{ $report->email }}" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
                                             <span class="material-symbols-outlined text-sm">mail</span>
                                             Reply to User
-                                        </a>
-                                    </div>
+                                        </a> -->
+
+                                        <!-- opens emails on the browser-->
+                                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ $report->email }}&su=Re: Your Chatla Support Request&body=Hello,%0A%0AThank you for contacting Chatla. We will review your request and get back to you as soon as possible.%0A%0A---------------------------------%0A🌱 Chatla Support Team%0A🌿 Simplifying Nursery Management in Morocco%0A---------------------------------" target="_blank" class="bg-primary text-white px-4 py-2 rounded-lg font-semibold text-sm">
+                                            Reply to User
+                                        </a>                                    </div>
                                 </div>
                             </td>
                         </tr>

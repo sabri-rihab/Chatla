@@ -17,7 +17,7 @@ class PublicNurseryController extends Controller
         $query = $nursery->inventory()
             ->select('nursery_inventories.*') // Keeps inventory IDs safe
             ->join('plants', 'nursery_inventories.plant_id', '=', 'plants.id')
-            ->with(['plant.family', 'images']);
+            ->with(['plant.family', 'plant.defaultImages', 'images']);
 
         //Sort result a-z/z-a
         if($request->sort === 'a-z'){

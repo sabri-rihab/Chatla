@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Middleware\NurseryOwnerMiddleware;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\SimpleUserMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,7 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // Register the nursery_owner alias so routes can use it declaratively
         $middleware->alias([
             'nursery_owner' => NurseryOwnerMiddleware::class,
-            'admin'         => \App\Http\Middleware\AdminMiddleware::class,
+            'admin'         => AdminMiddleware::class,
+            'simple'        => SimpleUserMiddleware::class,
         ]);
 
         // Enable stateful (session) capabilities on API endpoints

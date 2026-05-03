@@ -156,7 +156,7 @@
                             </td>
                             <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">{{ $user->email }}</td>
                             <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
-                                {{ $user->role === 'nursery_owner' && $user->nursery && $user->nursery->city ? $user->nursery->city->name . ', Morocco' : ($user->address ?? 'N/A') }}
+                                {{ $user->role === 'nursery_owner' && $user->nursery ? trim(($user->nursery->address ?? '') . ($user->nursery->city ? ', ' . $user->nursery->city->name : ''), ', ') : ($user->address ?? 'N/A') }}
                             </td>
                             <td class="px-6 py-4">
                                 @if($user->role === 'nursery_owner')

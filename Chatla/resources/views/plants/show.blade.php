@@ -4,6 +4,7 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <script id="tailwind-config">
@@ -65,24 +66,41 @@
     </header>
 
     <main class="max-w-[1280px] mx-auto w-full px-6 md:px-10 py-8">
-        <!-- Breadcrumbs -->
-        <nav class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-8">
-            <a class="hover:text-primary" href="{{ url('/') }}">Home</a>
-            <span class="material-symbols-outlined text-xs">chevron_right</span>
-            <a class="hover:text-primary" href="{{ route('explore') }}">{{ $inventory->plant->family->name ?? 'Plants' }}</a>
-            <span class="material-symbols-outlined text-xs">chevron_right</span>
-            <span class="text-primary font-medium">{{ $inventory->plant->name }}</span>
-        </nav>
-
         <!-- Featured Farm Photo Section -->
         <div class="mb-12 bg-white dark:bg-slate-800 rounded-xl border border-primary/10 overflow-hidden shadow-sm">
             <div class="flex flex-col sm:flex-row gap-0">
                 <!-- Left: Farm Photo -->
                 <div class="sm:w-2/5 h-72 sm:h-auto min-h-[280px] relative overflow-hidden flex-shrink-0">
                     @php
-                        $mainImage = $inventory->images->first() ? asset('storage/' . $inventory->images->first()->image_path) : 'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&q=80';
+                        // ==========================================
+                        // TOP SECTION: The Featured Farm Photo
+                        // ==========================================
+                        // This uses the display_image helper we created. 
+                        // It prioritizes the custom nursery uploaded image, 
+                        // but falls back to the primary default image if missing.
+                        $featuredPhoto = $inventory->display_image;
+                        
+                        // ==========================================
+                        // BOTTOM SECTION: The 5 Default Gallery Images
+                        // ==========================================
+                        // We ONLY want to display the plant's official default images here.
+                        // We ignore any custom images uploaded by the nursery.
+                        $galleryImages = [];
+                        
+                        // Loop through all the default images attached to this plant
+                        foreach ($inventory->plant->defaultImages as $defaultImg) {
+                            $path = $defaultImg->image_path;
+                            
+                            // Check if the path is an external URL (like Unsplash)
+                            if (str_starts_with($path, 'http')) {
+                                $galleryImages[] = $path;
+                            } else {
+                                // If it's a local file, wrap it in asset('storage/...')
+                                $galleryImages[] = asset('storage/' . $path);
+                            }
+                        }
                     @endphp
-                    <img src="{{ $mainImage }}" alt="{{ $inventory->plant->name }}" class="w-full h-full object-cover"/>
+                    <img src="{{ $featuredPhoto }}" alt="{{ $inventory->plant->name }}" class="w-full h-full object-cover"/>
                     <!-- Farm photo overlay tag -->
                     <div class="absolute bottom-3 left-3 bg-white/15 backdrop-blur-md border border-white/25 text-white text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
                         <span class="material-symbols-outlined" style="font-size:14px">photo_camera</span>
@@ -129,10 +147,7 @@
                             <a href="{{ route('public.nurseries.show', $inventory->nursery) }}" class="px-4 py-2.5 rounded-lg border border-primary/20 text-primary font-semibold text-sm hover:bg-primary/5 transition-colors">
                                 Visit Nursery
                             </a>
-                            <button class="px-4 py-2.5 rounded-lg bg-primary text-white font-semibold text-sm hover:bg-primary/90 transition-colors shadow-md flex items-center gap-2">
-                                <span class="material-symbols-outlined" style="font-size:18px">add_shopping_cart</span>
-                                Add to Cart
-                            </button>
+
                         </div>
                     </div>
                 </div>
@@ -143,14 +158,19 @@
             <!-- Left Column: Image Gallery & Details -->
             <div class="flex-1 space-y-8">
                 <div class="space-y-4">
+                    <!-- The large viewer for the gallery -->
                     <div class="aspect-[4/3] w-full rounded-xl overflow-hidden bg-slate-200 shadow-sm">
-                        <img id="main-image" class="w-full h-full object-cover" src="{{ $mainImage }}" alt="{{ $inventory->plant->name }}"/>
+                        <!-- We default to showing the very first gallery image here -->
+                        <img id="main-image" class="w-full h-full object-cover" src="{{ count($galleryImages) > 0 ? $galleryImages[0] : $featuredPhoto }}" alt="{{ $inventory->plant->name }}"/>
                     </div>
-                    @if($inventory->images->count() > 1)
-                    <div class="grid grid-cols-4 gap-4">
-                        @foreach($inventory->images as $index => $image)
-                        <div class="aspect-square rounded-lg overflow-hidden border-2 {{ $index === 0 ? 'border-primary ring-2 ring-primary/20' : 'cursor-pointer hover:opacity-80 transition-opacity' }} gallery-thumb" data-src="{{ asset('storage/' . $image->image_path) }}">
-                            <img class="w-full h-full object-cover" src="{{ asset('storage/' . $image->image_path) }}" alt="Thumbnail"/>
+                    
+                    <!-- Only show the thumbnails grid if we actually have default images -->
+                    @if(count($galleryImages) > 0)
+                    <div class="grid grid-cols-4 sm:grid-cols-5 gap-4">
+                        @foreach($galleryImages as $index => $imageUrl)
+                        <!-- Each thumbnail. The first one gets a green border by default. -->
+                        <div class="aspect-square rounded-lg overflow-hidden border-2 {{ $index === 0 ? 'border-primary ring-2 ring-primary/20' : 'cursor-pointer hover:opacity-80 transition-opacity' }} gallery-thumb" data-src="{{ $imageUrl }}">
+                            <img class="w-full h-full object-cover" src="{{ $imageUrl }}" alt="Thumbnail"/>
                         </div>
                         @endforeach
                     </div>
@@ -234,16 +254,25 @@
                             <p class="text-sm text-slate-600 dark:text-slate-400">Mon - Sat: 9:00 AM - 6:00 PM</p>
                         </div>
                     </div>
-                    <div class="w-full h-40 rounded-lg overflow-hidden mb-6 bg-slate-100 relative">
-                        <!-- Map Placeholder -->
-                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent opacity-50"></div>
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="bg-white dark:bg-slate-900 p-2 rounded-full shadow-lg border border-primary/20">
-                                <span class="material-symbols-outlined text-primary text-3xl">location_on</span>
-                            </div>
+
+                    <!-- display the map -->
+                    @if($inventory->nursery->latitude && $inventory->nursery->longitude)
+                        <div class="w-full h-40 rounded-lg overflow-hidden mb-6 bg-slate-100 relative">
+                            <div id="display-map" class="w-full h-full z-0"></div>
                         </div>
-                        <img class="w-full h-full object-cover opacity-60" src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=400" alt="Map view"/>
-                    </div>
+                    @else
+                        <div class="w-full h-40 rounded-lg overflow-hidden mb-6 bg-slate-100 relative">
+                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent opacity-50"></div>
+                            <div class="absolute inset-0 flex items-center justify-center z-10">
+                                <div class="bg-white p-2 rounded-full shadow-lg border border-primary/20">
+                                    <span class="material-symbols-outlined text-primary text-3xl">location_on</span>
+                                </div>
+                            </div>
+                            <img class="w-full h-full object-cover opacity-60" src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=400" alt="Map view"/>
+                        </div>
+                    @endif
+
+
                     <div class="flex flex-col gap-3">
                         <button class="w-full py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all flex items-center justify-center gap-2">
                             <span class="material-symbols-outlined text-xl">chat</span>
@@ -320,5 +349,27 @@
         });
     });
 </script>
+
+@if($inventory->nursery->latitude && $inventory->nursery->longitude)
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const lat = {{ $inventory->nursery->latitude }};
+        const lng = {{ $inventory->nursery->longitude }};
+        const nurseryName = "{{ $inventory->nursery->name ?? 'Our Nursery' }}";
+        
+        const map = L.map('display-map').setView([lat, lng], 15);
+        
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap'
+        }).addTo(map);
+
+                L.marker([lat, lng]).addTo(map)
+                .bindPopup(`<b>${nurseryName}</b>`)
+                .openPopup();
+            });
+            </script>
+    @endif
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </body>
 </html>

@@ -13,12 +13,12 @@ class PublicPlantController extends Controller
     public function show(NurseryInventory $inventory)
     {
         // Load relationships
-        $inventory->load(['plant.family', 'nursery.city', 'images']);
+        $inventory->load(['plant.family', 'plant.defaultImages', 'nursery.city', 'images']);
         
         // Find other plants from the same nursery as "recommendations"
         $relatedPlants = NurseryInventory::where('nursery_id', $inventory->nursery_id)
             ->where('id', '!=', $inventory->id)
-            ->with(['plant', 'images'])
+            ->with(['plant.defaultImages', 'images'])
             ->limit(4)
             ->get();
 
