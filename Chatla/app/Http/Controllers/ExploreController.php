@@ -14,7 +14,11 @@ class ExploreController extends Controller
      */
     public function index(Request $request)
     {
+        // Base Query: Only get inventories that belong to an 'active' nursery
         $query = NurseryInventory::query()
+            ->whereHas('nursery', function($q) {
+                $q->where('status', 'active');
+            })
             ->with(['plant.family', 'plant.defaultImages', 'nursery.city', 'images']);
 
         // 1. GLOBAL SEARCH (Name, Slug, or Family Name)

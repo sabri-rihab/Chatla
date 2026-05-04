@@ -47,7 +47,7 @@ class NurseryInventoryController extends Controller
                     'status' => $statusMap[$item->stock_quantity] ?? 'out',
                     'growth' => ucfirst($item->growth_status),
                     'desc' => $item->custom_description ?? $item->plant->about_description ?? '',
-                    'img' => $item->images->first() ? asset(str_starts_with($item->images->first()->image_path, '/storage/') ? $item->images->first()->image_path : 'storage/' . $item->images->first()->image_path) : ($item->plant->defaultImages->where('is_primary', true)->first()?->image_path ?? 'https://via.placeholder.com/400x300?text=Plant')
+                    'img' => $item->display_image
                 ];
             });
 
