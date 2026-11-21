@@ -1,0 +1,13 @@
+.git
+.vscode
+docs
+les diagrammes
+ressource et details
+Chatla/node_modules
+Chatla/vendor
+Chatla/storage/logs/*.log
+Chatla/storage/framework/cache/data/*
+Chatla/storage/framework/sessions/*
+Chatla/storage/framework/views/*
+Chatla/database/*.sqlite
+Chatla/database/*.sqlite-journal
