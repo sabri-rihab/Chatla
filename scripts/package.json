@@ -1,0 +1,12 @@
+{
+  "name": "chatla-screenshot-generator",
+  "version": "1.0.0",
+  "description": "Automated screenshot regression suite for Chatla using Playwright",
+  "main": "screenshots.js",
+  "scripts": {
+    "screenshots": "node screenshots.js"
+  },
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}
