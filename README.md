@@ -382,5 +382,5 @@ The application includes an authentic dataset modeling the Moroccan nursery sect
 
 **Rihab Sabri**  
 - **GitHub:** [@sabri-rihab](https://github.com/sabri-rihab)  
-- **LinkedIn:** [linkedin.com/in/rihab-sabri](https://linkedin.com/in/rihab-sabri)  
+- **LinkedIn:** [linkedin.com/in/rihab-sabri](https://www.linkedin.com/in/rihab-sabri-497281245/)  
 - **Portfolio:** [Portfolio Link](https://github.com/sabri-rihab)
